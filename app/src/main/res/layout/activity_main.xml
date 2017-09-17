@@ -17,6 +17,84 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     </android.support.v7.widget.Toolbar>
 
+
+    <!-- 추가1 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+        <SeekBar
+            android:id="@+id/recProgressBar"
+            android:layout_width="300dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="78dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:progress="0"/>
+        <EditText
+            android:id= "@+id/voice_text"
+            android:layout_width="281dp"
+            android:layout_height="252dp"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center_horizontal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="380dp"
+            android:layout_height="76dp"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp">
+                <ImageButton
+                    android:id="@+id/btnPlay"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/play"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    />
+            </FrameLayout>
+            <Space
+                android:layout_width="22dp"
+                android:layout_height="match_parent" />
+            <FrameLayout
+                android:layout_width="76dp"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:id="@+id/btnRecord"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/record"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    />
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/pause"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    />
+            </FrameLayout>
+            <Space
+                android:layout_width="22dp"
+                android:layout_height="match_parent" />
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp">
+                <ImageButton
+                    android:id="@+id/btnReset"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/reset"
+                    android:layout_height="match_parent"
+                    android:onClick="onClick"
+                    />
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+    <!-- 추가1 -->
+
+
     <Button
         android:text="저장하기"
         android:layout_width="wrap_content"
