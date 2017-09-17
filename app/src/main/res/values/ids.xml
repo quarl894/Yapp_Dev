@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="clientReady" type="id">clientReady</item>
+    <item name="audioRecording" type="id">audioRecording</item>
+    <item name="partialResult" type="id">partialResult</item>
+    <item name="finalResult" type="id">finalResult</item>
+    <item name="recognitionError" type="id">recognitionError</item>
+    <item name="endPointDetectTypeSelected" type="id">endPointDetectTypeSelected</item>
+    <item name="clientInactive" type="id">clientInactive</item>
+</resources>
