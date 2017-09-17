@@ -29,6 +29,7 @@
         <activity android:name=".ResultActivity"></activity>
         <activity android:name=".Detail.DetailActivity"></activity>
         <activity android:name=".List.ListDActivity"></activity>
+        <activity android:name=".Detail.AdjustActivity"></activity>
     </application>
 
 </manifest>

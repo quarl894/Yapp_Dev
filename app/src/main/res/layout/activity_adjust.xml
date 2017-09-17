@@ -31,7 +31,6 @@
         <!--android:layout_height="@dimen/flexible_space_image_height"-->
         <!--android:background="?attr/colorPrimary" />-->
 
-
     <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -43,20 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/backup_white"
-                android:layout_gravity="right"
-                android:layout_marginRight="61dp"
-                android:scaleType="fitXY"
-                android:id="@+id/btn_backup"/>
-            <ImageButton
-                android:id="@+id/btn_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/edit"
-                android:layout_gravity="right" />
 
             <View
                 android:layout_width="match_parent"
@@ -90,26 +75,58 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:text="@string/ex_content" />
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/title_pic"
-                android:textSize="22sp"
-                android:background="#f7f7f7"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="26dp"
-                android:textColor="#aba0ff"
-                android:lineSpacingExtra="8sp"
-                android:text="오늘의 사진" />
+                android:background="#f7f7f7">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/title_pic"
+                    android:textSize="22sp"
+                    android:background="#f7f7f7"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="26dp"
+                    android:textColor="#aba0ff"
+                    android:lineSpacingExtra="8sp"
+                    android:text="오늘의 사진" />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_gall"
+                    android:text="앨범이동"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/title_pic"
+                    android:layout_toEndOf="@+id/title_pic" />
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="13dp"
                 android:paddingBottom="64dp">
+                <HorizontalScrollView
+                    android:id="@+id/hori_scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="false"
+                    android:foregroundGravity="left"
+                    >
+                    <LinearLayout
+                        android:id="@+id/selected_photos_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:animateLayoutChanges="true"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+                        <!-- images will be added dynamicall to this layout -->
+                    </LinearLayout>
+                </HorizontalScrollView>
                 <ImageView
                     android:layout_width="109dp"
                     android:layout_height="109dp"

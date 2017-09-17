@@ -29,7 +29,7 @@ import yapp.dev_diary.Voice.VoiceActivity;
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
-    Button btn_ok, btn_detail;
+    Button btn_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +40,6 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String getTime = sdf.format(date);
         getImageNameToUri();
-        btn_detail = (Button) findViewById(R.id.btn_test);
-        btn_detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, ListDActivity.class);
-                startActivity(i);
-            }
-        });
         btn_ok = (Button) findViewById(R.id.btn_ok);
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
