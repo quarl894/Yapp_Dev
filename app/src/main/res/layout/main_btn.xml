@@ -31,7 +31,8 @@
             android:textColor="#6dffffff"
             android:hint="2017. 08. 01 화요일"
             android:textColorHint="#6dffffff"
-            android:paddingLeft="24dp"/>
+            android:paddingLeft="24dp"
+            android:id="@+id/edit_btn"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
