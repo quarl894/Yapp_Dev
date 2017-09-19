@@ -7,4 +7,14 @@ Quam libero nulla netus eu porta curae, ut nulla bibendum facilisis et urna sed,
     <string name="ex_content"> 텍스트로 변경된 오늘의 일기입니다. 글자수가 많아질수록 크기가 작아지겠죠?
 자동으로 자연스럽게 작아지길^_^
 실제로 만들면 오타도 많을텐데 일단은 그냥 써보겠습니다. 그런데 본문을 또 길게 해야하니까 지금 또 이렇게 쓰고 있습니다. 이거보다 길어야 하나 어째야하나 사실 잘 모르겠음. 그런데 이 콘텐츠는 음성이 포함되어 있을 예정이니까 아무래도 딱 이쯤에서 끝내면 될 것 같다는 생각이 든다.</string>
+
+    <string-array name="day_of_week">
+        <item>sun</item>
+        <item>mon</item>
+        <item>tue</item>
+        <item>wed</item>
+        <item>thu</item>
+        <item>fri</item>
+        <item>sat</item>
+    </string-array>
 </resources>

@@ -6,11 +6,10 @@ package yapp.dev_diary;
  */
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.CursorJoiner;
 import android.media.ExifInterface;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import yapp.dev_diary.Calendar.Activity.MultiCalendarActivity;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_list :
                 Intent i2 = new Intent(this, ListDActivity.class);
                 startActivity(i2);
+                return true;
+            case R.id.menu_calendar :
+                Intent i3 = new Intent(this, MultiCalendarActivity.class);
+                startActivity(i3);
                 return true;
         }
         return super.onOptionsItemSelected(item);
