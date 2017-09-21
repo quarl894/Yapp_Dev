@@ -1,9 +1,9 @@
-package me.dawson.applock.core;
+package yapp.dev_diary.Lock.core;
+
+import android.text.TextUtils;
 
 import java.security.MessageDigest;
 import java.util.Locale;
-
-import android.text.TextUtils;
 
 public class Encryptor {
 

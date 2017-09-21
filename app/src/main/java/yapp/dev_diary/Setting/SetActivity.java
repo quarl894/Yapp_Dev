@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import yapp.dev_diary.Lock.HomePage;
 import yapp.dev_diary.R;
 
 /**
@@ -50,6 +52,8 @@ public class SetActivity extends AppCompatActivity {
                 onClickEvent(view);
             }
         });
+
+        initToolbar();
     }
 
     /**
@@ -59,11 +63,14 @@ public class SetActivity extends AppCompatActivity {
     private void onClickEvent(View view){
         switch (view.getId()) {
             case R.id.setting_layout_alarm :
-                Toast.makeText(this, "알람설정은 3차에...", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(this, AlarmActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.setting_layout_lock :
-                Intent intent = new Intent(this, LockActivity.class);
-                startActivity(intent);
+//                Intent intent2 = new Intent(this, LockActivity.class);
+//                startActivity(intent2);
+                Intent intent2 = new Intent(this, LockActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.setting_layout_allbackup :
                 Toast.makeText(this, "전체백업은 백업 되면은...", Toast.LENGTH_SHORT).show();
@@ -72,5 +79,13 @@ public class SetActivity extends AppCompatActivity {
                 Toast.makeText(this, "전체초기화는 DB다 되면...", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.setting_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setTitle("설정");
     }
 }

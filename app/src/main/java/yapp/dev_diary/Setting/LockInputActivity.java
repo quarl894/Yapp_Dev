@@ -11,7 +11,7 @@ import yapp.dev_diary.R;
 
 
 /**
- * Created by Administrator on 2017-09-17.
+ * Created by AnGwangHo on 2017-09-17.
  */
 
 public class LockInputActivity extends AppCompatActivity {

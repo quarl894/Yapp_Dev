@@ -1,4 +1,4 @@
-package me.dawson.applock.core;
+package yapp.dev_diary.Lock.core;
 
 import android.app.Activity;
 import android.app.Application;

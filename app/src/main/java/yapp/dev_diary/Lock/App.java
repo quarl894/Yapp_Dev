@@ -1,7 +1,8 @@
-package me.dawson.applock;
+package yapp.dev_diary.Lock;
 
-import me.dawson.applock.core.LockManager;
 import android.app.Application;
+
+import yapp.dev_diary.Lock.core.LockManager;
 
 public class App extends Application {
 

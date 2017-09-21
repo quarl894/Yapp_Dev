@@ -1,6 +1,5 @@
-package me.dawson.applock.core;
+package yapp.dev_diary.Lock.core;
 
-import me.dawson.applock.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -19,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import yapp.dev_diary.R;
 
 public class AppLockActivity extends BaseActivity {
 	public static final String TAG = "AppLockActivity";
@@ -80,7 +81,7 @@ public class AppLockActivity extends BaseActivity {
 		((Button) findViewById(R.id.button9)).setOnClickListener(btnListener);
 
 		((Button) findViewById(R.id.button_clear))
-				.setOnClickListener(new OnClickListener() {
+				.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						clearFields();
@@ -227,7 +228,7 @@ public class AppLockActivity extends BaseActivity {
 		}
 	}
 
-	private OnClickListener btnListener = new OnClickListener() {
+	private OnClickListener btnListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View view) {
 			int currentValue = -1;
@@ -306,7 +307,7 @@ public class AppLockActivity extends BaseActivity {
 	private InputFilter numberFilter = new InputFilter() {
 		@Override
 		public CharSequence filter(CharSequence source, int start, int end,
-				Spanned dest, int dstart, int dend) {
+                                   Spanned dest, int dstart, int dend) {
 
 			if (source.length() > 1) {
 				return "";

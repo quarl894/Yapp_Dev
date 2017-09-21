@@ -6,10 +6,19 @@
     android:layout_height="match_parent"
     tools:context="yapp.dev_diary.Calendar.Activity.MultiCalendarActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/calendar_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_below="@+id/calendar_toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    android:background="#FFFFFF" >
+    android:background="@color/colorAccent">
 
     <LinearLayout
         android:id="@+id/ll_applock"
@@ -11,9 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_message"
@@ -30,38 +28,38 @@
             android:id="@+id/ll_passcodes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/passcode_1"
-                style="@style/PasscodeInputIStyle" >
+                style="@style/PasscodeInputIStyle"
+                android:hint="○">
 
                 <requestFocus />
             </EditText>
 
             <EditText
                 android:id="@+id/passcode_2"
-                style="@style/PasscodeInputIStyle" >
-            </EditText>
+                style="@style/PasscodeInputIStyle"
+                android:hint="○"></EditText>
 
             <EditText
                 android:id="@+id/passcode_3"
-                style="@style/PasscodeInputIStyle" >
-            </EditText>
+                style="@style/PasscodeInputIStyle"
+                android:hint="○"></EditText>
 
             <EditText
                 android:id="@+id/passcode_4"
-                style="@style/PasscodeInputIStyle" >
-            </EditText>
+                style="@style/PasscodeInputIStyle"
+                android:hint="○"></EditText>
         </LinearLayout>
 
         <TableLayout
             android:id="@+id/tl_keys"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="30dp"
             android:shrinkColumns="*"
-            android:stretchColumns="*" >
+            android:stretchColumns="*">
 
             <TableRow>
 

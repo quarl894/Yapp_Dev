@@ -1,21 +1,25 @@
-package me.dawson.applock;
+package yapp.dev_diary.Lock;
 
-import me.dawson.applock.core.AppLock;
-import me.dawson.applock.core.AppLockActivity;
-import me.dawson.applock.core.BaseActivity;
-import me.dawson.applock.core.LockManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import yapp.dev_diary.Lock.core.AppLock;
+import yapp.dev_diary.Lock.core.AppLockActivity;
+import yapp.dev_diary.Lock.core.BaseActivity;
+import yapp.dev_diary.Lock.core.LockManager;
+import yapp.dev_diary.R;
+
 public class HomePage extends BaseActivity implements OnClickListener {
 	public static final String TAG = "HomePage";
 
-	private Button btOnOff;
-	private Button btChange;
+	Button btOnOff;
+	Button btChange;
+	private Toolbar supportActionBar;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,18 +31,17 @@ public class HomePage extends BaseActivity implements OnClickListener {
 		btChange = (Button) findViewById(R.id.bt_change);
 		btChange.setText(R.string.change_passcode);
 		btChange.setOnClickListener(this);
-
+		LockManager.getInstance().enableAppLock(getApplication());
 		updateUI();
 	}
 
 	@Override
 	public void onClick(View view) {
 		if (view.equals(btOnOff)) {
-			int type = LockManager.getInstance().getAppLock().isPasscodeSet() ? AppLock.DISABLE_PASSLOCK
-					: AppLock.ENABLE_PASSLOCK;
-			Intent intent = new Intent(this, AppLockActivity.class);
-			intent.putExtra(AppLock.TYPE, type);
-			startActivityForResult(intent, type);
+				int type = LockManager.getInstance().getAppLock().isPasscodeSet() ? AppLock.DISABLE_PASSLOCK : AppLock.ENABLE_PASSLOCK;
+				Intent intent = new Intent(this, AppLockActivity.class);
+				intent.putExtra(AppLock.TYPE, type);
+				startActivityForResult(intent, type);
 		} else if (view.equals(btChange)) {
 			Intent intent = new Intent(this, AppLockActivity.class);
 			intent.putExtra(AppLock.TYPE, AppLock.CHANGE_PASSWORD);
@@ -77,5 +80,4 @@ public class HomePage extends BaseActivity implements OnClickListener {
 			btChange.setEnabled(false);
 		}
 	}
-
 }

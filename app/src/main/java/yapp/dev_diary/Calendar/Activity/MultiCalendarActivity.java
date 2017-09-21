@@ -1,9 +1,13 @@
 package yapp.dev_diary.Calendar.Activity;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,7 +18,10 @@ import java.util.ArrayList;
 import yapp.dev_diary.Calendar.adapters.AdapterFrgCalendar;
 import yapp.dev_diary.Calendar.adapters.AdapterRcvSimple;
 import yapp.dev_diary.Calendar.view.SimpleViewBinder;
+import yapp.dev_diary.List.ListDActivity;
+import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
+import yapp.dev_diary.Voice.VoiceActivity;
 
 public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.OnFragmentListener {
 
@@ -33,6 +40,7 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
         setContentView(R.layout.activity_multi_calendar);
 
         initialize();
+        initToolbar();
     }
 
     @Override
@@ -101,6 +109,49 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
     @Override
     public void onFragmentListener(View view) {
         resizeHeight(view);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.menu_start :
+                Intent i = new Intent(this, VoiceActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.menu_list :
+                Intent i2 = new Intent(this, ListDActivity.class);
+                startActivity(i2);
+                return true;
+            case R.id.menu_calendar :
+                Intent i3 = new Intent(this, MultiCalendarActivity.class);
+                startActivity(i3);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.calendar_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(null);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MultiCalendarActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     public void resizeHeight(View mRootView) {

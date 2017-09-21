@@ -26,6 +26,7 @@
         <activity android:name=".Setting.SetActivity"></activity>
         <activity android:name=".Setting.LockActivity"></activity>
         <activity android:name=".Setting.LockInputActivity"></activity>
+        <activity android:name=".Setting.AlarmActivity"></activity>
         <activity android:name=".Voice.VoiceActivity"></activity>
         <activity android:name=".SaveActivity" ></activity>
         <activity android:name=".ResultActivity"></activity>
@@ -33,6 +34,12 @@
         <activity android:name=".List.ListDActivity"></activity>
         <activity android:name=".Detail.AdjustActivity"></activity>
         <activity android:name=".Calendar.Activity.MultiCalendarActivity"></activity>
+        <activity android:name=".Lock.HomePage"
+                  android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".Lock.core.AppLockActivity"
+                  android:windowSoftInputMode="stateHidden" >
+        </activity>
     </application>
 
 </manifest>
