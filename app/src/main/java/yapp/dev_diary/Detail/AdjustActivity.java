@@ -1,40 +1,51 @@
 package yapp.dev_diary.Detail;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import java.util.ArrayList;
 
-import yapp.dev_diary.MainActivity;
+import gun0912.tedbottompicker.TedBottomPicker;
 import yapp.dev_diary.R;
 
 /**
- * Created by YoungJung on 2017-08-27.
+ * Created by HANSUNG on 2017-09-17.
  */
 
-public class DetailActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks {
     ArrayList<String> select_pic = new ArrayList<>();
+    ArrayList<Uri> selectedUriList;
+    private ViewGroup mSelectedImagesContainer;
     ImageView image, image2, image3, image4, image5;
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
-
+    public RequestManager mGlideRequestManager;
     private View mImageView;
-//    private View mOverlayView;
+    //    private View mOverlayView;
     private ObservableScrollView mScrollView;
     private TextView mTitleView;
     private View mFab;
@@ -45,12 +56,12 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private ImageButton btn_edit, btn_backup;
-
+    private Button btn_gall;
+    Uri selectedUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_adjust);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -67,17 +78,9 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mTitlePic = (TextView) findViewById(R.id.title_pic);
         mTitleDiary.setText("오늘의\n일기_");
         mTitlePic.setText("오늘의\n사진_");
-
-        btn_edit = (ImageButton) findViewById(R.id.btn_edit);
-        btn_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "hi", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(DetailActivity.this, AdjustActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+        mGlideRequestManager = Glide.with(this);
+        mSelectedImagesContainer = (ViewGroup) findViewById(R.id.selected_photos_container);
+        setMultiShowButton();
 
         image = (ImageView) findViewById(R.id.test_img);
         image2 = (ImageView) findViewById(R.id.test_img2);
@@ -85,12 +88,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         image4 = (ImageView) findViewById(R.id.test_img4);
         image5 = (ImageView) findViewById(R.id.test_img5);
         Intent intent = getIntent();
-        int chk_num = intent.getExtras().getInt("chk_num");
-        if(chk_num == 1){
-            select_pic = MainActivity.ok_path;
-        }else{
-            select_pic.clear();
-        }
         for(int i=0; i<select_pic.size(); i++) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 4;
@@ -117,13 +114,12 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                     break;
             }
         }
-
         setTitle(null);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdjustActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
             }
         });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
@@ -133,19 +129,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
             public void run() {
-//                mScrollView.scrollTo(0, mFlexibleSpaceImageHeight - mActionBarSize);
                 mScrollView.scrollTo(0, 1);
-
-                // If you'd like to start from scrollY == 0, don't write like this:
-                //mScrollView.scrollTo(0, 0);
-                // The initial scrollY is 0, so it won't invoke onScrollChanged().
-                // To do this, use the following:
-                //onScrollChanged(0, false, false);
-
-                // You can also achieve it with the following codes.
-                // This causes scroll change from 1 to 0.
-                //mScrollView.scrollTo(0, 1); 첫화면 고정
-                //mScrollView.scrollTo(0, 0);
             }
         });
     }
@@ -154,13 +138,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         // Translate overlay and image
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
-//        int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
-//        ViewHelper.setTranslationY(mOverlayView, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-//        ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
-
-        // Change alpha of overlay
-//        ViewHelper.setAlpha(mOverlayView, ScrollUtils.getFloat((float) scrollY / flexibleRange, 0, 1));
-
         // Scale title text
         float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
         ViewHelper.setPivotX(mTitleView, 0);
@@ -229,4 +206,63 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             mFabIsShown = false;
         }
     }
+    private void setMultiShowButton() {
+        Button btn_multi_show = (Button) findViewById(R.id.btn_gall);
+        btn_multi_show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PermissionListener permissionlistener = new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        TedBottomPicker bottomSheetDialogFragment = new TedBottomPicker.Builder(AdjustActivity.this)
+                                .setOnMultiImageSelectedListener(new TedBottomPicker.OnMultiImageSelectedListener() {
+                                    @Override
+                                    public void onImagesSelected(ArrayList<Uri> uriList) {
+                                        selectedUriList = uriList;
+                                        showUriList(uriList);
+                                    }
+                                })
+                                //.setPeekHeight(getResources().getDisplayMetrics().heightPixels/2)
+                                .setPeekHeight(1600)
+                                .showTitle(false)
+                                .setCompleteButtonText("Done")
+                                .setEmptySelectionText("No Select")
+                                //.setSelectedUriList(selectedUriList)
+                                .create();
+                        bottomSheetDialogFragment.show(getSupportFragmentManager());
+                    }
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                        Toast.makeText(AdjustActivity.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                };
+                new TedPermission(AdjustActivity.this)
+                        .setPermissionListener(permissionlistener)
+                        .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .check();
+            }
+        });
+    }
+    private void showUriList(ArrayList<Uri> uriList) {
+        // Remove all views before
+        // adding the new ones.
+        mSelectedImagesContainer.removeAllViews();
+
+        mSelectedImagesContainer.setVisibility(View.VISIBLE);
+
+        int wdpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        int htpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        for (Uri uri : uriList) {
+            View imageHolder = LayoutInflater.from(this).inflate(R.layout.image_item, null);
+            ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
+            Glide.with(this)
+                    .load(uri.toString())
+                    .fitCenter()
+                    .into(thumbnail);
+            mSelectedImagesContainer.addView(imageHolder);
+            thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
+        }
+    }
 }
+

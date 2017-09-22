@@ -11,15 +11,16 @@ import yapp.dev_diary.R;
 
 public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<AdapterItem> itemList;
-
     private OnItemClickListener listener;
 
     public static class TimeViewHolder extends RecyclerView.ViewHolder {
-        public TextView timeItemView;
+        public TextView timeItemView, tv_year, tv_size;
 
         public TimeViewHolder(View v) {
             super(v);
             timeItemView = (TextView) v.findViewById(R.id.timeItemView);
+            tv_year = (TextView) v.findViewById(R.id.tv_year);
+            tv_size = (TextView) v.findViewById(R.id.tv_size);
         }
     }
 
@@ -33,6 +34,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(v);
             timeView = (TextView) v.findViewById(R.id.timeView);
             nameView = (TextView) v.findViewById(R.id.nameView);
+
             v.setOnClickListener(this);
             this.listener = listener;
         }
@@ -114,6 +116,8 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(holder instanceof TimeViewHolder) {
             TimeViewHolder tHolder = (TimeViewHolder) holder;
             tHolder.timeItemView.setText(itemList.get(position).getTimeToString());
+            tHolder.tv_year.setText(itemList.get(position).getYearToString());
+            tHolder.tv_size.setText(itemList.size()+"개의 저장된 일기");
         } else {
             DataViewHolder dHolder = (DataViewHolder) holder;
             dHolder.timeView.setText(itemList.get(position).getDateToString());

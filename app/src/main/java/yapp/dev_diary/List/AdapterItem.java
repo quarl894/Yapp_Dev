@@ -55,6 +55,7 @@ public abstract class AdapterItem {
     public String getDateToString() {
         return getDayOfMonth()+"일";
     }
+    public String getYearToString() { return Integer.toString(getYear());}
 // return getYear() + "." + getMonth() + "." + getDayOfMonth();
     public abstract int getType();
 
