@@ -31,6 +31,9 @@ public class LockActivity extends AppCompatActivity {
         switch_lock = (Switch) findViewById(R.id.setting_lock_onoff_switch);
         setting_lock_change_layout = (LinearLayout) findViewById(R.id.setting_lock_change_layout);
 
+        LockManager.getInstance().enableAppLock(getApplication());
+        updateUI();
+
         switch_lock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean isChecked) {
@@ -61,9 +64,6 @@ public class LockActivity extends AppCompatActivity {
                 startActivityForResult(intent, AppLock.CHANGE_PASSWORD);
             }
         });
-
-        LockManager.getInstance().enableAppLock(getApplication());
-        updateUI();
     }
 
     @Override

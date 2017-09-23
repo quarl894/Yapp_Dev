@@ -7,15 +7,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/setting_toolbar"
+    <TextView
+        android:id="@+id/setting_textview_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@android:color/white"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:titleTextColor="@color/black" />
+        android:paddingBottom="17dp"
+        android:paddingTop="22dp"
+        android:text="설정"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/setting_title_underline"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@+id/pager"
+        android:background="@drawable/shape_div_gradient" />
 
     <TextView
         android:id="@+id/setting_title"

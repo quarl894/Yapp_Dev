@@ -18,10 +18,9 @@ import java.util.ArrayList;
 import yapp.dev_diary.Calendar.adapters.AdapterFrgCalendar;
 import yapp.dev_diary.Calendar.adapters.AdapterRcvSimple;
 import yapp.dev_diary.Calendar.view.SimpleViewBinder;
-import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.Voice.VoiceActivity;
+import yapp.dev_diary.Setting.SetActivity;
 
 public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.OnFragmentListener {
 
@@ -113,7 +112,7 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_calendar, menu);
         return true;
     }
 
@@ -121,16 +120,10 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id){
-            case R.id.menu_start :
-                Intent i = new Intent(this, VoiceActivity.class);
-                startActivity(i);
+            case R.id.menu_calendar_search :
                 return true;
-            case R.id.menu_list :
-                Intent i2 = new Intent(this, ListDActivity.class);
-                startActivity(i2);
-                return true;
-            case R.id.menu_calendar :
-                Intent i3 = new Intent(this, MultiCalendarActivity.class);
+            case R.id.menu_calendar_setting :
+                Intent i3 = new Intent(this, SetActivity.class);
                 startActivity(i3);
                 return true;
         }

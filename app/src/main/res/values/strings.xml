@@ -19,12 +19,12 @@ Quam libero nulla netus eu porta curae, ut nulla bibendum facilisis et urna sed,
     </string-array>
 
     <string name="manage_passcode">Manage passcode</string>
-    <string name="enter_passcode">Enter passcode</string>
-    <string name="enter_old_passcode">Enter old passcode</string>
-    <string name="reenter_passcode">Re-enter passcode</string>
+    <string name="enter_passcode">새로운 암호입력</string>
+    <string name="enter_old_passcode">현재 암호입력</string>
+    <string name="reenter_passcode">암호 재입력</string>
     <string name="change_passcode">Change passcode</string>
     <string name="setup_passcode">Setup Passcode</string>
-    <string name="passcode_wrong">Wrong passcode, please try again.</string>
+    <string name="passcode_wrong">암호가 틀렸습니다. 다시 입력해주세요.</string>
     <string name="disable_passcode">Disable passcode</string>
     <string name="enable_passcode">Enable passcode</string>
 </resources>

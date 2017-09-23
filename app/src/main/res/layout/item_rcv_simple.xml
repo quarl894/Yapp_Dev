@@ -8,17 +8,37 @@
         android:layout_width="match_parent"
         android:layout_height="72dp">
 
-        <TextView
-            android:id="@+id/txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="asdf"
-            android:textColor="#a1a1a1"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:id="@+id/toggleButton"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/circle_btn"
+                android:checked="true"
+                android:textOff=" "
+                android:textOn=" " />
+
+            <TextView
+                android:id="@+id/txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="asdf"
+                android:textColor="#a1a1a1"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

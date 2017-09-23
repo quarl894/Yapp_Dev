@@ -6,6 +6,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
 import android.text.method.PasswordTransformationMethod;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -47,6 +48,10 @@ public class AppLockActivity extends BaseActivity {
 			String message = extras.getString(AppLock.MESSAGE);
 			if (message != null) {
 				tvMessage.setText(message);
+			}
+			else
+			{
+				tvMessage.setText("암호입력");
 			}
 
 			type = extras.getInt(AppLock.TYPE, -1);
@@ -124,10 +129,14 @@ public class AppLockActivity extends BaseActivity {
 				+ codeField2.getText().toString()
 				+ codeField3.getText().toString() + codeField4.getText();
 
-		codeField1.setText("");
-		codeField2.setText("");
-		codeField3.setText("");
-		codeField4.setText("");
+        codeField1.setText("");
+        codeField1.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        codeField2.setText("");
+        codeField2.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        codeField3.setText("");
+        codeField3.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        codeField4.setText("");
+        codeField4.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		codeField1.requestFocus();
 
 		switch (type) {
@@ -215,16 +224,19 @@ public class AppLockActivity extends BaseActivity {
 
 	private void onDeleteKey() {
 		if (codeField1.isFocused()) {
-
+			codeField1.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		} else if (codeField2.isFocused()) {
 			codeField1.requestFocus();
 			codeField1.setText("");
+			codeField1.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		} else if (codeField3.isFocused()) {
 			codeField2.requestFocus();
 			codeField2.setText("");
+			codeField2.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		} else if (codeField4.isFocused()) {
 			codeField3.requestFocus();
 			codeField3.setText("");
+			codeField3.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		}
 	}
 
@@ -260,18 +272,22 @@ public class AppLockActivity extends BaseActivity {
 			String currentValueString = String.valueOf(currentValue);
 			if (codeField1.isFocused()) {
 				codeField1.setText(currentValueString);
+				codeField1.setTextSize(TypedValue.COMPLEX_UNIT_SP,60);
 				codeField2.requestFocus();
 				codeField2.setText("");
 			} else if (codeField2.isFocused()) {
 				codeField2.setText(currentValueString);
+				codeField2.setTextSize(TypedValue.COMPLEX_UNIT_SP,60);
 				codeField3.requestFocus();
 				codeField3.setText("");
 			} else if (codeField3.isFocused()) {
 				codeField3.setText(currentValueString);
+				codeField3.setTextSize(TypedValue.COMPLEX_UNIT_SP,60);
 				codeField4.requestFocus();
 				codeField4.setText("");
 			} else if (codeField4.isFocused()) {
 				codeField4.setText(currentValueString);
+				codeField4.setTextSize(TypedValue.COMPLEX_UNIT_SP,60);
 			}
 
 			if (codeField4.getText().toString().length() > 0
@@ -294,10 +310,14 @@ public class AppLockActivity extends BaseActivity {
 				Animation animation = AnimationUtils.loadAnimation(
 						AppLockActivity.this, R.anim.shake);
 				findViewById(R.id.ll_applock).startAnimation(animation);
-				codeField1.setText("");
-				codeField2.setText("");
-				codeField3.setText("");
-				codeField4.setText("");
+                codeField1.setText("");
+                codeField1.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+                codeField2.setText("");
+                codeField2.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+                codeField3.setText("");
+                codeField3.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+                codeField4.setText("");
+                codeField4.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 				codeField1.requestFocus();
 			}
 		};
@@ -341,9 +361,13 @@ public class AppLockActivity extends BaseActivity {
 
 	private void clearFields() {
 		codeField1.setText("");
+		codeField1.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		codeField2.setText("");
+        codeField2.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		codeField3.setText("");
+		codeField3.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		codeField4.setText("");
+		codeField4.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 
 		codeField1.postDelayed(new Runnable() {
 

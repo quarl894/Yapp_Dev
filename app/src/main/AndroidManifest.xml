@@ -25,7 +25,6 @@
         </activity>
         <activity android:name=".Setting.SetActivity"></activity>
         <activity android:name=".Setting.LockActivity"></activity>
-        <activity android:name=".Setting.LockInputActivity"></activity>
         <activity android:name=".Setting.AlarmActivity"></activity>
         <activity android:name=".Voice.VoiceActivity"></activity>
         <activity android:name=".SaveActivity" ></activity>

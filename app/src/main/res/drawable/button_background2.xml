@@ -3,6 +3,6 @@
 
     <item android:drawable="@drawable/button_pressed" android:state_pressed="true"/>
     <item android:drawable="@drawable/button_pressed" android:state_focused="true"/>
-    <item android:drawable="@drawable/button_normal"/>
+    <item android:drawable="@drawable/button_normal2"/>
 
 </selector>

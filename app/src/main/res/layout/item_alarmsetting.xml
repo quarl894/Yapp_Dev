@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/item_alarmsetting_textview_timetitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="14dp"
@@ -29,7 +29,7 @@
         android:orientation="vertical">
 
         <TimePicker
-            android:id="@+id/timePicker"
+            android:id="@+id/item_alarmsetting_timepicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="25.8dp"
@@ -44,7 +44,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/item_alarmsetting_textview_repeattitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#fafafa"
@@ -55,6 +55,7 @@
             android:textColor="@color/colorAccent" />
 
         <LinearLayout
+            android:id="@+id/item_alarmsetting_linearlayout_repeat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
