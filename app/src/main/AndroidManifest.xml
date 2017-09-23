@@ -23,6 +23,11 @@
         <activity android:name=".Setting.SetActivity"></activity>
         <activity android:name=".Voice.VoiceActivity"></activity>
         <activity android:name=".List.ListActivity"></activity>
+        <activity android:name=".SaveActivity"></activity>
+        <activity android:name=".ResultActivity"></activity>
+        <activity android:name=".Detail.AdjustActivity"/>
+        <activity android:name=".Detail.DetailActivity"></activity>
+        <activity android:name=".List.ListDActivity"></activity>
     </application>
 
 </manifest>

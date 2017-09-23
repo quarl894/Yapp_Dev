@@ -10,10 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
-/**
- * 바로 나오는 화면(sst, 녹음 추가시키면 됨)
- * 최신사진 5개 자동 불러와서 pic_path 배열에 집어넣음.
- */
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     int count=0;
 
     private int state = STATE_PREV;
-public class MainActivity extends AppCompatActivity {
+
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
     Button btn_ok;
@@ -90,14 +86,8 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String getTime = sdf.format(date);
         getImageNameToUri();
-        btn_ok = (Button) findViewById(R.id.btn_ok);
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,SaveActivity.class);
-                startActivity(i);
-            }
-        });
+
+
         initToolbar();
         //i=0;
         //recordFilePathList.add(sdRootPath + "/seohee"+ i +".mp4");
@@ -307,10 +297,13 @@ public class MainActivity extends AppCompatActivity {
         count = 0;
         try {
             startMerge(outputFileList);
+            Intent i = new Intent(MainActivity.this,SaveActivity.class);
+            startActivity(i);
         } catch (IOException e) {
             e.printStackTrace();
 
         }
+
     }
     public void startMerge(ArrayList<String> outputFileList)throws IOException
     {
