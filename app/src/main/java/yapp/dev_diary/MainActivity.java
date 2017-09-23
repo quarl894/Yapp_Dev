@@ -379,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         }
         count = 0;
         try {
-            startMerge2(outputSttList);
+//            startMerge2(outputSttList);
             startMerge(outputFileList);
 
         } catch (IOException e) {
@@ -390,6 +390,11 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             file.delete();
         }
         outputFileList.clear();
+        for(int i=0; i<outputSttList.size(); i++){
+            File file = new File(outputSttList.get(i));
+            file.delete();
+        }
+        outputSttList.clear();
     }
     public void startMerge(ArrayList<String> outputFileList)throws IOException
     {
@@ -545,10 +550,8 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                 break;
             case R.id.btnSave:
                 try {
-//                    File tmpFile = File.createTempFile("single_dev_camp", ".m4a", getExternalCacheDir());
-//                    encodeSingleFile(tmpFile.getAbsolutePath());
+                    startMerge2(outputSttList);
                     onBtnSave();
-//                    startMerge(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
                     startActivity(i);
                 } catch (Exception e) {
