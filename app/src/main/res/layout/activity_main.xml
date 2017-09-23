@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -20,14 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id = "@+id/back"/>
-
-    <SeekBar
-        android:id="@+id/recProgressBar"
-        android:layout_width="300dp"
-        android:layout_height="4dp"
-        android:layout_marginTop="78dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:progress="0"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,7 +60,7 @@
                 android:onClick="onClick" />
         </FrameLayout>
         <Space
-            android:layout_width="22.7dp"
+            android:layout_width="23dp"
             android:layout_height="match_parent" />
         <FrameLayout
             android:layout_width="60dp"
@@ -101,12 +93,18 @@
             android:textColor="#FFFFFF"/>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/voice_text"
-        android:layout_width="281dp"
-        android:layout_height="252dp"
+    <TextView
+        android:id="@+id/txt_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="156dp" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
 
