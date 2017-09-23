@@ -117,7 +117,8 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             TimeViewHolder tHolder = (TimeViewHolder) holder;
             tHolder.timeItemView.setText(itemList.get(position).getTimeToString());
             tHolder.tv_year.setText(itemList.get(position).getYearToString());
-            tHolder.tv_size.setText(itemList.size()+"개의 저장된 일기");
+            tHolder.tv_size.setText("("+itemList.size()+"개의 저장된 일기)");
+            tHolder.tv_year.setBackgroundResource(R.drawable.rectangle_5);
         } else {
             DataViewHolder dHolder = (DataViewHolder) holder;
             dHolder.timeView.setText(itemList.get(position).getDateToString());

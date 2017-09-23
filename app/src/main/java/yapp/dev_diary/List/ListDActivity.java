@@ -43,7 +43,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
 
@@ -52,9 +52,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         int id = item.getItemId();
         switch(id){
             case R.id.menu_start :
-                Intent i = new Intent(this, VoiceActivity.class);
-                startActivity(i);
-                return true;
             case R.id.menu_list :
                 Intent i2 = new Intent(this, ResultActivity.class);
                 startActivity(i2);

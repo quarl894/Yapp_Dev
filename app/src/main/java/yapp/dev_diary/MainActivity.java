@@ -364,84 +364,26 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             e.printStackTrace();
         }
     }
-
-
-//    public void append(List<String> list) throws IOException {
-//
-//
-//        Movie[] inMovies;
-//        inMovies = new Movie[list.size()];
-//        for (int i = 0; i < list.size(); i++) {
-//            inMovies[i] = MovieCreator.build(list.get(i));
-//        }
-//
-//        List<Track> videoTracks = new LinkedList<Track>();
-//        List<Track> audioTracks = new LinkedList<Track>();
-//
-//        for (Movie m : inMovies) {
-//            for (Track t : m.getTracks()) {
-//                if (t.getHandler().equals("soun")) {
-//                    audioTracks.add(t);
-//                }
-//                if (t.getHandler().equals("vide")) {
-//                    videoTracks.add(t);
-//                }
-//            }
-//        }
-//
-//        Movie result = new Movie();
-//
-//        if (audioTracks.size() > 0) {
-//            result.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
-//        }
-//        if (videoTracks.size() > 0) {
-//            result.addTrack(new AppendTrack(videoTracks.toArray(new Track[videoTracks.size()])));
-//        }
-//
-//        Container out = new DefaultMp4Builder().build(result);
-//
-//        RandomAccessFile ram = new RandomAccessFile(String.format(Environment.getExternalStorageDirectory().getAbsolutePath()  + "/output.mp4"), "rw");
-//        //최종적으로 output.mp4 라는 파일로 다 합친 파일을 저장하게 됨
-//        FileChannel fc = ram.getChannel();
-//        out.writeContainer(fc);
-//        ram.close();
-//        fc.close();
-//    }
-
-
-
-
     public void onClick(View v) {
-
         switch( v.getId() ) {
-
             case R.id.btnRecord :
-
                 onBtnRecord();
-
                 break;
-
             case R.id.btnPause :
-
                 onBtnStop();
-
                 break;
-
-
             case R.id.btnReset :
                 onBtnReset();
-
                 break;
-
             case R.id.btnPlay:
                 onBtnPlay();
                 break;
-
             case R.id.btnSave:
                 onBtnSave();
+                Intent i = new Intent(MainActivity.this, SaveActivity.class);
+                startActivity(i);
                 break;
         }
-
     }
 
 
