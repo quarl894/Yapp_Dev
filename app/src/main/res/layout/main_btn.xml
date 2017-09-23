@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#aba0ff"
+        android:weightSum="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="93dp"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group_3"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:textSize="22sp"
+            android:textColor="#6dffffff"
+            android:hint="2017. 08. 01 화요일"
+            android:textColorHint="#6dffffff"
+            android:paddingLeft="24dp"
+            android:id="@+id/edit_btn"
+            android:keepScreenOn="false"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:textSize="22sp"
+            android:textColor="#6dffffff"
+            android:hint="제목을 적어주세요."
+            android:textColorHint="#6dffffff"
+            android:paddingLeft="24dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:background="#fafafa">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fafafa"
+                android:textColor="#9b9b9b"
+                android:text="오늘의 날씨"
+                android:layout_weight="1"
+                android:id="@+id/btn_weather"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fafafa"
+                android:textColor="#9b9b9b"
+                android:text="오늘의 기분"
+                android:layout_weight="1"
+                android:id="@+id/btn_feel"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#9b9b9b"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="104dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@android:color/white">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sun"
+                android:background="@color/white"
+                android:layout_weight="1"
+                android:id="@+id/img1"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:src="@drawable/cloud"
+                android:layout_weight="1"
+                android:id="@+id/img2"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/rain"
+                android:background="@color/white"
+                android:layout_weight="1"
+                android:id="@+id/img3"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/snow"
+                android:background="@color/white"
+                android:layout_weight="1"
+                android:id="@+id/img4"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#9b9b9b"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="118dp"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:paddingLeft="59dp"
+            android:layout_weight="0.21">
+           <Switch
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="사진업로드"
+               android:paddingTop="25dp"
+               android:paddingBottom="27dp"
+               android:textColor="#aba0ff"
+               android:textSize="14sp"
+               android:id="@+id/switch_btn"
+               android:switchPadding="125dp"
+               android:checked="true"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#9b9b9b"
+                android:text="5장의 사진을 업로드 합니다." />
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#68e5f4"
+        android:text="저장"
+        android:id="@+id/btn_save"
+        android:layout_gravity="bottom"/>
+</FrameLayout>
