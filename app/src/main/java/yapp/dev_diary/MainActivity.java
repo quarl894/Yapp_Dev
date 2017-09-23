@@ -46,16 +46,13 @@ import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
 
-public class MainActivity extends AppCompatActivity
-        implements MediaRecorder.OnInfoListener {
+public class MainActivity extends AppCompatActivity implements MediaRecorder.OnInfoListener {
     public final static int STATE_PREV = 0;     //녹음 시작 전
     public final static int STATE_RECORDING = 1;    //녹음 중
     public final static int STATE_PAUSE = 2;        // 일시 정지 중
     String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/output.mp4";
     MediaPlayer mPlayer = null;
-
     MediaRecorder mRecorder = null;
-
     ArrayList<String> outputFileList; // 임시 파일 리스트
     String mFilePath =  null;
     ImageButton mBtnRecord; //재생&일시정지
@@ -66,14 +63,10 @@ public class MainActivity extends AppCompatActivity
 
     ImageButton mBtnReset;// 초기화 버튼
     Button mBtnSave;
-
     int count=0;
-
     private int state = STATE_PREV;
-
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
-    Button btn_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,8 +141,6 @@ public class MainActivity extends AppCompatActivity
     }
     public void onBtnRecord() {
         Log.d("seoheeing", "Record Prepare error");
-
-
         count +=1;
         mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myrecording";
         String nowFile = mFilePath  + count + ".mp4";
@@ -210,9 +201,6 @@ public class MainActivity extends AppCompatActivity
         mBtnStop.setVisibility(View.INVISIBLE);
 
     }
-
-
-
 
 //    public void onBtnOk(){
 //        Intent intent=new Intent(MainActivity.this,InputActivity.class);
@@ -297,19 +285,22 @@ public class MainActivity extends AppCompatActivity
         count = 0;
         try {
             startMerge(outputFileList);
-            Intent i = new Intent(MainActivity.this,SaveActivity.class);
-            startActivity(i);
         } catch (IOException e) {
             e.printStackTrace();
 
         }
-
+        for(int i=0; i<outputFileList.size(); i++){
+            File file = new File(outputFileList.get(i));
+            file.delete();
+        }
+        outputFileList.clear();
     }
     public void startMerge(ArrayList<String> outputFileList)throws IOException
     {
         Movie[] inMovies = new Movie[outputFileList.size()];
         try
         {
+            Log.e("file_size", ""+ Integer.toString(outputFileList.size()));
             for(int a = 0; a < outputFileList.size(); a++)
             {
                 inMovies[a] = MovieCreator.build(outputFileList.get(a));
