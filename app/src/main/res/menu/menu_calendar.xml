@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_calendar_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/search"
+        android:orderInCategory="101"
+        android:title="Search"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_calendar_etc"
+        android:icon="@drawable/overflow_menu"
+        android:orderInCategory="102"
+        app:showAsAction="always"
+        android:title="">
+        <menu>
+            <item
+                android:id="@+id/menu_calendar_setting"
+                android:icon="@drawable/setting"
+                android:orderInCategory="100"
+                android:title="설정"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+</menu>
