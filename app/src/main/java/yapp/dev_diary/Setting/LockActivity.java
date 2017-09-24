@@ -1,6 +1,7 @@
 package yapp.dev_diary.Setting;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -90,9 +91,11 @@ public class LockActivity extends AppCompatActivity {
         if (LockManager.getInstance().getAppLock().isPasscodeSet()) {
             switch_lock.setChecked(true);
             setting_lock_change_layout.setEnabled(true);
+            setting_lock_change_layout.setBackgroundColor(Color.WHITE);
         } else {
             switch_lock.setChecked(false);
             setting_lock_change_layout.setEnabled(false);
+            setting_lock_change_layout.setBackgroundColor(Color.argb(255, 229, 229, 229));
         }
     }
 }
