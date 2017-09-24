@@ -84,6 +84,9 @@
             android:layout_weight="1"
             android:text="잠금"
             android:textSize="20sp" />
+            android:textSize="14sp"
+            android:text="Rec"
+            android:onClick="onClick"/>
     </LinearLayout>
 
     <LinearLayout
@@ -134,5 +137,19 @@
             android:layout_weight="1"
             android:text="전체초기화"
             android:textSize="20sp" />
+        <Button
+            android:id="@+id/btnStartPlay"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Play"
+            android:onClick="onClick"/>
+        <Button
+            android:id="@+id/btnStopPlay"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Stop"
+            android:onClick="onClick"/>
     </LinearLayout>
 </LinearLayout>
