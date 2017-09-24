@@ -153,9 +153,9 @@ public class CalendarItemView extends View {
             } else {
                 canvas.drawText(calendar.get(Calendar.DATE) + "", xPos, yPos, mPaint);
                 //날짜 아래 원 표시
-                Paint paint = new Paint();
-                paint.setColor(Color.MAGENTA);
-                canvas.drawCircle(xPos, yPos+10, 5, paint);
+//                Paint paint = new Paint();
+//                paint.setColor(Color.MAGENTA);
+//                canvas.drawCircle(xPos, yPos+10, 5, paint);
             }
         }
 

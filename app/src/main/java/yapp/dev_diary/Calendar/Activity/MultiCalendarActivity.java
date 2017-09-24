@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import yapp.dev_diary.Calendar.adapters.AdapterFrgCalendar;
 import yapp.dev_diary.Calendar.adapters.AdapterRcvSimple;
 import yapp.dev_diary.Calendar.view.SimpleViewBinder;
-import yapp.dev_diary.MainActivity;
+import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.R;
 import yapp.dev_diary.Setting.SetActivity;
 
@@ -46,16 +46,16 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
     public void initData() {
         super.initData();
         mList = new ArrayList();
-        mList.add("06:00 wakeup");
-        mList.add("07:00 breakfast");
-        mList.add("08:00 go to office");
-        mList.add("09:00 work ");
-        mList.add("12:00 lunch");
-        mList.add("13:00 work");
-        mList.add("14:00 sleep");
-        mList.add("18:00 get off work");
-        mList.add("16:30 dinner");
-        mList.add("20:00 sleep");
+        mList.add("일정 어쩌구 저쩌구");
+        mList.add("일정 어쩌구");
+//        mList.add("08:00 go to office");
+//        mList.add("09:00 work ");
+//        mList.add("12:00 lunch");
+//        mList.add("13:00 work");
+//        mList.add("14:00 sleep");
+//        mList.add("18:00 get off work");
+//        mList.add("16:30 dinner");
+//        mList.add("20:00 sleep");
     }
 
     @Override
@@ -140,7 +140,7 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MultiCalendarActivity.this, MainActivity.class);
+                Intent i = new Intent(MultiCalendarActivity.this, ListDActivity.class);
                 startActivity(i);
                 finish();
             }
