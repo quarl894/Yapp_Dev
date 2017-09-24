@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        outputFileList = new ArrayList<String>();
         outputSttList = new ArrayList<String>();
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -275,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     mPlayer = new MediaPlayer ();
 
                     // 재생할 오디오 파일 저장위치를 설정
-                    mPlayer.setDataSource(outputFile);
+                    mPlayer.setDataSource(outputFile2);
                     // 웹상에 있는 오디오 파일을 재생할때
                     // player.setDataSource(Audio_Url);
 
@@ -288,139 +287,12 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
 
     }
     public void onBtnReset(){
-        outputFileList.clear();
-
-        for(int i=1; i<=count ; i++){
-            removeDir(Integer.toString(count));
-        }
-        count =0;
-    }
-    //파일 & 폴더 삭제
-
-    public static void removeDir(String countNum) {
-
-        String mRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myrecording" + countNum + ".mp4";
-        File file = new File(mRootPath);
-        File[] childFileList = file.listFiles();
-        for(File childFile : childFileList)
-        {
-            if(childFile.isDirectory()) {
-                removeDir(childFile.getAbsolutePath());    //하위 디렉토리
-            }
-            else {
-                childFile.delete();    //하위 파일
-            }
-        }
-        file.delete();    //root 삭제
-
-    }
-    public void onBtnSave(){
-        Log.d("seoheeing", "Record Prepare error");
-//        count=0;
-//        startMerge(outputFileList);
-        if (state == STATE_PREV) {     //
-            //녹음 시작안한 상태에서 정지 버튼 누르기
-            return;
-        } else if (state == STATE_PAUSE) {
-            //일시 정지 상태일 때,
-        }else {
-            try {
-                mPlayer.stop();
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-            mPlayer.reset();
-            mPlayer.release();
-            mPlayer = null;
-        }
-        count = 0;
-        try {
-//            startMerge2(outputSttList);
-            startMerge(outputFileList);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for(int i=0; i<outputFileList.size(); i++){
-            File file = new File(outputFileList.get(i));
-            file.delete();
-        }
-        outputFileList.clear();
-        for(int i=0; i<outputSttList.size(); i++){
-            File file = new File(outputSttList.get(i));
-            file.delete();
-        }
         outputSttList.clear();
+        count =0;
+        txtResult.setText("");
+        list_stt.clear();
     }
-    public void startMerge(ArrayList<String> outputFileList)throws IOException
-    {
-        Movie[] inMovies = new Movie[outputFileList.size()];
-        try
-        {
-            Log.e("file_size", ""+ Integer.toString(outputFileList.size()));
-            for(int a = 0; a < outputFileList.size(); a++)
-            {
-                inMovies[a] = MovieCreator.build(outputFileList.get(a));
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        List<Track> audioTracks = new LinkedList<Track>();
-        for (Movie m : inMovies)
-        {
-            for (Track t : m.getTracks())
-            {
-                if (t.getHandler().equals("soun"))
-                {
-                    audioTracks.add(t);
-                }
-            }
-        }
 
-        Movie output = new Movie();
-        if (audioTracks.size() > 0)
-        {
-            try
-            {
-                output.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        Container out = new DefaultMp4Builder().build(output);
-
-        FileChannel fc = null;
-        try
-        {
-            fc = new FileOutputStream(new File(outputFile)).getChannel();
-            Log.e("output",outputFile);
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        try
-        {
-            out.writeContainer(fc);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        try
-        {
-            fc.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
     public void startMerge2(ArrayList<String> outputFileList)throws IOException
     {
         Movie[] inMovies = new Movie[outputFileList.size()];
@@ -547,7 +419,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                 mBtnStop.setEnabled(false);
                 mBtnRecord.setVisibility(View.VISIBLE);
                 mBtnStop.setVisibility(View.INVISIBLE);
-//                onBtnStop();
                 break;
             case R.id.btnReset :
                 onBtnReset();
