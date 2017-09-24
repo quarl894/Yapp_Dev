@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToyCalendar</string>
+    <string name="app_name">dev_diary</string>
 
     <string-array name="day_of_week">
         <item>일</item>
