@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     public final static int STATE_PAUSE = 2;        // 일시 정지 중
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
+    ArrayList<String> list_stt;
     String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/output.mp4";
     String outputFile2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttput.mp4";
     MediaPlayer mPlayer = null;
@@ -97,8 +98,16 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     private void handleMessage(Message msg) {
         switch (msg.what) {
             case R.id.clientReady:
+                String tv3 = "";
+                if(list_stt.size()==0){
+                    tv3 ="";
+                }else{
+                    for(int i=0; i<list_stt.size(); i++){
+                        tv3 += list_stt.get(i)+ " ";
+                    }
+                }
                 // Now an user can speak.
-                txtResult.setText("Connected");
+                txtResult.setText(tv3);
                 writer = new AudioWriterPCM(
                         Environment.getExternalStorageDirectory().getAbsolutePath() + "/NaverSpeechTest");
                 writer.open("Test");
@@ -110,8 +119,16 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
 
             case R.id.partialResult:
                 // Extract obj property typed with String.
+                String tv ="";
+                if(list_stt.size() == 0){
+                    tv = "";
+                }else{
+                    for(int i=0; i<list_stt.size(); i++){
+                        tv +=list_stt.get(i)+" ";
+                    }
+                }
                 mResult = (String) (msg.obj);
-                txtResult.setText(mResult);
+                txtResult.setText(tv+mResult);
                 break;
 
             case R.id.finalResult:
@@ -125,9 +142,19 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     strBuf.append(result);
                     strBuf.append("\n");
                 }
+                String tv2 ="";
                 mResult = a.toString();
 //                mResult = strBuf.toString();
-                txtResult.setText(mResult);
+                if(list_stt.size() ==0){
+                    txtResult.setText(mResult);
+                }else{
+                    for(int i=0; i<list_stt.size(); i++){
+                        tv2 +=list_stt.get(i)+" ";
+                    }
+                    txtResult.setText(tv2+mResult);
+                }
+
+                list_stt.add(mResult);
                 break;
 
             case R.id.recognitionError:
@@ -166,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         btnStart = (Button) findViewById(R.id.btn_start);
 
         handler2 = new Handler();
+        list_stt = new ArrayList<String>();
         initToolbar();
         //i=0;
         //recordFilePathList.add(sdRootPath + "/seohee"+ i +".mp4");
@@ -599,8 +627,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             }
         }
     }
-
-
 
     public void onInfo(MediaRecorder mr, int what, int extra) {
 
