@@ -2,7 +2,6 @@ package yapp.dev_diary.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +13,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import yapp.dev_diary.MainActivity;
+import yapp.dev_diary.Calendar.Activity.MultiCalendarActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.Setting.SetActivity;
-import yapp.dev_diary.Voice.VoiceActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
 
@@ -66,7 +63,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListDActivity.this, SetActivity.class);
+                Intent i = new Intent(ListDActivity.this, MultiCalendarActivity.class);
                 startActivity(i);
             }
         });

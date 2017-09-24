@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             ExifInterface exif3 = new ExifInterface(pic_path.get(2));
             ExifInterface exif4 = new ExifInterface(pic_path.get(3));
             ExifInterface exif5 = new ExifInterface(pic_path.get(4));
-            //Uri에서 이미지 이름을 얻어온다. 
+            //Uri에서 이미지 이름을 얻어온다.?
             if(showExif(exif).equals(getTime)) ok_path.add(pic_path.get(0));
             if(showExif(exif2).equals(getTime)) ok_path.add(pic_path.get(1));
             if(showExif(exif3).equals(getTime)) ok_path.add(pic_path.get(2));
@@ -262,28 +262,28 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     }
 
     public void onBtnPlay(){
-                Log.d("seoheeing", "Record Prepare error");
-               if(mPlayer != null){
-                   mPlayer.stop();
-                   mPlayer.release();
-                   mPlayer = null;
-               }
-                Toast.makeText(getApplicationContext(), "녹음된 파일을 재생합니다.", Toast.LENGTH_LONG).show();
-                try {
-                    // 오디오를 플레이 하기위해 MediaPlayer 객체 player를 생성한다.
-                    mPlayer = new MediaPlayer ();
+        Log.d("seoheeing", "Record Prepare error");
+        if(mPlayer != null){
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
+        }
+        Toast.makeText(getApplicationContext(), "녹음된 파일을 재생합니다.", Toast.LENGTH_LONG).show();
+        try {
+            // 오디오를 플레이 하기위해 MediaPlayer 객체 player를 생성한다.
+            mPlayer = new MediaPlayer ();
 
-                    // 재생할 오디오 파일 저장위치를 설정
-                    mPlayer.setDataSource(outputFile2);
-                    // 웹상에 있는 오디오 파일을 재생할때
-                    // player.setDataSource(Audio_Url);
+            // 재생할 오디오 파일 저장위치를 설정
+            mPlayer.setDataSource(outputFile2);
+            // 웹상에 있는 오디오 파일을 재생할때
+            // player.setDataSource(Audio_Url);
 
-                    // 오디오 재생준비,시작
-                    mPlayer.prepare();
-                    mPlayer.start();
-                } catch (Exception e) {
-                    Log.d("SampleAudioRecorder", "Audio play failed.");
-                }
+            // 오디오 재생준비,시작
+            mPlayer.prepare();
+            mPlayer.start();
+        } catch (Exception e) {
+            Log.d("SampleAudioRecorder", "Audio play failed.");
+        }
 
     }
     public void onBtnReset(){
