@@ -6,8 +6,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,12 +62,12 @@
                 <LinearLayout
                     android:id="@+id/item_alarmsetting_linearlayout_repeat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@android:color/white"
                     android:gravity="top"
                     android:orientation="horizontal"
-                    android:paddingBottom="30dp"
-                    android:paddingTop="30dp">
+                    android:paddingBottom="40dp"
+                    android:paddingTop="40dp">
 
                     <ToggleButton
                         android:id="@+id/alarm_day_Monday"

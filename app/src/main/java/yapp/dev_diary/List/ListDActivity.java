@@ -15,9 +15,6 @@ import java.util.ArrayList;
 
 import yapp.dev_diary.Calendar.Activity.MultiCalendarActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.ResultActivity;
-import yapp.dev_diary.Setting.SetActivity;
-import yapp.dev_diary.Voice.VoiceActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
 
