@@ -103,11 +103,5 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="74dp" />
 
-    <Button
-        android:id="@+id/btn_start"
-        android:text="Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
 </FrameLayout>
 
