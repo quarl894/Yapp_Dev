@@ -2,7 +2,6 @@ package yapp.dev_diary.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,13 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.ResultActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
 
@@ -51,17 +50,17 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id){
-            case R.id.menu_start :
-                Intent i = new Intent(this, VoiceActivity.class);
-                startActivity(i);
+            case R.id.menu_list_edit :
                 return true;
-            case R.id.menu_list :
-                Intent i2 = new Intent(this, ResultActivity.class);
-                startActivity(i2);
+            case R.id.menu_list_setting :
+                Intent i3 = new Intent(this, SetActivity.class);
+                startActivity(i3);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,8 +72,9 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListDActivity.this, SetActivity.class);
+                Intent i = new Intent(ListDActivity.this, MainActivity.class);
                 startActivity(i);
+                finish();
             }
         });
     }

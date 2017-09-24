@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_list_edit"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/edit"
+        android:orderInCategory="101"
+        android:title="Search"
+        android:onClick="onClick"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_list_setting"
+        android:icon="@drawable/setting"
+        android:orderInCategory="102"
+        app:showAsAction="always"
+        android:onClick="onClick"
+        android:title="설정">
+
+    </item>
+</menu>
