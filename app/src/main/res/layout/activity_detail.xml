@@ -17,13 +17,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/flexible_space_image_height"
         android:scaleType="centerCrop"
         android:src="@drawable/pot_2" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="12dp"
+        android:orientation="horizontal"
+        android:id="@+id/edit_view"
+        android:gravity="right">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/backup_white"
+            android:layout_gravity="right"
+            android:background="@android:color/transparent"
+            android:layout_marginRight="12dp"
+            android:id="@+id/btn_backup"/>
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit"
+            android:background="@android:color/transparent"
+            android:layout_gravity="right" />
+    </LinearLayout>
 
     <!--<View-->
         <!--android:id="@+id/overlay"-->
@@ -43,21 +65,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/backup_white"
-                android:layout_gravity="right"
-                android:layout_marginRight="61dp"
-                android:scaleType="fitXY"
-                android:id="@+id/btn_backup"/>
-            <ImageButton
-                android:id="@+id/btn_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/edit"
-                android:layout_gravity="right" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/flexible_space_image_height"
@@ -104,40 +111,42 @@
                 android:lineSpacingExtra="8sp"
                 android:text="오늘의 사진" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="13dp"
-                android:paddingBottom="64dp">
-                <ImageView
-                    android:layout_width="109dp"
-                    android:layout_height="109dp"
-                    android:scaleType="fitXY"
-                    android:id="@+id/test_img" />
-                <ImageView
-                    android:layout_width="109dp"
-                    android:layout_height="109dp"
-                    android:scaleType="fitXY"
-                    android:id="@+id/test_img2" />
-                <ImageView
-                    android:layout_width="109dp"
-                    android:layout_height="109dp"
-                    android:scaleType="fitXY"
-                    android:id="@+id/test_img3" />
-                <ImageView
-                    android:layout_width="109dp"
-                    android:layout_height="109dp"
-                    android:scaleType="fitXY"
-                    android:id="@+id/test_img4" />
-                <ImageView
-                    android:layout_width="109dp"
-                    android:layout_height="109dp"
-                    android:scaleType="fitXY"
-                    android:id="@+id/test_img5" />
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <HorizontalScrollView
+                        android:id="@+id/hori_scroll_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="false"
+                        android:foregroundGravity="left">
+                        <LinearLayout
+                            android:id="@+id/selected_photos_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:animateLayoutChanges="true"
+                            android:gravity="left"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+                            <!-- images will be added dynamicall to this layout -->
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </LinearLayout>
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:layout_marginLeft="29dp"
+        android:scaleType="center"
+        android:src="@drawable/sound_play"
+        app:fab_colorNormal="@color/white"
+        app:fab_colorPressed="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -169,15 +178,4 @@
             android:layout_height="@dimen/flexible_space_image_height"
             android:background="@android:color/transparent" />
     </LinearLayout>
-
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left|top"
-        android:layout_marginLeft="29dp"
-        android:scaleType="center"
-        android:src="@drawable/sound_play"
-        app:fab_colorNormal="@color/white"
-        app:fab_colorPressed="@color/white" />
 </FrameLayout>

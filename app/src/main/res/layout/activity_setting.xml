@@ -48,6 +48,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginLeft="21dp"
+            android:src="@drawable/alarm"
             app:srcCompat="@drawable/alarm" />
 
         <TextView
@@ -73,6 +74,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginLeft="21dp"
+            android:src="@drawable/lock"
             app:srcCompat="@drawable/lock" />
 
         <TextView
@@ -97,6 +99,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginLeft="21dp"
+            android:src="@drawable/backup_all"
             app:srcCompat="@drawable/backup_all" />
 
         <TextView
@@ -121,6 +124,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginLeft="21dp"
+            android:src="@drawable/delete"
             app:srcCompat="@drawable/delete" />
 
         <TextView
@@ -132,5 +136,4 @@
             android:text="전체초기화"
             android:textSize="20sp" />
     </LinearLayout>
-
 </LinearLayout>
