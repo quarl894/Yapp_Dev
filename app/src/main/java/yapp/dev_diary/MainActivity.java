@@ -1,9 +1,12 @@
 package yapp.dev_diary;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,6 +20,8 @@ import android.os.Environment;
 import android.database.Cursor;
 import android.database.CursorJoiner;
 import android.media.ExifInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coremedia.iso.boxes.Container;
@@ -36,24 +42,34 @@ import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
+import com.naver.speech.clientapi.SpeechRecognitionResult;
+
 import android.widget.Button;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
+import yapp.dev_diary.utils.AudioWriterPCM;
 
 public class MainActivity extends AppCompatActivity implements MediaRecorder.OnInfoListener {
     public final static int STATE_PREV = 0;     //녹음 시작 전
     public final static int STATE_RECORDING = 1;    //녹음 중
     public final static int STATE_PAUSE = 2;        // 일시 정지 중
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
+    ArrayList<String> list_stt;
     String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/output.mp4";
+    String outputFile2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttput.mp4";
     MediaPlayer mPlayer = null;
     MediaRecorder mRecorder = null;
     ArrayList<String> outputFileList; // 임시 파일 리스트
+    ArrayList<String> outputSttList;
     String mFilePath =  null;
     ImageButton mBtnRecord; //재생&일시정지
 
@@ -63,40 +79,129 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
 
     ImageButton mBtnReset;// 초기화 버튼
     Button mBtnSave;
+
+    private RecognitionHandler handler;
+    private NaverRecognizer naverRecognizer;
+    private TextView txtResult;
+    private String mResult;
+
+    private Handler handler2;
+
+    private AudioWriterPCM writer;
     int count=0;
     private int state = STATE_PREV;
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
+
+    // Handle speech recognition Messages.
+    private void handleMessage(Message msg) {
+        switch (msg.what) {
+            case R.id.clientReady:
+                String tv3 = "";
+                if(list_stt.size()==0){
+                    tv3 ="";
+                }else{
+                    for(int i=0; i<list_stt.size(); i++){
+                        tv3 += list_stt.get(i)+ " ";
+                    }
+                }
+                // Now an user can speak.
+                txtResult.setText(tv3);
+                writer = new AudioWriterPCM(
+                        Environment.getExternalStorageDirectory().getAbsolutePath() + "/NaverSpeechTest");
+                writer.open("Test");
+                break;
+
+            case R.id.audioRecording:
+                writer.write((short[]) msg.obj);
+                break;
+
+            case R.id.partialResult:
+                // Extract obj property typed with String.
+                String tv ="";
+                if(list_stt.size() == 0){
+                    tv = "";
+                }else{
+                    for(int i=0; i<list_stt.size(); i++){
+                        tv +=list_stt.get(i)+" ";
+                    }
+                }
+                mResult = (String) (msg.obj);
+                txtResult.setText(tv+mResult);
+                break;
+
+            case R.id.finalResult:
+                // Extract obj property typed with String array.
+                // The first element is recognition result for speech.
+                SpeechRecognitionResult speechRecognitionResult = (SpeechRecognitionResult) msg.obj;
+                List<String> results = speechRecognitionResult.getResults();
+                String a = speechRecognitionResult.getResults().get(0);
+                StringBuilder strBuf = new StringBuilder();
+                for(String result : results) {
+                    strBuf.append(result);
+                    strBuf.append("\n");
+                }
+                String tv2 ="";
+                mResult = a.toString();
+                if(list_stt.size() ==0){
+                    txtResult.setText(mResult);
+                }else{
+                    for(int i=0; i<list_stt.size(); i++){
+                        tv2 +=list_stt.get(i)+" ";
+                    }
+                    txtResult.setText(tv2+mResult);
+                }
+
+                list_stt.add(mResult);
+                break;
+
+            case R.id.recognitionError:
+                if (writer != null) {
+                    writer.close();
+                }
+
+                mResult = "Error code : " + msg.obj.toString();
+                txtResult.setText(mResult);
+                break;
+
+            case R.id.clientInactive:
+                if (writer != null) {
+                    writer.close();
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        outputFileList = new ArrayList<String>();
+        outputSttList = new ArrayList<String>();
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String getTime = sdf.format(date);
+        final String getTime = sdf.format(date);
         getImageNameToUri();
 
-
+        handler2 = new Handler();
+        list_stt = new ArrayList<String>();
         initToolbar();
         //i=0;
         //recordFilePathList.add(sdRootPath + "/seohee"+ i +".mp4");
 
         //버튼 레코드는 원래 녹음 시작
         mBtnRecord = (ImageButton)findViewById(R.id.btnRecord);
-
         mBtnStop = (ImageButton)findViewById(R.id.btnPause);
-
         mBtnPlay = (ImageButton)findViewById(R.id.btnPlay);
-
         mBtnReset = (ImageButton)findViewById(R.id.btnReset);
-
         mBtnSave = (Button)findViewById(R.id.btnSave);
         mBtnRecord.setVisibility(View.VISIBLE);
         mBtnStop.setVisibility(View.INVISIBLE);
+
+        txtResult = (TextView) findViewById(R.id.txt_result);
+        handler = new RecognitionHandler(this);
+        naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
 
         try {
             //사진 찍은 날짜 정보 가져오기
@@ -139,55 +244,9 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         }
         return super.onOptionsItemSelected(item);
     }
-    public void onBtnRecord() {
-        Log.d("seoheeing", "Record Prepare error");
-        count +=1;
-        mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myrecording";
-        String nowFile = mFilePath  + count + ".mp4";
-        outputFileList.add(nowFile);
-
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        mRecorder.setAudioEncodingBitRate(320000);
-        mRecorder.setAudioSamplingRate(44100);
-        mRecorder.setOutputFile(nowFile);
-
-        try {
-
-            mRecorder.prepare();
-            mRecorder.start();
-
-        } catch(IOException e) {
-
-            Log.d("tag", "Record Prepare error");
-
-        }
-        state = STATE_RECORDING; //녹음 중 상태로 바꿈
-
-
-
-
-        // 버튼 활성/비활성 설정
-
-        mBtnRecord.setEnabled(false);
-
-        mBtnStop.setEnabled(true);
-
-       // mBtnPlay.setEnabled(false);
-        mBtnRecord.setVisibility(View.INVISIBLE);
-        mBtnStop.setVisibility(View.VISIBLE);
-    }
-
-
 
     public void onBtnStop() {//일시정지
         Log.d("seoheeing", "Record Prepare error");
-
-
         mRecorder.stop();
         mRecorder.reset();
         mRecorder.release();
@@ -202,10 +261,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
 
     }
 
-//    public void onBtnOk(){
-//        Intent intent=new Intent(MainActivity.this,InputActivity.class);
-//        startActivity(intent);
-//    }
     public void onBtnPlay(){
                 Log.d("seoheeing", "Record Prepare error");
                if(mPlayer != null){
@@ -215,12 +270,11 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                }
                 Toast.makeText(getApplicationContext(), "녹음된 파일을 재생합니다.", Toast.LENGTH_LONG).show();
                 try {
-
                     // 오디오를 플레이 하기위해 MediaPlayer 객체 player를 생성한다.
                     mPlayer = new MediaPlayer ();
 
                     // 재생할 오디오 파일 저장위치를 설정
-                    mPlayer.setDataSource(outputFile);
+                    mPlayer.setDataSource(outputFile2);
                     // 웹상에 있는 오디오 파일을 재생할때
                     // player.setDataSource(Audio_Url);
 
@@ -233,69 +287,13 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
 
     }
     public void onBtnReset(){
-        outputFileList.clear();
-
-        for(int i=1; i<=count ; i++){
-            removeDir(Integer.toString(count));
-        }
+        outputSttList.clear();
         count =0;
+        txtResult.setText("");
+        list_stt.clear();
     }
-    //파일 & 폴더 삭제
 
-    public static void removeDir(String countNum) {
-
-        String mRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myrecording" + countNum + ".mp4";
-        File file = new File(mRootPath);
-        File[] childFileList = file.listFiles();
-        for(File childFile : childFileList)
-        {
-            if(childFile.isDirectory()) {
-                removeDir(childFile.getAbsolutePath());    //하위 디렉토리
-            }
-            else {
-                childFile.delete();    //하위 파일
-            }
-        }
-        file.delete();    //root 삭제
-
-    }
-    public void onBtnSave(){
-        Log.d("seoheeing", "Record Prepare error");
-
-//        count=0;
-//        startMerge(outputFileList);
-        if (state == STATE_PREV) {     //
-            //녹음 시작안한 상태에서 정지 버튼 누르기
-            return;
-        } else if (state == STATE_PAUSE) {
-            //일시 정지 상태일 때,
-
-        } else {
-            try {
-                mPlayer.stop();
-
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-            mPlayer.reset();
-            mPlayer.release();
-            mPlayer = null;
-
-        }
-        count = 0;
-        try {
-            startMerge(outputFileList);
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-        for(int i=0; i<outputFileList.size(); i++){
-            File file = new File(outputFileList.get(i));
-            file.delete();
-        }
-        outputFileList.clear();
-    }
-    public void startMerge(ArrayList<String> outputFileList)throws IOException
+    public void startMerge2(ArrayList<String> outputFileList)throws IOException
     {
         Movie[] inMovies = new Movie[outputFileList.size()];
         try
@@ -340,13 +338,13 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         FileChannel fc = null;
         try
         {
-            fc = new FileOutputStream(new File(outputFile)).getChannel();
+            fc = new FileOutputStream(new File(outputFile2)).getChannel();
+            Log.e("output",outputFile2);
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
-
         try
         {
             out.writeContainer(fc);
@@ -364,87 +362,121 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             e.printStackTrace();
         }
     }
-
-
-//    public void append(List<String> list) throws IOException {
-//
-//
-//        Movie[] inMovies;
-//        inMovies = new Movie[list.size()];
-//        for (int i = 0; i < list.size(); i++) {
-//            inMovies[i] = MovieCreator.build(list.get(i));
-//        }
-//
-//        List<Track> videoTracks = new LinkedList<Track>();
-//        List<Track> audioTracks = new LinkedList<Track>();
-//
-//        for (Movie m : inMovies) {
-//            for (Track t : m.getTracks()) {
-//                if (t.getHandler().equals("soun")) {
-//                    audioTracks.add(t);
-//                }
-//                if (t.getHandler().equals("vide")) {
-//                    videoTracks.add(t);
-//                }
-//            }
-//        }
-//
-//        Movie result = new Movie();
-//
-//        if (audioTracks.size() > 0) {
-//            result.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
-//        }
-//        if (videoTracks.size() > 0) {
-//            result.addTrack(new AppendTrack(videoTracks.toArray(new Track[videoTracks.size()])));
-//        }
-//
-//        Container out = new DefaultMp4Builder().build(result);
-//
-//        RandomAccessFile ram = new RandomAccessFile(String.format(Environment.getExternalStorageDirectory().getAbsolutePath()  + "/output.mp4"), "rw");
-//        //최종적으로 output.mp4 라는 파일로 다 합친 파일을 저장하게 됨
-//        FileChannel fc = ram.getChannel();
-//        out.writeContainer(fc);
-//        ram.close();
-//        fc.close();
-//    }
-
-
-
-
     public void onClick(View v) {
-
         switch( v.getId() ) {
-
             case R.id.btnRecord :
+                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
+                    // Start button is pushed when SpeechRecognizer's state is inactive.
+                    // Run SpeechRecongizer by calling recognize().
+                    mResult = "";
+                    txtResult.setText("Connecting...");
+                    naverRecognizer.recognize();
+                } else {
+                    Log.d(TAG, "stop and wait Final Result");
+                    naverRecognizer.getSpeechRecognizer().stop();
+                    try {
+                        count +=1;
+                        mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
+                        String nowFile = mFilePath  + count + ".mp4";
+                        encodeSingleFile(nowFile);
+                        outputSttList.add(nowFile);
+                        Log.e("TAG",""+Integer.toString(outputSttList.size()));
+                    } catch (Exception e) {
+                        Log.e(TAG, "Exception while creating tmp file1", e);
+                    }
+                }
+                mBtnRecord.setEnabled(false);
 
-                onBtnRecord();
+                mBtnStop.setEnabled(true);
 
+                // mBtnPlay.setEnabled(false);
+                mBtnRecord.setVisibility(View.INVISIBLE);
+                mBtnStop.setVisibility(View.VISIBLE);
                 break;
-
             case R.id.btnPause :
+                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
+                    // Start button is pushed when SpeechRecognizer's state is inactive.
+                    // Run SpeechRecongizer by calling recognize().
+                    mResult = "";
+                    txtResult.setText("Connecting...");
+                    naverRecognizer.recognize();
+                } else {
+                    Log.d(TAG, "stop and wait Final Result");
+                    naverRecognizer.getSpeechRecognizer().stop();
+                    try {
+                        count +=1;
+                        mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
+                        String nowFile = mFilePath  + count + ".mp4";
+                        encodeSingleFile(nowFile);
+                        outputSttList.add(nowFile);
+                        Log.e("TAG",""+Integer.toString(outputSttList.size()));
+                    } catch (Exception e) {
+                        Log.e(TAG, "Exception while creating tmp file1", e);
+                    }
+                }
+                mBtnRecord.setEnabled(true);
 
-                onBtnStop();
-
+                mBtnStop.setEnabled(false);
+                mBtnRecord.setVisibility(View.VISIBLE);
+                mBtnStop.setVisibility(View.INVISIBLE);
                 break;
-
-
             case R.id.btnReset :
                 onBtnReset();
-
                 break;
-
             case R.id.btnPlay:
                 onBtnPlay();
                 break;
-
             case R.id.btnSave:
-                onBtnSave();
+                try {
+                    startMerge2(outputSttList);
+//                    onBtnSave();
+                    Intent i = new Intent(MainActivity.this, SaveActivity.class);
+                    startActivity(i);
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception while creating tmp file", e);
+                }
                 break;
         }
-
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // NOTE : initialize() must be called on start time.
+        naverRecognizer.getSpeechRecognizer().initialize();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mResult = "";
+        txtResult.setText("");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // NOTE : release() must be called on stop time.
+        naverRecognizer.getSpeechRecognizer().release();
+    }
+
+    // Declare handler for handling SpeechRecognizer thread's Messages.
+    static class RecognitionHandler extends Handler {
+        private final WeakReference<MainActivity> mActivity;
+
+        RecognitionHandler(MainActivity activity) {
+            mActivity = new WeakReference<MainActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.handleMessage(msg);
+            }
+        }
+    }
 
     public void onInfo(MediaRecorder mr, int what, int extra) {
 
@@ -508,5 +540,40 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             pic_date = a.replaceAll(":","");
             return pic_date.substring(0,8);
         }
+    }
+
+    private void encodeSingleFile(final String outputPath) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(encodeTask(1, outputPath));
+    }
+
+    private Runnable encodeTask(final int numFiles, final String outputPath) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final PCMEncoder pcmEncoder = new PCMEncoder(48000, 16000, 1);
+                    pcmEncoder.setOutputPath(outputPath);
+                    pcmEncoder.prepare();
+                    File directory = new File("storage/emulated/0/NaverSpeechTest/Test.pcm");
+                    for (int i = 0; i < numFiles; i++) {
+                        Log.d(TAG, "Encoding: " + i);
+                        //InputStream inputStream = getAssets().open("test.wav");
+                        InputStream inputStream = new FileInputStream(directory);
+                        inputStream.skip(44);
+                        pcmEncoder.encode(inputStream, 16000);
+                    }
+                    pcmEncoder.stop();
+                    handler2.post(new Runnable() {
+                        @Override
+                        public void run() {
+//                            Toast.makeText(getApplicationContext(), "Encoded file to: " + outputPath, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e(TAG, "Cannot create FileInputStream", e);
+                }
+            }
+        };
     }
 }

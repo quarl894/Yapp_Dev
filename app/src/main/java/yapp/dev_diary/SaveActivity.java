@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +31,7 @@ import yapp.dev_diary.Detail.DetailActivity;
 public class SaveActivity extends AppCompatActivity {
     Button save_btn, btn_weather, btn_feel;
     Switch pic_switch;
+    static int feel, weather;
     int chk_num;
     ImageButton img1, img2, img3, img4;
     EditText edit_btn;
@@ -68,6 +70,8 @@ public class SaveActivity extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        btn_weather.performClick();
+        btn_weather.setTextColor(getResources().getColor(R.color.colorAccent));
         //기분 이모티콘
         btn_feel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +82,42 @@ public class SaveActivity extends AppCompatActivity {
                 img2.setImageResource(R.drawable.notbad);
                 img3.setImageResource(R.drawable.sad);
                 img4.setImageResource(R.drawable.angry);
+                img1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img1.setAlpha(100);
+                        img2.setAlpha(50);
+                        img3.setAlpha(50);
+                        img4.setAlpha(50);
+                    }
+                });
+                img2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img2.setAlpha(100);
+                        img1.setAlpha(50);
+                        img3.setAlpha(50);
+                        img4.setAlpha(50);
+                    }
+                });
+                img3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img3.setAlpha(100);
+                        img2.setAlpha(50);
+                        img1.setAlpha(50);
+                        img4.setAlpha(50);
+                    }
+                });
+                img4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img4.setAlpha(100);
+                        img2.setAlpha(50);
+                        img3.setAlpha(50);
+                        img1.setAlpha(50);
+                    }
+                });
             }
         });
         // 날씨 이모티콘
@@ -90,6 +130,42 @@ public class SaveActivity extends AppCompatActivity {
                 img2.setImageResource(R.drawable.cloud);
                 img3.setImageResource(R.drawable.rain);
                 img4.setImageResource(R.drawable.snow);
+                img1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img1.setAlpha(100);
+                        img2.setAlpha(50);
+                        img3.setAlpha(50);
+                        img4.setAlpha(50);
+                    }
+                });
+                img2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img2.setAlpha(100);
+                        img1.setAlpha(50);
+                        img3.setAlpha(50);
+                        img4.setAlpha(50);
+                    }
+                });
+                img3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img3.setAlpha(100);
+                        img2.setAlpha(50);
+                        img1.setAlpha(50);
+                        img4.setAlpha(50);
+                    }
+                });
+                img4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img4.setAlpha(100);
+                        img2.setAlpha(50);
+                        img3.setAlpha(50);
+                        img1.setAlpha(50);
+                    }
+                });
             }
         });
 
