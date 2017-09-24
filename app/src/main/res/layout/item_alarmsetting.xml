@@ -1,148 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fafafa"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/item_alarmsetting_textview_timetitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="14dp"
-            android:paddingLeft="14dp"
-            android:paddingTop="26dp"
-            android:text="알람 세부 설정"
-            android:textColor="@color/colorAccent" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:orientation="vertical">
-
-        <TimePicker
-            android:id="@+id/item_alarmsetting_timepicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="25.8dp"
-            android:paddingTop="39dp"
-            android:timePickerMode="spinner" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/item_alarmsetting_textview_repeattitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fafafa"
-            android:paddingBottom="14dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="20dp"
-            android:text="반복 설정"
-            android:textColor="@color/colorAccent" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/item_alarmsetting_linearlayout_repeat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:gravity="top"
-            android:orientation="horizontal"
-            android:paddingTop="30dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Monday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:textOff="월"
-                android:textOn="월" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fafafa"
+                android:orientation="vertical">
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Tuesday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:text="ToggleButton"
-                android:textOff="화"
-                android:textOn="화" />
+                <TextView
+                    android:id="@+id/item_alarmsetting_textview_timetitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="14dp"
+                    android:paddingLeft="14dp"
+                    android:paddingTop="26dp"
+                    android:text="알람 세부 설정"
+                    android:textColor="@color/colorAccent" />
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Wednesday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:text="ToggleButton"
-                android:textOff="수"
-                android:textOn="수" />
+            </LinearLayout>
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Thursday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:text="ToggleButton"
-                android:textOff="목"
-                android:textOn="목" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Friday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:text="ToggleButton"
-                android:textOff="금"
-                android:textOn="금" />
+                <TimePicker
+                    android:id="@+id/item_alarmsetting_timepicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="25.8dp"
+                    android:paddingTop="39dp"
+                    android:timePickerMode="spinner" />
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Saturday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:text="ToggleButton"
-                android:textOff="토"
-                android:textOn="토" />
+            </LinearLayout>
 
-            <ToggleButton
-                android:id="@+id/alarm_day_Sunday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/circle_btn"
-                android:checked="false"
-                android:text="ToggleButton"
-                android:textOff="일"
-                android:textOn="일" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/item_alarmsetting_textview_repeattitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fafafa"
+                    android:paddingBottom="14dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="20dp"
+                    android:text="반복 설정"
+                    android:textColor="@color/colorAccent" />
+
+                <LinearLayout
+                    android:id="@+id/item_alarmsetting_linearlayout_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="top"
+                    android:orientation="horizontal"
+                    android:paddingBottom="30dp"
+                    android:paddingTop="30dp">
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Monday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:textOff="월"
+                        android:textOn="월" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Tuesday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="화"
+                        android:textOn="화" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Wednesday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="수"
+                        android:textOn="수" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Thursday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="목"
+                        android:textOn="목" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Friday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="금"
+                        android:textOn="금" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Saturday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="토"
+                        android:textOn="토" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Sunday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="일"
+                        android:textOn="일" />
+
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+    </ScrollView>
