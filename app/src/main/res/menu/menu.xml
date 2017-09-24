@@ -6,7 +6,7 @@
         android:title="calendar"
         app:showAsAction="always" />
     <item android:title="Item"
-        android:icon="@drawable/record"
+        android:icon="@drawable/text"
         app:showAsAction="always"
         android:id="@+id/menu_start" />
     <item android:title="Item"

@@ -31,6 +31,7 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import java.util.ArrayList;
 
 import gun0912.tedbottompicker.TedBottomPicker;
+import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
 
 /**
@@ -41,7 +42,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     ArrayList<String> select_pic = new ArrayList<>();
     ArrayList<Uri> selectedUriList;
     private ViewGroup mSelectedImagesContainer;
-    ImageView image, image2, image3, image4, image5;
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     public RequestManager mGlideRequestManager;
     private View mImageView;
@@ -81,39 +81,19 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mGlideRequestManager = Glide.with(this);
         mSelectedImagesContainer = (ViewGroup) findViewById(R.id.selected_photos_container);
         setMultiShowButton();
-
-        image = (ImageView) findViewById(R.id.test_img);
-        image2 = (ImageView) findViewById(R.id.test_img2);
-        image3 = (ImageView) findViewById(R.id.test_img3);
-        image4 = (ImageView) findViewById(R.id.test_img4);
-        image5 = (ImageView) findViewById(R.id.test_img5);
         Intent intent = getIntent();
-        for(int i=0; i<select_pic.size(); i++) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 4;
-            Bitmap a = BitmapFactory.decodeFile(select_pic.get(i), options);
-            Bitmap img_bitmap = Bitmap.createScaledBitmap(a,100,100,true);
-//            Bitmap img_bitmap = BitmapFactory.decodeFile(select_pic.get(i));
-            switch (i) {
-                case 0:
-                    image.setImageBitmap(img_bitmap);
-                    break;
-                case 1:
-                    image2.setImageBitmap(img_bitmap);
-                    break;
-                case 2:
-                    image3.setImageBitmap(img_bitmap);
-                    break;
-                case 3:
-                    image4.setImageBitmap(img_bitmap);
-                    break;
-                case 4:
-                    image5.setImageBitmap(img_bitmap);
-                    break;
-                default:
-                    break;
-            }
+        final int chk_num = intent.getExtras().getInt("chk_num");
+        if(chk_num == 1){
+            select_pic = MainActivity.ok_path;
+        }else{
+            select_pic.clear();
         }
+        if(chk_num == 1){
+            select_pic = MainActivity.ok_path;
+        }else{
+            select_pic.clear();
+        }
+        showStringgList(select_pic);
         setTitle(null);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +207,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                                 .showTitle(false)
                                 .setCompleteButtonText("Done")
                                 .setEmptySelectionText("No Select")
-                                //.setSelectedUriList(selectedUriList)
+                                .setSelectedUriList(selectedUriList)
+                                .setSelectMaxCount(5)
                                 .create();
                         bottomSheetDialogFragment.show(getSupportFragmentManager());
                     }
@@ -248,7 +229,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         // Remove all views before
         // adding the new ones.
         mSelectedImagesContainer.removeAllViews();
-
         mSelectedImagesContainer.setVisibility(View.VISIBLE);
 
         int wdpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
@@ -258,6 +238,24 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
             ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
             Glide.with(this)
                     .load(uri.toString())
+                    .fitCenter()
+                    .into(thumbnail);
+            mSelectedImagesContainer.addView(imageHolder);
+            thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
+        }
+    }
+
+    private void showStringgList(ArrayList<String> StringList) {
+        mSelectedImagesContainer.removeAllViews();
+        mSelectedImagesContainer.setVisibility(View.VISIBLE);
+
+        int wdpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        int htpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        for (int i = 0; i < StringList.size(); i++) {
+            View imageHolder = LayoutInflater.from(this).inflate(R.layout.image_item, null);
+            ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
+            Glide.with(this)
+                    .load(StringList.get(i).toString())
                     .fitCenter()
                     .into(thumbnail);
             mSelectedImagesContainer.addView(imageHolder);
