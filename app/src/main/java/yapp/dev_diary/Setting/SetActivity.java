@@ -1,5 +1,6 @@
 package yapp.dev_diary.Setting;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import yapp.dev_diary.R;
-
 
 public class SetActivity extends Activity {
     @Override
@@ -53,20 +53,20 @@ public class SetActivity extends Activity {
      * onClick시 Event 분기 메소드
      * @param view Event가 발생한 View를 인자 그대로 넘기면 된다.
      * */
-    private void onClickEvent(View view){
+    private void onClickEvent(View view) {
         switch (view.getId()) {
-            case R.id.setting_layout_alarm :
+            case R.id.setting_layout_alarm:
                 Intent intent1 = new Intent(this, AlarmActivity.class);
                 startActivity(intent1);
                 break;
-            case R.id.setting_layout_lock :
+            case R.id.setting_layout_lock:
                 Intent intent2 = new Intent(this, LockActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.setting_layout_allbackup :
+            case R.id.setting_layout_allbackup:
                 Toast.makeText(this, "전체백업은 백업 되면은...", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.setting_layout_allclear :
+            case R.id.setting_layout_allclear:
                 Toast.makeText(this, "전체초기화는 DB다 되면...", Toast.LENGTH_SHORT).show();
                 break;
         }

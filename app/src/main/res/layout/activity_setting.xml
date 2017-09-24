@@ -135,5 +135,4 @@
             android:text="전체초기화"
             android:textSize="20sp" />
     </LinearLayout>
-
 </LinearLayout>
