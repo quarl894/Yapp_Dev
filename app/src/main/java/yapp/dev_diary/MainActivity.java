@@ -14,6 +14,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -52,6 +53,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
@@ -92,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     private int state = STATE_PREV;
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
+
+
+    MyDBHelper     DBHelper;
+    SQLiteDatabase db;
 
     // Handle speech recognition Messages.
     private void handleMessage(Message msg) {
@@ -176,6 +183,20 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DBHelper = new MyDBHelper(MainActivity.this);
+        db = DBHelper.getWritableDatabase();
+        Button db_button = (Button)findViewById(R.id.db_button);
+        db_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("db", "DBHelper.allSelect()");
+                List<MyItem> itemList = DBHelper.allSelect();
+                for(int i = 0; i < itemList.size(); i++)
+                    Log.i("db", itemList.get(i).getString());
+            }
+        });
+
 
         outputSttList = new ArrayList<String>();
         long now = System.currentTimeMillis();
@@ -428,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                 break;
             case R.id.btnSave:
                 try {
-                    startMerge2(outputSttList);
+//                    startMerge2(outputSttList);
 //                    onBtnSave();
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
                     startActivity(i);
