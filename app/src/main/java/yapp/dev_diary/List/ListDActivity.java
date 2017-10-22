@@ -23,12 +23,9 @@ import yapp.dev_diary.R;
 import yapp.dev_diary.SaveActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
-
     private TimeRecyclerAdapter adapter;
-
     MyDBHelper     DBHelper;
     SQLiteDatabase db;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,20 +83,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private ArrayList<MyData> getDataset() {
         ArrayList<MyData> dataset = new ArrayList<>();
 
-//        for(int i=1; i<13; i++){
-//            dataset.add(new MyData("Hello", 2017, i, 1));
-//        }
-
-//        dataset.add(new MyData("Cristiano Ronaldo", 1985, 1, 1));
-//        dataset.add(new MyData("Lionel Messi", 1985, 1, 1));
-//        dataset.add(new MyData("Wayne Rooney", 1985, 1, 1));
-//        dataset.add(new MyData("Karim Benzema", 1989, 12, 16));
-//        dataset.add(new MyData("Luka Modric", 1991, 8, 19));
-//        dataset.add(new MyData("Fernando Torres", 1992, 3, 24));
-//        dataset.add(new MyData("David Silva", 1986, 5, 6));
-//        dataset.add(new MyData("Raheem Sterling", 1986, 5, 6));
-//        dataset.add(new MyData("Philippe Coutinho", 1986, 5, 6));
-
         DBHelper = new MyDBHelper(ListDActivity.this);
         db = DBHelper.getWritableDatabase();
         Log.i("db", "DBHelper.allSelect()");
@@ -109,10 +92,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         {
             tmpItem = itemList.get(i);
             dataset.add(new MyData(tmpItem.getTitle(), tmpItem.getDate()/10000, (tmpItem.getDate()/100)%100, tmpItem.getDate()%100));
+            Log.i("p_path:", ""+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100);
         }
-
-
-
         return dataset;
     }
 }

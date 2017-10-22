@@ -41,6 +41,7 @@ public class SaveActivity extends AppCompatActivity {
     int chk_num;
     ImageButton img1, img2, img3, img4,img5,img6,img7,img8;
     TextView data_view;
+    EditText edit_title;
     Calendar myCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -53,18 +54,14 @@ public class SaveActivity extends AppCompatActivity {
             updateLabel();
         }
     };
-
-
-    MyDBHelper     DBHelper;
+    MyDBHelper DBHelper;
     SQLiteDatabase db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         DBHelper = new MyDBHelper(SaveActivity.this);
         db = DBHelper.getWritableDatabase();
-
 
         // 상태바, 엑션바 둘다 없애기 setContentView 보다 먼저 써야됨.
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -89,6 +86,7 @@ public class SaveActivity extends AppCompatActivity {
         btn_weather = (Button) findViewById(R.id.btn_weather);
         btn_feel = (Button) findViewById(R.id.btn_feel);
         data_view= (TextView) findViewById(R.id.edit_btn);
+        edit_title = (EditText) findViewById(R.id.edit_title);
         chk_num =1;
         data_view.setOnClickListener(new View.OnClickListener() {
             @Override

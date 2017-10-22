@@ -14,6 +14,8 @@ import java.util.List;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -51,6 +53,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
@@ -99,11 +103,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     private int state = STATE_PREV;
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
-    MyDBHelper dbHelper;
     P_Thread p_thread;
-
-
-
     MyDBHelper     DBHelper;
     SQLiteDatabase db;
 
@@ -466,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                 break;
             case R.id.btnSave:
                 try {
-//                    startMerge2(outputSttList);
+                    startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
                     startActivity(i);
                 } catch (Exception e) {
