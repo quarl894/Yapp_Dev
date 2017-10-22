@@ -5,23 +5,25 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.database.Cursor;
-import android.database.CursorJoiner;
 import android.media.ExifInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,8 +33,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,18 +48,25 @@ import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 import com.naver.speech.clientapi.SpeechRecognitionResult;
 
-import android.widget.Button;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
 import yapp.dev_diary.utils.AudioWriterPCM;
+
+import static android.media.AudioManager.AUDIOFOCUS_GAIN;
+import static android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
+import static android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK;
+import static android.media.AudioManager.AUDIOFOCUS_LOSS;
+import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
+import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK;
+import static java.lang.Thread.State.RUNNABLE;
+import static java.lang.Thread.State.TIMED_WAITING;
 
 public class MainActivity extends AppCompatActivity implements MediaRecorder.OnInfoListener {
     public final static int STATE_PREV = 0;     //녹음 시작 전
@@ -64,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
     ArrayList<String> list_stt;
-    String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/output.mp4";
     String outputFile2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttput.mp4";
     MediaPlayer mPlayer = null;
     MediaRecorder mRecorder = null;
@@ -72,26 +82,29 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     ArrayList<String> outputSttList;
     String mFilePath =  null;
     ImageButton mBtnRecord; //재생&일시정지
-
     ImageButton mBtnStop; //저장 버튼
-
     ImageButton mBtnPlay; //재생 버튼
-
     ImageButton mBtnReset;// 초기화 버튼
     Button mBtnSave;
-
+    ProgressBar p_gradient;
+    TextView start_time, end_time;
+    int t_count=0;
     private RecognitionHandler handler;
     private NaverRecognizer naverRecognizer;
     private TextView txtResult;
     private String mResult;
 
     private Handler handler2;
+    private Handler handler3;
 
     private AudioWriterPCM writer;
     int count=0;
     private int state = STATE_PREV;
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
+    MyDBHelper dbHelper;
+    P_Thread p_thread;
+
 
     // Handle speech recognition Messages.
     private void handleMessage(Message msg) {
@@ -151,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     }
                     txtResult.setText(tv2+mResult);
                 }
-
                 list_stt.add(mResult);
                 break;
 
@@ -187,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         handler2 = new Handler();
         list_stt = new ArrayList<String>();
         initToolbar();
+        handler3 = new Handler();
+
+        p_thread = new P_Thread();
+        Log.e("thread_status: " ,""+p_thread.getState() + Integer.toString(t_count));
         //i=0;
         //recordFilePathList.add(sdRootPath + "/seohee"+ i +".mp4");
 
@@ -203,6 +219,12 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         handler = new RecognitionHandler(this);
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
 
+        p_gradient = (ProgressBar) findViewById(R.id.p_gradient);
+        start_time = (TextView) findViewById(R.id.start_time);
+        end_time = (TextView) findViewById(R.id.end_time);
+        p_gradient.setMax(60);
+
+
         try {
             //사진 찍은 날짜 정보 가져오기
             ExifInterface exif = new ExifInterface(pic_path.get(0));
@@ -210,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             ExifInterface exif3 = new ExifInterface(pic_path.get(2));
             ExifInterface exif4 = new ExifInterface(pic_path.get(3));
             ExifInterface exif5 = new ExifInterface(pic_path.get(4));
-            //Uri에서 이미지 이름을 얻어온다.?
+            //Uri에서 이미지 이름을 얻어온다.
             if(showExif(exif).equals(getTime)) ok_path.add(pic_path.get(0));
             if(showExif(exif2).equals(getTime)) ok_path.add(pic_path.get(1));
             if(showExif(exif3).equals(getTime)) ok_path.add(pic_path.get(2));
@@ -245,24 +267,8 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         return super.onOptionsItemSelected(item);
     }
 
-    public void onBtnStop() {//일시정지
-        Log.d("seoheeing", "Record Prepare error");
-        mRecorder.stop();
-        mRecorder.reset();
-        mRecorder.release();
-        mRecorder = null;
-        state = STATE_PAUSE;
-
-        mBtnRecord.setEnabled(true);
-
-        mBtnStop.setEnabled(false);
-        mBtnRecord.setVisibility(View.VISIBLE);
-        mBtnStop.setVisibility(View.INVISIBLE);
-
-    }
-
     public void onBtnPlay(){
-        Log.d("seoheeing", "Record Prepare error");
+        Log.e("seoheeing", "Record Prepare error");
         if(mPlayer != null){
             mPlayer.stop();
             mPlayer.release();
@@ -365,6 +371,16 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     public void onClick(View v) {
         switch( v.getId() ) {
             case R.id.btnRecord :
+                p_thread.stop = false;
+                p_thread.work =true;
+                if(t_count==0){
+                    p_thread.start();
+                }else if(t_count ==1){
+                    p_thread.resume();
+                }
+                t_count=1;
+                Log.e("thread_status: " ,""+p_thread.getState()+ Integer.toString(t_count));
+
                 if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
                     // Start button is pushed when SpeechRecognizer's state is inactive.
                     // Run SpeechRecongizer by calling recognize().
@@ -372,28 +388,35 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     txtResult.setText("Connecting...");
                     naverRecognizer.recognize();
                 } else {
-                    Log.d(TAG, "stop and wait Final Result");
+                    Log.e(TAG, "stop and wait Final Result");
                     naverRecognizer.getSpeechRecognizer().stop();
-                    try {
-                        count +=1;
-                        mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
-                        String nowFile = mFilePath  + count + ".mp4";
-                        encodeSingleFile(nowFile);
-                        outputSttList.add(nowFile);
-                        Log.e("TAG",""+Integer.toString(outputSttList.size()));
-                    } catch (Exception e) {
-                        Log.e(TAG, "Exception while creating tmp file1", e);
-                    }
                 }
                 mBtnRecord.setEnabled(false);
-
                 mBtnStop.setEnabled(true);
 
                 // mBtnPlay.setEnabled(false);
                 mBtnRecord.setVisibility(View.INVISIBLE);
                 mBtnStop.setVisibility(View.VISIBLE);
+
+                // 다른 앱 음악 일시정지
+                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                am.requestAudioFocus(focusChangeListener,
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.AUDIOFOCUS_GAIN); // 이건 focusChangeListener를 보면 알 수 있다.
                 break;
             case R.id.btnPause :
+                p_thread.work =false;
+//                synchronized (naverRecognizer){
+//                    try{
+//                        p_thread.wait();
+//                        Log.e("ok?",""+p_thread.getState());
+//                    }catch (Exception e){
+//                        Log.e("ok??",""+p_thread.getState());
+//                    }
+//                }
+                p_thread.stop = true;
+                t_count=2;
+                Log.e("thread_status: " ,""+p_thread.getState() + Integer.toString(t_count));
                 if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
                     // Start button is pushed when SpeechRecognizer's state is inactive.
                     // Run SpeechRecongizer by calling recognize().
@@ -401,7 +424,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     txtResult.setText("Connecting...");
                     naverRecognizer.recognize();
                 } else {
-                    Log.d(TAG, "stop and wait Final Result");
                     naverRecognizer.getSpeechRecognizer().stop();
                     try {
                         count +=1;
@@ -415,21 +437,21 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     }
                 }
                 mBtnRecord.setEnabled(true);
-
                 mBtnStop.setEnabled(false);
                 mBtnRecord.setVisibility(View.VISIBLE);
                 mBtnStop.setVisibility(View.INVISIBLE);
                 break;
             case R.id.btnReset :
                 onBtnReset();
+                p_thread.stop = true;
+                p_thread.stop();
                 break;
             case R.id.btnPlay:
                 onBtnPlay();
                 break;
             case R.id.btnSave:
                 try {
-                    startMerge2(outputSttList);
-//                    onBtnSave();
+//                    startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
                     startActivity(i);
                 } catch (Exception e) {
@@ -444,6 +466,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         super.onStart();
         // NOTE : initialize() must be called on start time.
         naverRecognizer.getSpeechRecognizer().initialize();
+        Log.e("abcd","onStart");
     }
 
     @Override
@@ -452,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
 
         mResult = "";
         txtResult.setText("");
+        Log.e("abcd","onResume");
     }
 
     @Override
@@ -459,6 +483,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         super.onStop();
         // NOTE : release() must be called on stop time.
         naverRecognizer.getSpeechRecognizer().release();
+        Log.e("abcd","onStop");
     }
 
     // Declare handler for handling SpeechRecognizer thread's Messages.
@@ -479,19 +504,11 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     }
 
     public void onInfo(MediaRecorder mr, int what, int extra) {
-
         switch( what ) {
-
             case MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED :
-
             case MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED :
-
-                onBtnStop();
-
                 break;
-
         }
-
     }
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -576,4 +593,60 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
             }
         };
     }
+    private class P_Thread extends Thread{
+        private int progressStatus = 0;
+        public boolean stop = false;
+        public boolean work = true;
+        public void run() {
+            while(progressStatus <60) {
+//                while (progressStatus < 60) {
+                if (work) {
+                    Log.e("hello2", " " + Thread.currentThread().getState());
+                    try {
+                        progressStatus++;
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // Update the progress bar
+                    handler3.post(new Runnable() {
+                        public void run() {
+                            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                            p_gradient.setProgress(progressStatus);
+                            start_time.setText("00:" + String.format("%02d", progressStatus));
+                            end_time.setText("00:" + String.format("%02d", 60 - progressStatus));
+                        }
+                    });
+                } else {
+                    if (Thread.currentThread().getState().equals(State.RUNNABLE)) {
+                        try {
+                            Thread.sleep(800);
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        p_thread.stop();
+                    }
+                    Log.e("hello", " " + Thread.currentThread().getState());
+                }
+//            }
+            }
+        }
+    }
+    private AudioManager.OnAudioFocusChangeListener focusChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    switch (focusChange) {
+                        case (AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) :
+                            // Lower the volume while ducking.
+                            break;
+                        case (AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) :
+                            mPlayer.pause();
+                            break;
+                        case (AudioManager.AUDIOFOCUS_GAIN) :
+                            break;
+                        default: break;
+                    }
+                }
+            };
 }
+

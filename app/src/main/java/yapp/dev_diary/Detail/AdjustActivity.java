@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,7 +57,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private Button btn_gall;
     Uri selectedUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +187,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         }
     }
     private void setMultiShowButton() {
-        Button btn_multi_show = (Button) findViewById(R.id.btn_gall);
+        ImageButton btn_multi_show = (ImageButton) findViewById(R.id.btn_gall);
         btn_multi_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

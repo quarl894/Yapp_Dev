@@ -161,9 +161,7 @@
             android:textSize="11sp"
             android:textColor="#4a4a4a"
             android:lineSpacingExtra="1sp"
-            android:text="2017. 08. 01 화   오후 9: 25"
-            />
-
+            android:text="2017. 08. 01 화   오후 9: 25" />
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"

@@ -35,5 +35,6 @@
         <activity android:name=".Lock.core.AppLockActivity"
                   android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity android:name=".Setting.Pactivity"></activity>
     </application>
 </manifest>

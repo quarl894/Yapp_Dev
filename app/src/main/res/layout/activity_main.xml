@@ -14,8 +14,41 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
     </android.support.v7.widget.Toolbar>
+    <ProgressBar
+        android:id="@+id/p_gradient"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/gradient_progress" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginLeft="19dp"
+        android:textSize="13sp"
+        android:id="@+id/start_time"
+        android:textColor="@color/black"
+        android:letterSpacing="-0.06"
+        android:gravity="center_horizontal"
+        android:visibility="visible"
+        tools:text="00:10"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginRight="19dp"
+        android:id="@+id/end_time"
+        android:textSize="13sp"
+        android:letterSpacing="-0.06"
+        android:layout_gravity="right"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:visibility="visible"
+        tools:text="00:50"
+        />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

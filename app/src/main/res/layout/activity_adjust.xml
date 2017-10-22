@@ -47,7 +47,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/flexible_space_image_height"
                 android:background="@android:color/transparent" />
-
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f7f7f7">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +65,27 @@
                 android:lineSpacingExtra="8sp"
                 android:text="오늘의 일기"
                 />
-
+                <ImageButton
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/sun"
+                    android:background="#aba0ff"
+                    android:layout_gravity="right"
+                    android:id="@+id/btn_status1"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="58dp" />
+                <ImageButton
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/smile"
+                    android:background="#aba0ff"
+                    android:layout_gravity="right"
+                    android:id="@+id/btn_status2"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="22dp" />
+            </RelativeLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,14 +116,16 @@
                     android:lineSpacingExtra="8sp"
                     android:text="오늘의 사진" />
 
-                <Button
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:src="@drawable/edit"
+                    android:background="#aba0ff"
+                    android:layout_gravity="right"
                     android:id="@+id/btn_gall"
-                    android:text="앨범이동"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/title_pic"
-                    android:layout_toEndOf="@+id/title_pic" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="22dp" />
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"

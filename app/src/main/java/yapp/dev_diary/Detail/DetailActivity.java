@@ -221,8 +221,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         int wdpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
         int htpx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
         for (int i = 0; i < StringList.size(); i++) {
-            View imageHolder = LayoutInflater.from(this).inflate(R.layout.image_item, null);
-            ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
+            final View imageHolder = LayoutInflater.from(this).inflate(R.layout.image_item, null);
+            final ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
             Glide.with(this)
                     .load(StringList.get(i).toString())
                     .fitCenter()

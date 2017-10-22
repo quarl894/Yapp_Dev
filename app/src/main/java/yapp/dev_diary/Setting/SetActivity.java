@@ -64,7 +64,9 @@ public class SetActivity extends Activity {
                 startActivity(intent2);
                 break;
             case R.id.setting_layout_allbackup :
-                Toast.makeText(this, "전체백업은 백업 되면은...", Toast.LENGTH_SHORT).show();
+                Intent i3 = new Intent(this, Pactivity.class);
+                startActivity(i3);
+                //Toast.makeText(this, "전체백업은 백업 되면은...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_layout_allclear :
                 Toast.makeText(this, "전체초기화는 DB다 되면...", Toast.LENGTH_SHORT).show();

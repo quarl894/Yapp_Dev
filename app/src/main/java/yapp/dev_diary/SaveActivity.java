@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,7 +16,9 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -33,8 +36,8 @@ public class SaveActivity extends AppCompatActivity {
     Switch pic_switch;
     static int feel, weather;
     int chk_num;
-    ImageButton img1, img2, img3, img4;
-    EditText edit_btn;
+    ImageButton img1, img2, img3, img4,img5,img6,img7,img8;
+    TextView data_view;
     Calendar myCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -58,11 +61,23 @@ public class SaveActivity extends AppCompatActivity {
         img2 = (ImageButton) findViewById(R.id.img2);
         img3 = (ImageButton) findViewById(R.id.img3);
         img4 = (ImageButton) findViewById(R.id.img4);
+        img5 = (ImageButton) findViewById(R.id.img5);
+        img6 = (ImageButton) findViewById(R.id.img6);
+        img7 = (ImageButton) findViewById(R.id.img7);
+        img8 = (ImageButton) findViewById(R.id.img8);
+        img1.setVisibility(View.VISIBLE);
+        img2.setVisibility(View.VISIBLE);
+        img3.setVisibility(View.VISIBLE);
+        img4.setVisibility(View.VISIBLE);
+        img5.setVisibility(View.INVISIBLE);
+        img6.setVisibility(View.INVISIBLE);
+        img7.setVisibility(View.INVISIBLE);
+        img8.setVisibility(View.INVISIBLE);
         btn_weather = (Button) findViewById(R.id.btn_weather);
         btn_feel = (Button) findViewById(R.id.btn_feel);
-        edit_btn = (EditText) findViewById(R.id.edit_btn);
+        data_view= (TextView) findViewById(R.id.edit_btn);
         chk_num =1;
-        edit_btn.setOnClickListener(new View.OnClickListener() {
+        data_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(SaveActivity.this, date, myCalendar
@@ -70,105 +85,131 @@ public class SaveActivity extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        btn_weather.performClick();
+        btn_weather.setFocusableInTouchMode(true);
+        btn_weather.requestFocus();
+        Log.e("TEST","현재 포커스=>"+getCurrentFocus());
         btn_weather.setTextColor(getResources().getColor(R.color.colorAccent));
-        //기분 이모티콘
-        btn_feel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btn_feel.setTextColor(getResources().getColor(R.color.colorAccent));
-                btn_weather.setTextColor(getResources().getColor(R.color.gray));
-                img1.setImageResource(R.drawable.smile);
-                img2.setImageResource(R.drawable.notbad);
-                img3.setImageResource(R.drawable.sad);
-                img4.setImageResource(R.drawable.angry);
-                img1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        img1.setAlpha(100);
-                        img2.setAlpha(50);
-                        img3.setAlpha(50);
-                        img4.setAlpha(50);
-                    }
-                });
-                img2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        img2.setAlpha(100);
-                        img1.setAlpha(50);
-                        img3.setAlpha(50);
-                        img4.setAlpha(50);
-                    }
-                });
-                img3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        img3.setAlpha(100);
-                        img2.setAlpha(50);
-                        img1.setAlpha(50);
-                        img4.setAlpha(50);
-                    }
-                });
-                img4.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        img4.setAlpha(100);
-                        img2.setAlpha(50);
-                        img3.setAlpha(50);
-                        img1.setAlpha(50);
-                    }
-                });
-            }
-        });
         // 날씨 이모티콘
         btn_weather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btn_weather.setTextColor(getResources().getColor(R.color.colorAccent));
                 btn_feel.setTextColor(getResources().getColor(R.color.gray));
-                img1.setImageResource(R.drawable.sun);
-                img2.setImageResource(R.drawable.cloud);
-                img3.setImageResource(R.drawable.rain);
-                img4.setImageResource(R.drawable.snow);
+                img1.setVisibility(View.VISIBLE);
+                img2.setVisibility(View.VISIBLE);
+                img3.setVisibility(View.VISIBLE);
+                img4.setVisibility(View.VISIBLE);
+                img5.setVisibility(View.INVISIBLE);
+                img6.setVisibility(View.INVISIBLE);
+                img7.setVisibility(View.INVISIBLE);
+                img8.setVisibility(View.INVISIBLE);
+                img1.setEnabled(true);
+                img2.setEnabled(true);
+                img3.setEnabled(true);
+                img4.setEnabled(true);
+                img5.setEnabled(false);
+                img6.setEnabled(false);
+                img7.setEnabled(false);
+                img8.setEnabled(false);
                 img1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        img1.setAlpha(100);
-                        img2.setAlpha(50);
-                        img3.setAlpha(50);
-                        img4.setAlpha(50);
+                        img1.setImageAlpha(2000);
+                        img2.setImageAlpha(50);
+                        img3.setImageAlpha(50);
+                        img4.setImageAlpha(50);
                     }
                 });
                 img2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        img2.setAlpha(100);
-                        img1.setAlpha(50);
-                        img3.setAlpha(50);
-                        img4.setAlpha(50);
+                        img2.setImageAlpha(2000);
+                        img1.setImageAlpha(50);
+                        img3.setImageAlpha(50);
+                        img4.setImageAlpha(50);
                     }
                 });
                 img3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        img3.setAlpha(100);
-                        img2.setAlpha(50);
-                        img1.setAlpha(50);
-                        img4.setAlpha(50);
+                        img3.setImageAlpha(2000);
+                        img2.setImageAlpha(50);
+                        img1.setImageAlpha(50);
+                        img4.setImageAlpha(50);
                     }
                 });
                 img4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        img4.setAlpha(100);
-                        img2.setAlpha(50);
-                        img3.setAlpha(50);
-                        img1.setAlpha(50);
+                        img4.setImageAlpha(2000);
+                        img2.setImageAlpha(50);
+                        img3.setImageAlpha(50);
+                        img1.setImageAlpha(50);
                     }
                 });
             }
         });
-
+        //기분 이모티콘
+        btn_feel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                img5.setVisibility(View.VISIBLE);
+                img6.setVisibility(View.VISIBLE);
+                img7.setVisibility(View.VISIBLE);
+                img8.setVisibility(View.VISIBLE);
+                img1.setVisibility(View.INVISIBLE);
+                img2.setVisibility(View.INVISIBLE);
+                img3.setVisibility(View.INVISIBLE);
+                img4.setVisibility(View.INVISIBLE);
+                img8.setEnabled(true);
+                img7.setEnabled(true);
+                img6.setEnabled(true);
+                img5.setEnabled(true);
+                img4.setEnabled(false);
+                img3.setEnabled(false);
+                img2.setEnabled(false);
+                img1.setEnabled(false);
+                btn_feel.setTextColor(getResources().getColor(R.color.colorAccent));
+                btn_weather.setTextColor(getResources().getColor(R.color.gray));
+                img5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img5.setImageAlpha(2000);
+                        img6.setImageAlpha(50);
+                        img7.setImageAlpha(50);
+                        img8.setImageAlpha(50);
+                    }
+                });
+                img6.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img6.setImageAlpha(2000);
+                        img5.setImageAlpha(50);
+                        img7.setImageAlpha(50);
+                        img8.setImageAlpha(50);
+                    }
+                });
+                img7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img7.setImageAlpha(2000);
+                        img6.setImageAlpha(50);
+                        img5.setImageAlpha(50);
+                        img8.setImageAlpha(50);
+                    }
+                });
+                img8.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img8.setImageAlpha(2000);
+                        img5.setImageAlpha(50);
+                        img6.setImageAlpha(50);
+                        img7.setImageAlpha(50);
+                    }
+                });
+            }
+        });
+        btn_weather.performClick();
         //사진 가져오기
         pic_switch = (Switch) findViewById(R.id.switch_btn);
         pic_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -193,6 +234,6 @@ public class SaveActivity extends AppCompatActivity {
     private void updateLabel() {
         String myFormat = "yyyy"+"년 "+"MM"+"월 " +"dd"+"일"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
-        edit_btn.setText(sdf.format(myCalendar.getTime()));
+        data_view.setText(sdf.format(myCalendar.getTime()));
     }
 }
