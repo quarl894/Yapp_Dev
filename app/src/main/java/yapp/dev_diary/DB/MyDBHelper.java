@@ -19,9 +19,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "RECORD_TABLE";
     public static final String CREATE_TABLE = "create table "
             + TABLE_NAME + "(_index INTEGER PRIMARY KEY AUTOINCREMENT, p_path TEXT, r_path TEXT, content TEXT, weather INTEGER, mood INTEGER, title TEXT, date INTEGER, backup INTEGER);";
+
     public MyDBHelper(Context context){
         super(context, DB_NAME, null,1);
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {//ok
         sqLiteDatabase.execSQL(CREATE_TABLE);
@@ -150,4 +152,5 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
 }

@@ -3,6 +3,7 @@ package yapp.dev_diary;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 
 /**
@@ -50,9 +53,19 @@ public class SaveActivity extends AppCompatActivity {
             updateLabel();
         }
     };
+
+
+    MyDBHelper     DBHelper;
+    SQLiteDatabase db;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DBHelper = new MyDBHelper(SaveActivity.this);
+        db = DBHelper.getWritableDatabase();
+
+
         // 상태바, 엑션바 둘다 없애기 setContentView 보다 먼저 써야됨.
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -225,6 +238,23 @@ public class SaveActivity extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // DB에 추가
+                // 임시 데이터들
+                String p_path = "tmp p_path";
+                String r_path = "tmp r_path";
+                String content = "tmp content";
+                String title = edit_title.getText().toString();
+                int dateInt = 0;
+
+                dateInt = myCalendar.get(Calendar.YEAR);
+                dateInt *= 100;
+                dateInt += myCalendar.get(Calendar.MONTH) + 1;
+                dateInt *= 100;
+                dateInt += myCalendar.get(Calendar.DAY_OF_MONTH);
+                Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
+                 MyItem newItem = new MyItem(p_path, r_path, content, weather, feel, title, dateInt, 0);
+                 DBHelper.insert(newItem);
+
                 Intent i = new Intent(SaveActivity.this,DetailActivity.class);
                 i.putExtra("chk_num", chk_num);
                 startActivity(i);
