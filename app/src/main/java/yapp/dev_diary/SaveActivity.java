@@ -238,9 +238,10 @@ public class SaveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // DB에 추가
                 // 임시 데이터들
+                Intent mainIntent = getIntent();
                 String p_path = "tmp p_path";
-                String r_path = "tmp r_path";
-                String content = "tmp content";
+                String r_path = mainIntent.getStringExtra("r_path");
+                String content = mainIntent.getStringExtra("content");
                 String title = edit_title.getText().toString();
                 int dateInt = 0;
 
