@@ -113,8 +113,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         for(int i = 0; i < itemList.size(); i++)
         {
             tmpItem = itemList.get(i);
-            dataset.add(new MyData(tmpItem.getTitle(), tmpItem.getDate()/10000, (tmpItem.getDate()/100)%100, tmpItem.getDate()%100));
-            Log.i("p_path:", ""+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100);
+            dataset.add(new MyData(tmpItem.getTitle(), tmpItem.getDate()/10000, (tmpItem.getDate()/100)%100, tmpItem.getDate()%100, tmpItem.get_Index()));
+            Log.i("p_path:", tmpItem.getTitle() + ", "+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100 + ", " + tmpItem.get_Index());
         }
         return dataset;
     }
@@ -124,9 +124,11 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     public void onClick(View v) {
         switch( v.getId() ){
             case R.id.btn_list_backup :
-                Toast.makeText(this, "BACKUP",Toast.LENGTH_SHORT).show();
+                buttonsBottom.setVisibility(View.GONE);
                 break;
             case R.id.btn_list_delete :
+                adapter.deleteSelected(this);
+                adapter.notifyDataSetChanged();
                 buttonsBottom.setVisibility(View.GONE);
                 break;
         }
