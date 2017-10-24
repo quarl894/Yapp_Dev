@@ -257,6 +257,7 @@ public class SaveActivity extends AppCompatActivity {
                 Intent i = new Intent(SaveActivity.this,DetailActivity.class);
                 i.putExtra("chk_num", chk_num);
                 startActivity(i);
+                finish();
             }
         });
     }

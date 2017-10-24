@@ -26,7 +26,7 @@ import yapp.dev_diary.R;
  * Created by AnGwangHo on 2017-09-17.
  */
 
-public class LockActivity extends BaseActivity {
+public class LockActivity extends AppCompatActivity {
     private Switch switch_lock;
     private LinearLayout setting_lock_change_layout;
     int count =0;
