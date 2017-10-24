@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,11 +28,22 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private TimeRecyclerAdapter adapter;
     MyDBHelper     DBHelper;
     SQLiteDatabase db;
+
+    private LinearLayout buttonsBottom;
+    private Button       buttonBackup;
+    private Button       buttonDelete;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         initToolbar();
+
+        buttonsBottom = (LinearLayout)findViewById(R.id.btns_bottom);
+        buttonBackup = (Button)findViewById(R.id.btn_list_backup);
+        buttonDelete = (Button)findViewById(R.id.btn_list_delete);
+
 
         RecyclerView mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         mTimeRecyclerView.setHasFixedSize(true);
@@ -54,7 +67,16 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         int id = item.getItemId();
         switch(id){
             case R.id.menu_start :
-            case R.id.menu_list :
+                Log.i("optionSelected", "R.id.menu_start");
+                break;
+            case R.id.menu_list_modify :
+                Log.i("optionSelected", "R.id.menu_list_modify");
+                /* 체크박스 원래 없다가 여기서 수정 눌리면 생기면서 툴바도 바뀌고 밑에 버튼도 생겨야 한다 ㅎㅎ  일단 밑에 버튼부터...  */
+                buttonsBottom.setVisibility(View.VISIBLE);
+                break;
+            case R.id.menu_list_setting :
+                Log.i("optionSelected", "R.id.menu_list_setting");
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -91,9 +113,25 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         for(int i = 0; i < itemList.size(); i++)
         {
             tmpItem = itemList.get(i);
-            dataset.add(new MyData(tmpItem.getTitle(), tmpItem.getDate()/10000, (tmpItem.getDate()/100)%100, tmpItem.getDate()%100));
-            Log.i("p_path:", ""+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100);
+            dataset.add(new MyData(tmpItem.getTitle(), tmpItem.getDate()/10000, (tmpItem.getDate()/100)%100, tmpItem.getDate()%100, tmpItem.get_Index()));
+            Log.i("p_path:", tmpItem.getTitle() + ", "+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100 + ", " + tmpItem.get_Index());
         }
         return dataset;
     }
+
+
+
+    public void onClick(View v) {
+        switch( v.getId() ){
+            case R.id.btn_list_backup :
+                buttonsBottom.setVisibility(View.GONE);
+                break;
+            case R.id.btn_list_delete :
+                adapter.deleteSelected(this);
+                adapter.notifyDataSetChanged();
+                buttonsBottom.setVisibility(View.GONE);
+                break;
+        }
+    }
+
 }

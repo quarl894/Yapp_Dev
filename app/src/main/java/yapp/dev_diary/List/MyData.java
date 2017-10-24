@@ -2,15 +2,18 @@ package yapp.dev_diary.List;
 
 public class MyData extends AdapterItem {
     private String name;
+    private int DBIndex;
 
-    public MyData(String name, long time) {
+    public MyData(String name, long time, int DBIndex) {
         super(time);
         this.name = name;
+        this.DBIndex = DBIndex;
     }
 
-    public MyData(String name, int year, int month, int dayOfMonth) {
+    public MyData(String name, int year, int month, int dayOfMonth, int DBIndex) {
         super(year, month, dayOfMonth);
         this.name = name;
+        this.DBIndex = DBIndex;
     }
 
     @Override
@@ -25,4 +28,6 @@ public class MyData extends AdapterItem {
     public void setName(String name) {
         this.name = name;
     }
+
+    public int getDBIndex() { return DBIndex; }
 }

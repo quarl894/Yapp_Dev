@@ -467,8 +467,10 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 break;
             case R.id.btnSave:
                 try {
-                    startMerge2(outputSttList);
+//                    startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
+                    i.putExtra("r_path", outputFile2);
+                    i.putExtra("content", txtResult.getText());
                     startActivity(i);
                 } catch (Exception e) {
                     Log.e(TAG, "Exception while creating tmp file", e);
