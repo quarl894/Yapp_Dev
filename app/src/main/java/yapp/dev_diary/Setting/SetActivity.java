@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import yapp.dev_diary.Lock.core.AppLock;
+import yapp.dev_diary.Lock.core.AppLockActivity;
+import yapp.dev_diary.Lock.core.LockManager;
 import yapp.dev_diary.R;
 
 public class SetActivity extends Activity {
@@ -47,6 +50,7 @@ public class SetActivity extends Activity {
                 onClickEvent(view);
             }
         });
+
     }
 
     /**

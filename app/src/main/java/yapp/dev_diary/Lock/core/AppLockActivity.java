@@ -6,6 +6,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -55,6 +56,7 @@ public class AppLockActivity extends BaseActivity {
 			}
 
 			type = extras.getInt(AppLock.TYPE, -1);
+			Log.e("ahahahahahahah",""+Integer.toString(type));
 		}
 
 		filters = new InputFilter[2];
@@ -140,11 +142,11 @@ public class AppLockActivity extends BaseActivity {
 		codeField1.requestFocus();
 
 		switch (type) {
-
 		case AppLock.DISABLE_PASSLOCK:
 			if (LockManager.getInstance().getAppLock().checkPasscode(passLock)) {
 				setResult(RESULT_OK);
 				LockManager.getInstance().getAppLock().setPasscode(null);
+				Log.e("ha2.."," "+"여긴들어오냐");
 				finish();
 			} else {
 				onPasscodeError();
@@ -180,6 +182,7 @@ public class AppLockActivity extends BaseActivity {
 
 		case AppLock.UNLOCK_PASSWORD:
 			if (LockManager.getInstance().getAppLock().checkPasscode(passLock)) {
+				Log.e("ha2.."," "+"혹시 여기냐");
 				setResult(RESULT_OK);
 				finish();
 			} else {

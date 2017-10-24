@@ -56,6 +56,7 @@ import java.util.concurrent.Executors;
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.List.ListDActivity;
+import yapp.dev_diary.Lock.core.BaseActivity;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
 import yapp.dev_diary.utils.AudioWriterPCM;
@@ -69,7 +70,7 @@ import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK;
 import static java.lang.Thread.State.RUNNABLE;
 import static java.lang.Thread.State.TIMED_WAITING;
 
-public class MainActivity extends AppCompatActivity implements MediaRecorder.OnInfoListener {
+public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoListener {
     public final static int STATE_PREV = 0;     //녹음 시작 전
     public final static int STATE_RECORDING = 1;    //녹음 중
     public final static int STATE_PAUSE = 2;        // 일시 정지 중
