@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -14,7 +15,10 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
     </android.support.v7.widget.Toolbar>
+
+
     <ProgressBar
         android:id="@+id/p_gradient"
         android:layout_marginTop="50dp"
@@ -49,97 +53,126 @@
         android:visibility="visible"
         tools:text="00:50"
         />
+
+
+
     <ImageView
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="456dp"
-        android:layout_height="68.6dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
-        <FrameLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8.6dp">
-            <ImageButton
-                android:id="@+id/btnPlay"
-                android:layout_width="match_parent"
-                android:background="@drawable/play"
-                android:layout_height="match_parent"
-                android:onClick="onClick"                />
-        </FrameLayout>
-        <Space
-            android:layout_width="22.7dp"
-            android:layout_height="match_parent" />
-        <FrameLayout
-            android:layout_width="68.6dp"
-            android:layout_height="match_parent">
-            <ImageButton
-                android:id="@+id/btnRecord"
-                android:layout_width="match_parent"
-                android:background="@drawable/record"
-                android:layout_height="match_parent"
-                android:onClick="onClick"
-                />
+        android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/btnPause"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/pause"
-                android:onClick="onClick" />
-        </FrameLayout>
-        <Space
-            android:layout_width="23dp"
-            android:layout_height="match_parent" />
-        <FrameLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8.6dp">
-            <ImageButton
-                android:id="@+id/btnReset"
-                android:layout_width="match_parent"
-                android:background="@drawable/reset"
-                android:layout_height="match_parent"
-                android:onClick="onClick"
-                />
-        </FrameLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/txt_result"
+            android:hint="녹음을 시작해주세요"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="39dp"
+            android:layout_marginRight="40dp"
+            android:textSize="22sp" />
+        <!--android:layout_marginTop="74dp"-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="556dp"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
+
+
+        <!--android:layout_marginTop="456dp"-->
         <Button
-            android:id="@+id/btnSave"
-            android:onClick="onClick"
-            android:layout_width="360dp"
-            android:layout_height="60dp"
-            android:background="#68e5f4"
-            android:text="확인"
-            android:textSize="22sp"
-            android:textColor="#FFFFFF"/>
+            android:id="@+id/db_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="check DB" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8.6dp">
+
+                <ImageButton
+                    android:id="@+id/btnPlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/play"
+                    android:onClick="onClick" />
+            </FrameLayout>
+
+            <Space
+                android:layout_width="22.7dp"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:layout_width="68.6dp"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/btnRecord"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/record"
+                    android:onClick="onClick" />
+
+                <ImageButton
+                    android:id="@+id/btnPause"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/pause"
+                    android:onClick="onClick" />
+            </FrameLayout>
+
+            <Space
+                android:layout_width="23dp"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8.6dp">
+
+                <ImageButton
+                    android:id="@+id/btnReset"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/reset"
+                    android:onClick="onClick" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#68e5f4"
+                android:onClick="onClick"
+                android:text="확인"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_result"
-        android:textSize="22sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="39dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="74dp" />
-    <Button
-        android:id="@+id/db_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:text="check DB" />
 
 </FrameLayout>
-
