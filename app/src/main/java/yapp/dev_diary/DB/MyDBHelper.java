@@ -116,7 +116,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         ArrayList<MyItem> list = null;
         Cursor cursor = db.rawQuery("SELECT * FROM RECORD_TABLE WHERE date = "+date+";", null);
 
-        if(cursor != null) {
+        if(cursor != null && cursor.getCount() > 0) {
             Log.i("calendarSelect", "cursor.getCount() : " + cursor.getCount());
             list = new ArrayList<MyItem>();
             while (cursor.moveToNext()) {
