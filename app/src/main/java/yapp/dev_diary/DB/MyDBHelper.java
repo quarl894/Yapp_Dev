@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,25 +109,32 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
         return myItems;
     }
+
+    /* select된 행들을 리스트로 반환. 없으면 null 반환 */
     public ArrayList<MyItem> calendarSelect(int date){
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<MyItem> list = null;
         Cursor cursor = db.rawQuery("SELECT * FROM RECORD_TABLE WHERE date = "+date+";", null);
-        while (cursor.moveToNext()) {
-            int  _index = cursor.getInt(0);
-            String p_path = cursor.getString(1);
-            String r_path = cursor.getString(2);
-            String content = cursor.getString(3);
-            int weather = cursor.getInt(4);
-            int mood = cursor.getInt(5);
-            String title = cursor.getString(6);
-            date = cursor.getInt(7);
-            int backup = cursor.getInt(8);
 
-            MyItem item = new MyItem(_index, p_path,r_path, content, weather, mood, title, date, backup );
-            list.add(item);
+        if(cursor != null) {
+            Log.i("calendarSelect", "cursor.getCount() : " + cursor.getCount());
+            list = new ArrayList<MyItem>();
+            while (cursor.moveToNext()) {
+                int _index = cursor.getInt(0);
+                String p_path = cursor.getString(1);
+                String r_path = cursor.getString(2);
+                String content = cursor.getString(3);
+                int weather = cursor.getInt(4);
+                int mood = cursor.getInt(5);
+                String title = cursor.getString(6);
+                date = cursor.getInt(7);
+                int backup = cursor.getInt(8);
+
+                MyItem item = new MyItem(_index, p_path, r_path, content, weather, mood, title, date, backup);
+                list.add(item);
+            }
+            cursor.close();
         }
-        cursor.close();
         db.close();
         return list;
     }

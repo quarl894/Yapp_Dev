@@ -15,6 +15,10 @@ public class MyItem {
     private int date;
     private int backup;
 
+
+    public MyItem(){}
+
+    // _index 있는 생성자
     public MyItem(int _index, String p_path, String r_path, String content, int weather, int mood, String title, int date, int backup) {
         this._index = _index;
         this.p_path = p_path;
@@ -27,13 +31,12 @@ public class MyItem {
         this.backup = backup;
     }
 
-    public MyItem() {
-    }
 
     public MyItem(int _index) {
         this._index = _index;
     }
 
+    // _index 없는 생성자
     public MyItem(String p_path, String r_path, String content, int weather, int mood, String title, int date, int backup) {
         this.p_path = p_path;
         this.r_path = r_path;
