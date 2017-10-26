@@ -21,6 +21,7 @@ import java.util.List;
 import yapp.dev_diary.Calendar.Activity.MultiCalendarActivity;
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
+import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.R;
 import yapp.dev_diary.SaveActivity;
 
@@ -100,6 +101,12 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     @Override
     public void onItemClick(int position) {
         Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+        /* 해당 postiion의 MyData 가져오기. DBIndex가져와서 rowID로 인텐트에 담아서 DetailActivity열기 */
+        MyData selected = adapter.getItem(position);
+        Intent i = new Intent(this, DetailActivity.class);
+        i.putExtra("chk_num", 0);      // 어떻게 해야해!!!!!!!!??????
+        i.putExtra("rowID", selected.getDBIndex());
+        startActivity(i);
     }
 
     private ArrayList<MyData> getDataset() {

@@ -1,6 +1,7 @@
 package yapp.dev_diary.Detail;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -28,8 +29,12 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
 import yapp.dev_diary.Voice.VoiceActivity;
@@ -46,7 +51,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private View mImageView;
 //    private View mOverlayView;
     private ObservableScrollView mScrollView;
-    private TextView mTitleView;
+    private TextView mTitleView;    // 제목
+    private TextView mContentView;  // 내용
     private View mFab;
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
@@ -58,10 +64,21 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private ImageButton btn_edit, btn_backup;
     private LinearLayout edit_view;
 
+    private MyDBHelper     DBHelper;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        DBHelper = new MyDBHelper(DetailActivity.this);
+        db        = DBHelper.getWritableDatabase();
+
+        Intent intent = getIntent();
+        final int chk_num = intent.getExtras().getInt("chk_num");
+        final int rowID = intent.getExtras().getInt("rowID");
+        MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -72,7 +89,9 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("제목을 입력하세요!");
+        mTitleView.setText(thisItem.getTitle());
+        mContentView = (TextView) findViewById(R.id.detail_context);
+        mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.title_date);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
         mTitlePic = (TextView) findViewById(R.id.title_pic);
@@ -80,8 +99,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mTitlePic.setText("오늘의\n사진_");
         edit_view = (LinearLayout) findViewById(R.id.edit_view);
         edit_view.bringToFront();
-        Intent intent = getIntent();
-        final int chk_num = intent.getExtras().getInt("chk_num");
+
+
         if(chk_num == 1){
             select_pic = MainActivity.ok_path;
         }else{
@@ -98,6 +117,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                 Toast.makeText(DetailActivity.this, "hi", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(DetailActivity.this, AdjustActivity.class);
                 i.putExtra("chk_num", chk_num);
+                i.putExtra("rowID", rowID);
                 startActivity(i);
                 finish();
             }

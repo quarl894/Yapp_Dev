@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
         setContentView(R.layout.activity_main);
 
         DBHelper = new MyDBHelper(MainActivity.this);
-        db = DBHelper.getWritableDatabase();
+        db        = DBHelper.getWritableDatabase();
 
         /* 테스트 버튼 ㅎㅎ */
         Button db_button = (Button)findViewById(R.id.db_button);
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                 Log.i("db", "DBHelper.allSelect()");
                 List<MyItem> itemList = DBHelper.allSelect();
                 for(int i = 0; i < itemList.size(); i++)
-                    Log.i("db", itemList.get(i).getString());
+                    Log.i("db", "[" + itemList.get(i).get_Index() + "]" + itemList.get(i).getString());
 
                 // calendarSelct null?
                 ArrayList<MyItem> tmpItems = DBHelper.calendarSelect(20171022);
@@ -213,8 +213,6 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     }
                     Log.i("calendarSelect", itemsString);
                 }
-
-                tmpItems = DBHelper.calendarSelect(20171122);
             }
         });
 
@@ -483,6 +481,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                 try {
 //                    startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     i.putExtra("r_path", outputFile2);
                     i.putExtra("content", txtResult.getText());
                     startActivity(i);

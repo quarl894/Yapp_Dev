@@ -87,6 +87,7 @@
                     android:layout_marginEnd="22dp" />
             </RelativeLayout>
             <TextView
+                android:id="@+id/context"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"

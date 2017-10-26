@@ -35,7 +35,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
-    public void insert(MyItem myItem) {//ok
+    public int insert(MyItem myItem) {//ok
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -47,9 +47,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
         values.put("title", myItem.getTitle());
         values.put("date", myItem.getDate());
         values.put("backup", myItem.getBackup());
-        db.insert(TABLE_NAME, null, values);
+        long rowID = db.insert(TABLE_NAME, null, values);
+        Log.i("db.insert()", "rowID : " + rowID);
         // DB에 입력한 값으로 행 추가
         db.close();
+        return (int)rowID;
     }
 
     public void update(MyItem myItem) {
