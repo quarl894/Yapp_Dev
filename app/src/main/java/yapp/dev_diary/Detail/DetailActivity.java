@@ -36,6 +36,7 @@ import yapp.dev_diary.Voice.VoiceActivity;
 
 /**
  * Created by YoungJung on 2017-08-27.
+ * circle progressbar_gradient Reference : https://github.com/CardinalNow/Android-CircleProgressIndicator
  */
 
 public class DetailActivity extends BaseActivity implements ObservableScrollViewCallbacks {

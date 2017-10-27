@@ -20,13 +20,13 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import yapp.dev_diary.R;
 
 /**
- * Created by HANSUNG on 2017-10-15.
+ * Created by YOUNGJUNG on 2017-10-15.
+ * Reference : https://github.com/CardinalNow/Android-CircleProgressIndicator
+ * circle progressbar_gradient
  */
 
 public class Pactivity extends AppCompatActivity {
-    ProgressBar p_gradient;
     ProgressBar mProgressBar;
-    ProgressBar  mp;
     Handler handler = new Handler();
     Context context;
     @Override
@@ -34,34 +34,17 @@ public class Pactivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p);
         context = this.getApplicationContext();
-        p_gradient = (ProgressBar) findViewById(R.id.p_gradient);
-        mProgressBar = (ProgressBar) findViewById(R.id.mProgressBar);
-        mp = (ProgressBar) findViewById(R.id.progressBar2);
-//        mProgressBar.setIndeterminateDrawable(new SmoothProgressDrawable.Builder(context)
-//                .colors(getResources().getIntArray(R.array.p_colors))
-//                .interpolator(new DecelerateInterpolator())
-//                .sectionsCount(1)
-//                .separatorLength(8)         //You should use Resources#getDimensionPixelSize
-//                .strokeWidth(8f)            //You should use Resources#getDimension
-//                .speed(2f)                 //2 times faster
-//                .progressiveStartSpeed(2)
-//                .progressiveStopSpeed(3.4f)
-//                .reversed(false)
-//                .mirrorMode(false)
-//                .gradients(true)
-//                .build());
+        mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
         final String FORMAT = "%02d:%02d:%02d";
         // 현재 시간을 받아옴
-
-        p_gradient.setProgress(0);
-        mProgressBar.setProgress(0);
-        mp.setProgress(0);
+        mProgressBar.setProgress(100);
+//        mp.setProgress(0);
         new Thread(new Runnable() {
             int i = 0;
-            int progressStatus = 0;
+            int progressStatus = 100;
             public void run() {
-                while (progressStatus < 100) {
-                    progressStatus += doWork();
+                while (progressStatus > 0) {
+                    progressStatus -= doWork();
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -70,9 +53,7 @@ public class Pactivity extends AppCompatActivity {
                     // Update the progress bar
                     handler.post(new Runnable() {
                         public void run() {
-                            p_gradient.setProgress(progressStatus);
                             mProgressBar.setProgress(progressStatus);
-                            mp.setProgress(progressStatus);
                             Log.e("test",Integer.toString(mProgressBar.getProgress()));
                             i++;
                         }

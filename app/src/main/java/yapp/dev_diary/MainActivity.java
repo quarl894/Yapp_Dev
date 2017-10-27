@@ -71,9 +71,6 @@ import static java.lang.Thread.State.RUNNABLE;
 import static java.lang.Thread.State.TIMED_WAITING;
 
 public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoListener {
-    public final static int STATE_PREV = 0;     //녹음 시작 전
-    public final static int STATE_RECORDING = 1;    //녹음 중
-    public final static int STATE_PAUSE = 2;        // 일시 정지 중
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
     ArrayList<String> list_stt;
@@ -101,7 +98,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 
     private AudioWriterPCM writer;
     int count=0;
-    private int state = STATE_PREV;
     ArrayList<String> pic_path = new ArrayList<>();
     public static ArrayList<String> ok_path = new ArrayList<>();
     P_Thread p_thread;
@@ -148,6 +144,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
             case R.id.finalResult:
                 // Extract obj property typed with String array.
                 // The first element is recognition result for speech.
+
                 SpeechRecognitionResult speechRecognitionResult = (SpeechRecognitionResult) msg.obj;
                 List<String> results = speechRecognitionResult.getResults();
                 String a = speechRecognitionResult.getResults().get(0);
@@ -166,7 +163,13 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     }
                     txtResult.setText(tv2+mResult);
                 }
+                // 10초 동안 아무말 없으면 자동으로 꺼지므로 밑에 코드 추가시킴(일시정지)
                 list_stt.add(mResult);
+                mBtnRecord.setEnabled(true);
+                mBtnStop.setEnabled(false);
+                mBtnRecord.setVisibility(View.VISIBLE);
+                mBtnStop.setVisibility(View.INVISIBLE);
+                p_thread.work = false;
                 break;
 
             case R.id.recognitionError:
@@ -215,12 +218,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         handler2 = new Handler();
         list_stt = new ArrayList<String>();
         initToolbar();
-        handler3 = new Handler();
-
-        p_thread = new P_Thread();
-        Log.e("thread_status: " ,""+p_thread.getState() + Integer.toString(t_count));
-        //i=0;
-        //recordFilePathList.add(sdRootPath + "/seohee"+ i +".mp4");
 
         //버튼 레코드는 원래 녹음 시작
         mBtnRecord = (ImageButton)findViewById(R.id.btnRecord);
@@ -313,6 +310,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         count =0;
         txtResult.setText("");
         list_stt.clear();
+        p_gradient.setProgress(0);
     }
 
     public void startMerge2(ArrayList<String> outputFileList)throws IOException
@@ -354,9 +352,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 e.printStackTrace();
             }
         }
-
         Container out = new DefaultMp4Builder().build(output);
-
         FileChannel fc = null;
         try
         {
@@ -387,12 +383,18 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     public void onClick(View v) {
         switch( v.getId() ) {
             case R.id.btnRecord :
-                p_thread.stop = false;
-                p_thread.work =true;
                 if(t_count==0){
+                    //시작시마다 스레드 객체 생성(재사용이 안되서 매번 생성해야함)
+                    handler3 = new Handler();
+                    p_thread = new P_Thread();
                     p_thread.start();
+                    p_thread.stop = false;
+                    p_thread.work =true;
+                    Log.e("btnRecord 처음시작"," "+p_thread.getState().toString());
                 }else if(t_count ==1){
-                    p_thread.resume();
+                    p_thread.stop = false;
+                    p_thread.work =true;
+                    Log.e("btnRecord 재시작"," "+p_thread.getState().toString());
                 }
                 t_count=1;
                 Log.e("thread_status: " ,""+p_thread.getState()+ Integer.toString(t_count));
@@ -421,25 +423,8 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                         AudioManager.AUDIOFOCUS_GAIN); // 이건 focusChangeListener를 보면 알 수 있다.
                 break;
             case R.id.btnPause :
+                Log.e("btnPause 일시정지"," "+p_thread.getState().toString());
                 p_thread.work =false;
-//                synchronized (naverRecognizer){
-//                    try{
-//                        p_thread.wait();
-//                        Log.e("ok?",""+p_thread.getState());
-//                    }catch (Exception e){
-//                        Log.e("ok??",""+p_thread.getState());
-//                    }
-//                }
-                p_thread.stop = true;
-                t_count=2;
-                Log.e("thread_status: " ,""+p_thread.getState() + Integer.toString(t_count));
-                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
-                    // Start button is pushed when SpeechRecognizer's state is inactive.
-                    // Run SpeechRecongizer by calling recognize().
-                    mResult = "";
-                    txtResult.setText("Connecting...");
-                    naverRecognizer.recognize();
-                } else {
                     naverRecognizer.getSpeechRecognizer().stop();
                     try {
                         count +=1;
@@ -451,7 +436,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     } catch (Exception e) {
                         Log.e(TAG, "Exception while creating tmp file1", e);
                     }
-                }
+
                 mBtnRecord.setEnabled(true);
                 mBtnStop.setEnabled(false);
                 mBtnRecord.setVisibility(View.VISIBLE);
@@ -459,21 +444,29 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 break;
             case R.id.btnReset :
                 onBtnReset();
+                p_thread.work = false;
                 p_thread.stop = true;
-                p_thread.stop();
+                t_count = 0;
+                Log.e("btnReset 리셋"," "+p_thread.getState().toString());
                 break;
             case R.id.btnPlay:
                 onBtnPlay();
                 break;
             case R.id.btnSave:
                 try {
-//                    startMerge2(outputSttList);
+                    startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
                     i.putExtra("r_path", outputFile2);
                     i.putExtra("content", txtResult.getText());
+                    t_count =0;
+                    p_thread.work = false;
+                    p_thread.stop = true;
+                    Log.e("btnsave 완료"," "+p_thread.getState().toString());
                     startActivity(i);
                 } catch (Exception e) {
                     Log.e(TAG, "Exception while creating tmp file", e);
+                }finally{
+                    onBtnReset();
                 }
                 break;
         }
@@ -484,16 +477,13 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         super.onStart();
         // NOTE : initialize() must be called on start time.
         naverRecognizer.getSpeechRecognizer().initialize();
-        Log.e("abcd","onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         mResult = "";
         txtResult.setText("");
-        Log.e("abcd","onResume");
     }
 
     @Override
@@ -501,7 +491,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         super.onStop();
         // NOTE : release() must be called on stop time.
         naverRecognizer.getSpeechRecognizer().release();
-        Log.e("abcd","onStop");
     }
 
     // Declare handler for handling SpeechRecognizer thread's Messages.
@@ -616,10 +605,8 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         public boolean stop = false;
         public boolean work = true;
         public void run() {
-            while(progressStatus <60) {
-//                while (progressStatus < 60) {
+            while(progressStatus <60 && !Thread.currentThread().isInterrupted()) {
                 if (work) {
-                    Log.e("hello2", " " + Thread.currentThread().getState());
                     try {
                         progressStatus++;
                         Thread.sleep(1000);
@@ -629,25 +616,37 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     // Update the progress bar
                     handler3.post(new Runnable() {
                         public void run() {
-                            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                             p_gradient.setProgress(progressStatus);
                             start_time.setText("00:" + String.format("%02d", progressStatus));
                             end_time.setText("00:" + String.format("%02d", 60 - progressStatus));
                         }
                     });
                 } else {
+                    Log.e("여기 뭐나오지???"," "+p_thread.getState().toString());
                     if (Thread.currentThread().getState().equals(State.RUNNABLE)) {
                         try {
                             Thread.sleep(800);
                         } catch (Exception e) {
                         }
-                    } else {
-                        p_thread.stop();
                     }
-                    Log.e("hello", " " + Thread.currentThread().getState());
+                    if(stop){
+                        Log.e("hello", " " + Thread.currentThread().getState());
+                        progressStatus =0;
+                        handler3.post(new Runnable() {
+                            public void run() {
+                                p_gradient.setProgress(progressStatus);
+                                start_time.setText("00:" + String.format("%02d", progressStatus));
+                                end_time.setText("00:" + String.format("%02d", 60 - progressStatus));
+                            }
+                        });
+                        break;
+                    }
                 }
-//            }
             }
+            Log.e("끝남끝남끝남", "끝남끝남끝남");
+            progressStatus = 0;
+            stop = false;
+            work = true;
         }
     }
     private AudioManager.OnAudioFocusChangeListener focusChangeListener =

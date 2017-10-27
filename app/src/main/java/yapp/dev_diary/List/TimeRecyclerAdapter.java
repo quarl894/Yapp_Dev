@@ -193,9 +193,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Log.i("DBIndex", Integer.toString(((MyData)tmpItem).getDBIndex()));
             DBHelper.delete( ((MyData)tmpItem).getDBIndex() );
             itemList.remove(pos);
-
         }
-
-
     }
 }

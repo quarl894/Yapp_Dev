@@ -36,7 +36,7 @@ import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
 
 /**
- * Created by HANSUNG on 2017-09-17.
+ * Created by YoungJung on 2017-09-17.
  */
 
 public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks {
