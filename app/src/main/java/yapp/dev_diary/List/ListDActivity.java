@@ -126,8 +126,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         return dataset;
     }
 
-
-
+    
     public void onClick(View v) {
         switch( v.getId() ){
             case R.id.btn_list_backup :

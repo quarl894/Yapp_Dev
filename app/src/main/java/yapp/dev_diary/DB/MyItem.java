@@ -15,7 +15,6 @@ public class MyItem {
     private int date;
     private int backup;
 
-
     public MyItem(){}
 
     // _index 있는 생성자
