@@ -61,15 +61,6 @@ import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
 import yapp.dev_diary.utils.AudioWriterPCM;
 
-import static android.media.AudioManager.AUDIOFOCUS_GAIN;
-import static android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
-import static android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK;
-import static android.media.AudioManager.AUDIOFOCUS_LOSS;
-import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
-import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK;
-import static java.lang.Thread.State.RUNNABLE;
-import static java.lang.Thread.State.TIMED_WAITING;
-
 public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
@@ -203,7 +194,18 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 Log.i("db", "DBHelper.allSelect()");
                 List<MyItem> itemList = DBHelper.allSelect();
                 for(int i = 0; i < itemList.size(); i++)
-                    Log.i("db", itemList.get(i).getString());
+                    Log.i("db", "[" + itemList.get(i).get_Index() + "]" + itemList.get(i).getString());
+
+                // calendarSelct null?
+                ArrayList<MyItem> tmpItems = DBHelper.calendarSelect(20171022);
+                if ( tmpItems != null ) {
+                    String itemsString = "";
+
+                    for (MyItem i : tmpItems) {
+                        itemsString += i.getTitle();
+                    }
+                    Log.i("calendarSelect", itemsString);
+                }
             }
         });
 

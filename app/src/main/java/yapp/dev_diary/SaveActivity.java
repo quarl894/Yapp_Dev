@@ -265,11 +265,12 @@ public class SaveActivity extends AppCompatActivity {
                 dateInt *= 100;
                 dateInt += myCalendar.get(Calendar.DAY_OF_MONTH);
                 Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
-                 MyItem newItem = new MyItem(p_path, r_path, content, weather, feel, title, dateInt, 0);
-                 DBHelper.insert(newItem);
+                MyItem newItem = new MyItem(p_path, r_path, content, weather, feel, title, dateInt, 0);
+                int rowID = DBHelper.insert(newItem);
 
                 Intent i = new Intent(SaveActivity.this,DetailActivity.class);
                 i.putExtra("chk_num", chk_num);
+                i.putExtra("rowID", rowID);
                 startActivity(i);
                 finish();
             }
