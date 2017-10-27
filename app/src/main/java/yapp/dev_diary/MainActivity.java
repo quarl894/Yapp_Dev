@@ -186,7 +186,9 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         setContentView(R.layout.activity_main);
 
         DBHelper = new MyDBHelper(MainActivity.this);
-        db = DBHelper.getWritableDatabase();
+        db        = DBHelper.getWritableDatabase();
+
+        /* 테스트 버튼 ㅎㅎ */
         Button db_button = (Button)findViewById(R.id.db_button);
         db_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -458,6 +460,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 try {
                     startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     i.putExtra("r_path", outputFile2);
                     i.putExtra("content", txtResult.getText());
                     t_count =0;

@@ -2,6 +2,7 @@ package yapp.dev_diary.Detail;
 
 import android.Manifest;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -32,6 +33,8 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import java.util.ArrayList;
 
 import gun0912.tedbottompicker.TedBottomPicker;
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
 
@@ -49,6 +52,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     //    private View mOverlayView;
     private ObservableScrollView mScrollView;
     private TextView mTitleView;
+    private TextView mContentView;
     private View mFab;
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
@@ -58,10 +62,22 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
     Uri selectedUri;
+
+    private MyDBHelper DBHelper;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adjust);
+
+        DBHelper = new MyDBHelper(AdjustActivity.this);
+        db        = DBHelper.getWritableDatabase();
+
+        Intent intent = getIntent();
+        final int chk_num = intent.getExtras().getInt("chk_num");
+        final int rowID = intent.getExtras().getInt("rowID");
+        MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -72,7 +88,9 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("제목을 입력하세요!");
+        mTitleView.setText(thisItem.getTitle());
+        mContentView = (TextView) findViewById(R.id.context);
+        mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.title_date);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
         mTitlePic = (TextView) findViewById(R.id.title_pic);
@@ -81,8 +99,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mGlideRequestManager = Glide.with(this);
         mSelectedImagesContainer = (ViewGroup) findViewById(R.id.selected_photos_container);
         setMultiShowButton();
-        Intent intent = getIntent();
-        final int chk_num = intent.getExtras().getInt("chk_num");
+
         if(chk_num == 1){
             select_pic = MainActivity.ok_path;
         }else{
