@@ -127,9 +127,19 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         final int pos = position;
         if(holder instanceof TimeViewHolder) {
             TimeViewHolder tHolder = (TimeViewHolder) holder;
-            tHolder.timeItemView.setText(itemList.get(position).getTimeToString());
-            tHolder.tv_year.setText(itemList.get(position).getYearToString());
-            tHolder.tv_size.setText("("+itemList.size()+"개의 저장된 일기)");
+            AdapterItem item = itemList.get(position);
+            tHolder.timeItemView.setText(item.getTimeToString());
+            tHolder.tv_year.setText(item.getYearToString());
+
+            // tmp counting
+            int year = item.getYear();
+            int month = item.getMonth();
+            int count = 0;
+            for(AdapterItem i : itemList)
+                if( i.getType() == AdapterItem.TYPE_DATA && i.getYear() == year && i.getMonth() == month)
+                    count++;
+
+            tHolder.tv_size.setText("("+count+"개의 저장된 일기)");
             tHolder.tv_year.setBackgroundResource(R.drawable.rectangle_5);
 
         } else {
@@ -139,8 +149,8 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((MyData)itemList.get(position))
                             .getName());
 
+//            dHolder.cb.setVisibility(View.GONE);
             dHolder.cb.setTag(itemList.get(position));
-//            Log.i("position", Integer.toString(position) + " / " + dHolder.cb.getTag());
             Log.i("position", Integer.toString(position)  + " / " + ((MyData) itemList.get(position)).getName()+ " / " + itemList.get(position));
 
             dHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -148,7 +158,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked == true)
                     {
-//                        Log.i("checkbox", buttonView.getId() + " / " + buttonView.getParent());
                         Log.i("position", Integer.toString(pos) + " / " + buttonView.getTag());
                         checkedList.add(pos);
                     }
@@ -193,9 +202,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Log.i("DBIndex", Integer.toString(((MyData)tmpItem).getDBIndex()));
             DBHelper.delete( ((MyData)tmpItem).getDBIndex() );
             itemList.remove(pos);
-
         }
-
 
     }
 }

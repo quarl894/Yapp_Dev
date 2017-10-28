@@ -5,14 +5,16 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
     android:background="@color/white"
-    android:clickable="true">
+    android:clickable="true"
+    >
     
     <CheckBox
         android:id="@+id/cb_data"
         android:layout_width="40dp"
         android:layout_height="18dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginTop="14dp"/>
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="14dp"
+        />
 
     <TextView
         android:id="@+id/timeView"
@@ -23,7 +25,8 @@
         android:layout_marginTop="12dp"
         android:layout_marginLeft="64dp"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        />
 
     <TextView
         android:id="@+id/nameView"
