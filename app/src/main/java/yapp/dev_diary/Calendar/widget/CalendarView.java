@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,6 +199,7 @@ public class CalendarView extends ViewGroup {
                             continue;
                         }
                         if (child.isSameDay((Long) child.getTag(), (Long) tagView.getTag())) {
+
                             child.invalidate();
                             break;
                         }
@@ -213,6 +215,8 @@ public class CalendarView extends ViewGroup {
             cal.setTimeInMillis(time);
             pager.setTag(view);
             view.invalidate();
+            Log.d("체크", "확인용1 : "+cal.get(Calendar.YEAR)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.DATE));
+
         }
     }
 }

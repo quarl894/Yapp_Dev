@@ -2,7 +2,6 @@ package yapp.dev_diary;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -19,10 +18,8 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -253,7 +250,15 @@ public class SaveActivity extends AppCompatActivity {
                 // DB에 추가
                 // 임시 데이터들
                 Intent mainIntent = getIntent();
-                String p_path = "tmp p_path";
+                String strP_Path = "";
+                for (int i = 0; i < MainActivity.ok_path.size(); i++)
+                {
+                    if (i == MainActivity.ok_path.size()-1)
+                        strP_Path += MainActivity.ok_path.get(i);
+                    else
+                        strP_Path += MainActivity.ok_path.get(i)+",";
+                }
+                String p_path = strP_Path;
                 String r_path = mainIntent.getStringExtra("r_path");
                 String content = mainIntent.getStringExtra("content");
                 String title = edit_title.getText().toString();

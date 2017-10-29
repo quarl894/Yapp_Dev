@@ -23,7 +23,6 @@ import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.SaveActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
     private TimeRecyclerAdapter adapter;
@@ -104,7 +103,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         /* 해당 postiion의 MyData 가져오기. DBIndex가져와서 rowID로 인텐트에 담아서 DetailActivity열기 */
         MyData selected = adapter.getItem(position);
         Intent i = new Intent(this, DetailActivity.class);
-        i.putExtra("chk_num", 0);      // 어떻게 해야해!!!!!!!!??????
+        MyItem tmpItem = DBHelper.oneSelect(selected.getDBIndex());
+        int p_Check = tmpItem.getP_path().isEmpty() ? 0 : 1;
+
+        i.putExtra("chk_num", p_Check);      // 이렇게요
         i.putExtra("rowID", selected.getDBIndex());
         startActivity(i);
     }

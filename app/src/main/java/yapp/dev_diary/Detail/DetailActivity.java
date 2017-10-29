@@ -2,15 +2,11 @@ package yapp.dev_diary.Detail;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -29,15 +25,11 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
-import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.Voice.VoiceActivity;
 
 /**
  * Created by YoungJung on 2017-08-27.
@@ -93,17 +85,32 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mTitleView.setText(thisItem.getTitle());
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
-        mTitleDate = (TextView) findViewById(R.id.title_date);
+        mTitleDate = (TextView) findViewById(R.id.detail_title_date);
+        mTitleDate.setText(thisItem.getDate()+"");
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
+
         mTitlePic = (TextView) findViewById(R.id.title_pic);
         mTitleDiary.setText("오늘의\n일기_");
         mTitlePic.setText("오늘의\n사진_");
         edit_view = (LinearLayout) findViewById(R.id.edit_view);
         edit_view.bringToFront();
 
-
+        Log.d("체크", ""+chk_num+","+thisItem.getP_path().toString());
         if(chk_num == 1){
-            select_pic = MainActivity.ok_path;
+            ArrayList<String> tmpList = new ArrayList<>();
+            if (!thisItem.getP_path().isEmpty())
+            {
+                String[] strList = thisItem.getP_path().split(",");
+
+                for (int i = 0; i < strList.length; i ++)
+                {
+                    tmpList.add(strList[i]);
+                }
+                select_pic = tmpList;
+            }
+            else
+                select_pic.clear();
+
         }else{
             select_pic.clear();
         }
