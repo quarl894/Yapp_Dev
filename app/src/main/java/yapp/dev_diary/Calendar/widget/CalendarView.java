@@ -6,14 +6,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Calendar;
 
+import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.R;
+
+import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.calendar_Month_List;
 
 
 /**
@@ -215,8 +217,6 @@ public class CalendarView extends ViewGroup {
             cal.setTimeInMillis(time);
             pager.setTag(view);
             view.invalidate();
-            Log.d("체크", "확인용1 : "+cal.get(Calendar.YEAR)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.DATE));
-
         }
     }
 }

@@ -26,6 +26,7 @@ import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.R;
 
 import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.adapterHourLine;
+import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.calendar_Month_List;
 import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.itemList;
 
 
@@ -175,6 +176,21 @@ public class CalendarItemView extends View {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);
 
+//        MyDBHelper DBHelper = new MyDBHelper(getContext());
+
+//        String strTmp = calendar.get(Calendar.YEAR) + "";
+//
+//        if (calendar.get(Calendar.MONTH)+1 < 10)
+//            strTmp += "0"+(calendar.get(Calendar.MONTH)+1);
+//        else
+//            strTmp += (calendar.get(Calendar.MONTH)+1);
+//
+//        if (calendar.get(Calendar.DATE) < 10)
+//            strTmp += "0"+calendar.get(Calendar.DATE);
+//        else
+//            strTmp += calendar.get(Calendar.DATE);
+//        calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(strTmp), false);
+//        Log.d ("체크", "확이~ : "+strTmp+", ");
         CalendarView calendarView = (CalendarView) getParent();
         if (calendarView.getParent() instanceof ViewPager) {
             ViewGroup parent = (ViewPager) calendarView.getParent();
@@ -202,6 +218,20 @@ public class CalendarItemView extends View {
                 canvas.drawText(calendar.get(Calendar.DATE) + "", xPos, yPos, mPaintTextWhite);
             } else {
                 canvas.drawText(calendar.get(Calendar.DATE) + "", xPos, yPos, mPaint);
+
+                if (calendar_Month_List != null)
+                {
+                    for (int i = 0; i < calendar_Month_List.size(); i++)
+                    {
+                        if (calendar_Month_List.get(i) == (Integer) calendar.get(Calendar.DATE))
+                        {
+                            Paint paint = new Paint();
+                            paint.setColor(Color.MAGENTA);
+                            canvas.drawCircle(xPos, yPos+10, 5, paint);
+                        }
+
+                    }
+                }
                 //날짜 아래 원 표시
 //                Paint paint = new Paint();
 //                paint.setColor(Color.MAGENTA);

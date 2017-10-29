@@ -2,6 +2,7 @@ package yapp.dev_diary.Detail;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import yapp.dev_diary.DB.MyDBHelper;
@@ -71,7 +73,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
         final int rowID = intent.getExtras().getInt("rowID");
-        MyItem thisItem = DBHelper.oneSelect(rowID);
+        final MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -137,6 +139,16 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             @Override
             public void onClick(View v) {
                 Toast.makeText(DetailActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+                MediaPlayer mPlayer = new MediaPlayer();
+                Log.d("체크", "음성 패스"+thisItem.getR_path());
+                try {
+                    mPlayer.setDataSource(thisItem.getR_path());
+                    mPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mPlayer.start();
             }
         });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
