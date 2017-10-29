@@ -112,7 +112,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return myItems;
     }
 
-    /* select된 행들을 리스트로 반환. 없으면 null 반환 */
+    /* 해당 날짜로 select된 행들을 리스트로 반환. 없으면 null 반환 */
     public ArrayList<MyItem> calendarSelect(int date){
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<MyItem> list = null;
@@ -140,6 +140,29 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
+    /* 해당 월에 일기가 있는 날짜 리스트로 반환. 없으면 null 반환.
+     * 파라미터
+      * 1) input : YYYYMM 형식으로 주세요. e.g. 201710
+      * 2) dup   : 결과 중복 허용? true 허용. false 비허용 */
+    public ArrayList<Integer> monthSelect(int input, boolean dup){
+        ArrayList<Integer> days = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT date FROM RECORD_TABLE WHERE date/100 == " + input + ";", null);
+        if( cursor != null && cursor.getCount() > 0 )
+        {
+            days = new ArrayList<Integer>();
+            while (cursor.moveToNext()){
+                int itemDay = cursor.getInt(0) % 100;
+                if( dup ) days.add(itemDay);         // 중복 허용
+                else if( !days.contains(itemDay) )  //중복 비허용
+                    days.add(itemDay);
+            }
+        }
+        db.close();
+        return days;
+    }
+
     public ArrayList<MyItem> searchSelect(String word){
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<MyItem> list = null;

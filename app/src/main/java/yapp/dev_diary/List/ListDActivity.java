@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.R;
+import yapp.dev_diary.SaveActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
     private TimeRecyclerAdapter adapter;
@@ -32,7 +35,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private LinearLayout buttonsBottom;
     private Button       buttonBackup;
     private Button       buttonDelete;
-
+    private boolean     BUTTONS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mTimeRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new TimeRecyclerAdapter(getDataset());
+        adapter = new TimeRecyclerAdapter(getApplicationContext(), getDataset());
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
     }
@@ -71,8 +74,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
             case R.id.menu_list_modify :
                 Log.i("optionSelected", "R.id.menu_list_modify");
-                /* 체크박스 원래 없다가 여기서 수정 눌리면 생기면서 툴바도 바뀌고 밑에 버튼도 생겨야 한다 ㅎㅎ  일단 밑에 버튼부터...  */
                 buttonsBottom.setVisibility(View.VISIBLE);
+                animSlideUp(buttonsBottom, "menu_list_modify");
+                BUTTONS = true;
+                initToolbar();
                 break;
             case R.id.menu_list_setting :
                 Log.i("optionSelected", "R.id.menu_list_setting");
@@ -81,25 +86,49 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         return super.onOptionsItemSelected(item);
     }
 
+    private Toolbar toolbar = null;
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.setting);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle(null);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(ListDActivity.this, MultiCalendarActivity.class);
-                startActivity(i);
-            }
-        });
+        if( toolbar==null ) {
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(null);
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        if( BUTTONS )
+        {
+            // 텍스트로 못해서 일단 아이콘으로 둡니다.................
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.reset);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    // 체크박스 선택해제, 체크박스 리스트 삭제, 체크박스 안보이게
+
+                    slideDownButtons("cancle");
+                }
+            });
+        }
+        else
+        {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.setting);
+
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(ListDActivity.this, MultiCalendarActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
+
     }
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
         /* 해당 postiion의 MyData 가져오기. DBIndex가져와서 rowID로 인텐트에 담아서 DetailActivity열기 */
         MyData selected = adapter.getItem(position);
         Intent i = new Intent(this, DetailActivity.class);
@@ -128,18 +157,82 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         return dataset;
     }
 
-    
+
+
     public void onClick(View v) {
-        switch( v.getId() ){
-            case R.id.btn_list_backup :
-                buttonsBottom.setVisibility(View.GONE);
+        switch (v.getId()) {
+            case R.id.btn_list_backup:
+
+                slideDownButtons("btn_list_backup");
+                BUTTONS = false;
+                initToolbar();
                 break;
-            case R.id.btn_list_delete :
+            case R.id.btn_list_delete:
                 adapter.deleteSelected(this);
                 adapter.notifyDataSetChanged();
-                buttonsBottom.setVisibility(View.GONE);
+
+                slideDownButtons("btn_list_delete");
+                BUTTONS = false;
+                initToolbar();
                 break;
         }
     }
 
+
+    private void animSlideDown(View view, String msg){
+        Animation slide_down = AnimationUtils.loadAnimation(this, R.anim.slide_down);
+        slide_down.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.setAnimation(slide_down);
+        Log.i("anim", "slide_down   / " + msg);
+    }
+
+
+    private void animSlideUp(View view, String msg){
+        Animation slide_up = AnimationUtils.loadAnimation(this, R.anim.slide_up);
+        slide_up.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.setAnimation(slide_up);
+        Log.i("anim", "slide_up / " + msg);
+    }
+
+    private void slideDownButtons(String msg)
+    {
+        buttonsBottom.setVisibility(View.INVISIBLE);
+        animSlideDown(buttonsBottom, msg);
+        initToolbar();
+    }
+
+    // 하단에 버튼 올라와 있으면 버튼 내리기
+    @Override
+    public void onBackPressed() {
+        if(BUTTONS)
+        {
+            slideDownButtons("btn_list_delete");
+            BUTTONS = false;
+        }
+        else super.onBackPressed();
+    }
 }
