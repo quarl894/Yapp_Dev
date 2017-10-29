@@ -54,7 +54,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mTimeRecyclerView.setLayoutManager(layoutManager);
 
-        adapter = new TimeRecyclerAdapter(getDataset());
+        adapter = new TimeRecyclerAdapter(getApplicationContext(), getDataset());
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
     }
@@ -161,12 +161,16 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             case R.id.btn_list_backup:
 
                 slideDownButtons("btn_list_backup");
+                BUTTONS = false;
+                initToolbar();
                 break;
             case R.id.btn_list_delete:
                 adapter.deleteSelected(this);
                 adapter.notifyDataSetChanged();
 
                 slideDownButtons("btn_list_delete");
+                BUTTONS = false;
+                initToolbar();
                 break;
         }
     }

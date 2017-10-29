@@ -213,6 +213,17 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
                     }
                     Log.i("calendarSelect", itemsString);
                 }
+
+                // monthSelect
+                ArrayList<Integer> days = DBHelper.monthSelect(201710, false);
+                String str = "";
+                if( days != null ){
+                    for(int i : days){
+                        str += Integer.toString(i) + " ";
+                    }
+                }
+                else str = "null";
+                Log.i("monthSelect", "201710 : " + str);
             }
         });
 

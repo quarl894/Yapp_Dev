@@ -21,6 +21,8 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private OnItemClickListener listener;
     private ArrayList<Integer> checkedList;
 
+    private Context context;
+
     public static class TimeViewHolder extends RecyclerView.ViewHolder {
         public TextView timeItemView, tv_year, tv_size;
 
@@ -60,7 +62,8 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public TimeRecyclerAdapter(ArrayList<MyData> dataset) {
+    public TimeRecyclerAdapter(Context c, ArrayList<MyData> dataset) {
+        context = c;
         itemList = initItemList(orderByTimeDesc(dataset));
         checkedList = new ArrayList<Integer>();
     }
@@ -132,12 +135,18 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tHolder.tv_year.setText(item.getYearToString());
 
             // tmp counting
+            int count = 0;
+
             int year = item.getYear();
             int month = item.getMonth();
-            int count = 0;
-            for(AdapterItem i : itemList)
-                if( i.getType() == AdapterItem.TYPE_DATA && i.getYear() == year && i.getMonth() == month)
-                    count++;
+            String yearStr = Integer.toString(year);
+            String monthStr = Integer.toString(month);
+            monthStr = yearStr + monthStr;
+            month = Integer.parseInt(monthStr);
+
+            MyDBHelper DBHelper     = new MyDBHelper(context);
+            ArrayList<Integer> days = DBHelper.monthSelect(month, true);
+            if( days != null ) count = days.size();
 
             tHolder.tv_size.setText("("+count+"개의 저장된 일기)");
             tHolder.tv_year.setBackgroundResource(R.drawable.rectangle_5);
