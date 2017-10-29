@@ -70,14 +70,12 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private ArrayList<AdapterItem> initItemList(ArrayList<MyData> dataset) {
         ArrayList<AdapterItem> result = new ArrayList<>();
-
-        int year = 0, month = 0, dayOfMonth = 0;
+        int year = 0, month = 0;
         for(MyData data:dataset) {
-            if(year != data.getYear() || month != data.getMonth() || dayOfMonth != data.getDayOfMonth()) {
+            if(year != data.getYear() || month != data.getMonth() ){
                 result.add(new TimeItem(data.getYear(), data.getMonth(), data.getDayOfMonth()));
                 year = data.getYear();
                 month = data.getMonth();
-                dayOfMonth = data.getDayOfMonth();
             }
             result.add(data);
         }
@@ -128,29 +126,34 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final int pos = position;
-        if(holder instanceof TimeViewHolder) {
+        if(holder instanceof TimeViewHolder) {  // TimeViewHolder
             TimeViewHolder tHolder = (TimeViewHolder) holder;
             AdapterItem item = itemList.get(position);
             tHolder.timeItemView.setText(item.getTimeToString());
             tHolder.tv_year.setText(item.getYearToString());
 
-            // tmp counting
             int count = 0;
-
             int year = item.getYear();
             int month = item.getMonth();
-            String yearStr = Integer.toString(year);
+            month = year*100 + month;
             String monthStr = Integer.toString(month);
-            monthStr = yearStr + monthStr;
-            month = Integer.parseInt(monthStr);
 
             MyDBHelper DBHelper     = new MyDBHelper(context);
             ArrayList<Integer> days = DBHelper.monthSelect(month, true);
-            if( days != null ) count = days.size();
+            if( days != null ){
+                count = days.size();
+                tHolder.tv_size.setText("("+count+"개의 저장된 일기)");
+                tHolder.tv_year.setBackgroundResource(R.drawable.rectangle_5);
+            }
+            else{
+                Log.i("onCreateViewHolder", "해당 달에 일기 없음 [" + monthStr + "]");
+                itemList.remove(position);
+                // 인덱스가 꼬이는 듯 한데 마지막아이템 삭제하는게 문제인지~~?~?!??
+            }
 
-            tHolder.tv_size.setText("("+count+"개의 저장된 일기)");
-            tHolder.tv_year.setBackgroundResource(R.drawable.rectangle_5);
 
+
+        //DataViewHolder
         } else {
             final DataViewHolder dHolder = (DataViewHolder) holder;
             dHolder.timeView.setText(itemList.get(position).getDateToString());
