@@ -8,9 +8,12 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -57,6 +60,7 @@ import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Lock.core.BaseActivity;
+import yapp.dev_diary.Setting.BroadcastD;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
 import yapp.dev_diary.utils.AudioWriterPCM;
@@ -187,6 +191,13 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 
         DBHelper = new MyDBHelper(MainActivity.this);
         db        = DBHelper.getWritableDatabase();
+        Button test_btn = (Button) findViewById(R.id.test_btn);
+        test_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlarmHATT(getApplicationContext()).Alarm();
+            }
+        });
 
         /* 테스트 버튼 ㅎㅎ */
         Button db_button = (Button)findViewById(R.id.db_button);
@@ -251,8 +262,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         start_time = (TextView) findViewById(R.id.start_time);
         end_time = (TextView) findViewById(R.id.end_time);
         p_gradient.setMax(60);
-
-
         try {
             //사진 찍은 날짜 정보 가져오기
             ExifInterface exif = new ExifInterface(pic_path.get(0));
@@ -681,5 +690,26 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     }
                 }
             };
+    public class AlarmHATT {
+        private Context context;
+        public AlarmHATT(Context context) {
+            this.context=context;
+        }
+        public void Alarm() {
+            AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(MainActivity.this, BroadcastD.class);
+
+            PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
+            Calendar calendar = Calendar.getInstance();
+            //알람시간 calendar에 set해주기
+
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 14, 49, 0);
+            //알람 예약
+            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
+            Log.e("알림 시간:", " " +calendar.getTime().toString());
+        }
+    }
 }
 

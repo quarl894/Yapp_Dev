@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
     android:background="@color/white"
-    android:clickable="true"
-    >
+    android:clickable="true">
     
     <CheckBox
         android:id="@+id/cb_data"
@@ -14,7 +13,7 @@
         android:layout_height="18dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="14dp"
-        />
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/timeView"
@@ -25,8 +24,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginLeft="64dp"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/nameView"
@@ -40,27 +38,4 @@
         android:layout_marginTop="12dp"
         android:layout_marginLeft="70dp"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/timeView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_vertical"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginTop="16dp"-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--android:textColor="@android:color/black"-->
-        <!--android:textSize="18sp" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/nameView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_toRightOf="@+id/timeView"-->
-        <!--android:layout_toEndOf="@+id/timeView"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginTop="16dp"-->
-        <!--android:layout_marginLeft="70dp"-->
-        <!--android:layout_marginStart="70dp" />-->
-
-</RelativeLayout>
+</LinearLayout>
