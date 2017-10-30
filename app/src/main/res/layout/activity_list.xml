@@ -31,42 +31,43 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <LinearLayout
-        android:id="@+id/btns_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        android:visibility="invisible">
-        <Button
-            android:id="@+id/btn_list_backup"
+        <LinearLayout
+            android:layout_below="@id/scroll_view"
+            android:id="@+id/btns_bottom"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:drawableTop="@drawable/backup_all"
-            android:paddingTop="20dp"
-            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
-            android:onClick="onClick"
-            />
-
-        <Button
-            android:layout_alignParentBottom="true"
-            android:id="@+id/btn_list_delete"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
             android:background="#FFFFFF"
-            android:drawableTop="@drawable/delete"
-            android:paddingTop="20dp"
-            android:layout_gravity="center"
-            android:onClick="onClick"
-            />
-    </LinearLayout>
+            android:visibility="gone">
+            <Button
+                android:id="@+id/btn_list_backup"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:drawableTop="@drawable/backup_all"
+                android:paddingTop="20dp"
+                android:layout_gravity="center"
+                android:layout_alignParentBottom="true"
+                android:onClick="onClick"
+                />
+            <Button
+                android:layout_alignParentBottom="true"
+                android:id="@+id/btn_list_delete"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:drawableTop="@drawable/delete"
+                android:paddingTop="20dp"
+                android:layout_gravity="center"
+                android:onClick="onClick"
+                />
+        </LinearLayout>
     </RelativeLayout>
 </ScrollView>
+
 </RelativeLayout>
 

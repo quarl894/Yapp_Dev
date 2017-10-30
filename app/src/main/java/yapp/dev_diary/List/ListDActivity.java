@@ -27,8 +27,6 @@ import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.R;
 
-import static android.view.View.OVER_SCROLL_IF_CONTENT_SCROLLS;
-
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
     private TimeRecyclerAdapter adapter;
     MyDBHelper     DBHelper;
@@ -39,6 +37,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private Button       buttonBackup;
     private Button       buttonDelete;
     private boolean     BUTTONS = false;
+    ScrollView sv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +49,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         buttonBackup = (Button)findViewById(R.id.btn_list_backup);
         buttonDelete = (Button)findViewById(R.id.btn_list_delete);
         RecyclerView mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
+        sv = (ScrollView) findViewById(R.id.scroll_view);
+
         mTimeRecyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -127,8 +128,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         else
         {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.setting);
-
-
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,7 +136,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 }
             });
         }
-
     }
 
     @Override
@@ -208,7 +206,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         Log.i("anim", "slide_down   / " + msg);
     }
 
-
     private void animSlideUp(View view, String msg){
         Animation slide_up = AnimationUtils.loadAnimation(this, R.anim.slide_up);
         slide_up.setAnimationListener(new Animation.AnimationListener() {
@@ -230,7 +227,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
     private void slideDownButtons(String msg)
     {
-        buttonsBottom.setVisibility(View.INVISIBLE);
+        buttonsBottom.setVisibility(View.GONE);
         animSlideDown(buttonsBottom, msg);
         initToolbar();
     }

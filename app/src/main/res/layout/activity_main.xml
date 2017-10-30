@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sl="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,97 +16,120 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            sl:scale_base_height="95"
+            sl:scale_base_width="360">
     <ProgressBar
         android:id="@+id/p_gradient"
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="4dp"
+        sl:scale_height="4"
+        sl:scale_top="55"
+        sl:scale_width="360"
         style="?android:attr/progressBarStyleHorizontal"
         android:progressDrawable="@drawable/gradient_progress" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginLeft="19dp"
         android:textSize="13sp"
         android:id="@+id/start_time"
         android:textColor="@color/black"
         android:letterSpacing="-0.06"
-        android:gravity="center_horizontal"
+        android:gravity="left"
         android:visibility="visible"
         tools:text="00:10"
+        sl:scale_left="19"
+        sl:scale_top="69"
+        sl:scale_width="100"
+        sl:scale_textsize="13"
+        sl:scale_height="30"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:layout_marginRight="19dp"
         android:id="@+id/end_time"
         android:textSize="13sp"
         android:letterSpacing="-0.06"
-        android:layout_gravity="right"
-        android:gravity="center_horizontal"
+        android:layout_marginRight="14dp"
+        android:layout_gravity=""
+        android:gravity="left"
         android:textColor="@color/black"
         android:visibility="visible"
         tools:text="00:50"
-        />
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        sl:scale_left="308"
+        sl:scale_top="69"
+        sl:scale_width="100"
+        sl:scale_textsize="13"
+        sl:scale_height="30"/>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_marginTop="456dp"
-        android:layout_height="68.6dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal">
-        <FrameLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8.6dp">
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            sl:scale_base_height="100"
+            sl:scale_base_width="360">
             <ImageButton
                 android:id="@+id/btnPlay"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:background="@drawable/play"
-                android:layout_height="match_parent"
-                android:onClick="onClick"                />
-        </FrameLayout>
-        <Space
-            android:layout_width="22.7dp"
-            android:layout_height="match_parent" />
-        <FrameLayout
-            android:layout_width="68.6dp"
-            android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                sl:scale_height="60"
+                sl:scale_left="63"
+                sl:scale_top="4"
+                sl:scale_width="60"/>
+        <!--<Space-->
+            <!--android:layout_width="22.7dp"-->
+            <!--android:layout_height="match_parent" />-->
             <ImageButton
                 android:id="@+id/btnRecord"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:background="@drawable/record"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:onClick="onClick"
+                sl:scale_height="69"
+                sl:scale_left="145"
+                sl:scale_top="0"
+                sl:scale_width="69"
                 />
 
             <ImageButton
                 android:id="@+id/btnPause"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/pause"
-                android:onClick="onClick" />
-        </FrameLayout>
-        <Space
-            android:layout_width="23dp"
-            android:layout_height="match_parent" />
-        <FrameLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8.6dp">
+                android:onClick="onClick"
+                sl:scale_height="69"
+                sl:scale_left="145"
+                sl:scale_top="0"
+                sl:scale_width="69"
+                />
             <ImageButton
                 android:id="@+id/btnReset"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:background="@drawable/reset"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:onClick="onClick"
+                sl:scale_height="60"
+                sl:scale_left="237"
+                sl:scale_top="4"
+                sl:scale_width="60"
                 />
-        </FrameLayout>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -114,15 +138,25 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal">
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            sl:scale_base_height="60"
+            sl:scale_base_width="360">
         <Button
             android:id="@+id/btnSave"
             android:onClick="onClick"
-            android:layout_width="360dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="#68e5f4"
             android:text="확인"
-            android:textSize="22sp"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            sl:scale_height="60"
+            sl:scale_left="0"
+            sl:scale_top="0"
+            sl:scale_width="360"
+            sl:scale_textsize="22"/>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
     </LinearLayout>
 
     <TextView
@@ -146,6 +180,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="220dp"
         android:text="alarm" />
-
 </FrameLayout>
 
