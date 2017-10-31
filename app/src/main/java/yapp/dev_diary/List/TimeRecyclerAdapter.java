@@ -1,5 +1,6 @@
 package yapp.dev_diary.List;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -68,7 +69,12 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         checkedList = new ArrayList<Integer>();
     }
 
+    ArrayList<MyData> dataset;
+
     private ArrayList<AdapterItem> initItemList(ArrayList<MyData> dataset) {
+
+        this.dataset = dataset;
+
         ArrayList<AdapterItem> result = new ArrayList<>();
         int year = 0, month = 0;
         for(MyData data:dataset) {
@@ -79,8 +85,12 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             result.add(data);
         }
+        Log.i("initItemList", "dataset : " + dataset.size() + " / itemList : " + result.size());
+
         return result;
     }
+
+
 
     private ArrayList<MyData> orderByTimeDesc(ArrayList<MyData> dataset) {
         ArrayList<MyData> result = dataset;
@@ -126,6 +136,8 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final int pos = position;
+        Log.i("onBindViewHolder", "position : " + position);
+
         if(holder instanceof TimeViewHolder) {  // TimeViewHolder
             TimeViewHolder tHolder = (TimeViewHolder) holder;
             AdapterItem item = itemList.get(position);
@@ -147,10 +159,9 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             else{
                 Log.i("onCreateViewHolder", "해당 달에 일기 없음 [" + monthStr + "]");
-                itemList.remove(position);
+//                itemList.remove(position);
                 // 인덱스가 꼬이는 듯 한데 마지막아이템 삭제하는게 문제인지~~?~?!??
             }
-
 
 
         //DataViewHolder
@@ -161,7 +172,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((MyData)itemList.get(position))
                             .getName());
 
-//            dHolder.cb.setVisibility(View.GONE);
             dHolder.cb.setTag(itemList.get(position));
             Log.i("position", Integer.toString(position)  + " / " + ((MyData) itemList.get(position)).getName()+ " / " + itemList.get(position));
 
@@ -206,15 +216,29 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         db = DBHelper.getWritableDatabase();
         int pos;
         AdapterItem tmpItem;
+        ArrayList<Integer> months = new ArrayList<Integer>();
+
         for(int i = checkedList.size()-1 ; 0 <= i ; i--)
         {
             pos = checkedList.get(i);
             checkedList.remove(i);
             tmpItem = itemList.get(pos);
+            months.add( tmpItem.getYear() * 100 + tmpItem.getMonth() );
             Log.i("DBIndex", Integer.toString(((MyData)tmpItem).getDBIndex()));
             DBHelper.delete( ((MyData)tmpItem).getDBIndex() );
             itemList.remove(pos);
+//            Log.i("new position", itemList.get(pos).getYearToString() + itemList.get(pos).getMonth() + itemList.get(pos).getDateToString() );
         }
 
+//        notifyDataSetChanged();
+//        // 월을 모아놨다가 해당 월만 검사.....삭제하는 모든 아이템을 검사하면 넘마니해야돼
+//        for(int i : months)
+//        {
+//            ArrayList<Integer> list = DBHelper.monthSelect(i, true);
+//            if( list == null || list.size() < 1 ){
+//                // Time이 뭔지알구 삭제하냐 ㅠㅠㅠㅜㅠㅜ
+//            }
+//        }
     }
+
 }

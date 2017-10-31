@@ -57,6 +57,13 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         adapter = new TimeRecyclerAdapter(getApplicationContext(), getDataset());
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
+
+
+        this.runOnUiThread(new Runnable(){
+            public void run(){
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -169,7 +176,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
             case R.id.btn_list_delete:
                 adapter.deleteSelected(this);
-                adapter.notifyDataSetChanged();
 
                 slideDownButtons("btn_list_delete");
                 BUTTONS = false;
