@@ -44,6 +44,7 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
     private MyDBHelper DBHelper;
     private SQLiteDatabase db;
     public static List<MyItem> itemList;
+    public static ArrayList calendar_Month_List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,8 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
         {
             mList.add("일기를 추가해주세요");
         }
+
+        calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(strToDay.substring(0, 6).toString()), false);
     }
 
     @Override
@@ -112,6 +115,20 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
                 String title = adapter.getMonthDisplayed(position);
                 //getSupportActionBar().setTitle(title);
                 textView_title.setText(title);
+
+                Calendar calendar = Calendar.getInstance();
+
+                MyDBHelper DBHelper = new MyDBHelper(MultiCalendarActivity.this);
+                SQLiteDatabase db = DBHelper.getWritableDatabase();
+                String tmpStr = ""+calendar.get(Calendar.YEAR);
+
+                if (adapter.getMonthDisplayed(position).length() < 3)
+                    tmpStr += ("0"+adapter.getMonthDisplayed(position).substring(0,1));
+                else
+                    tmpStr += adapter.getMonthDisplayed(position).substring(0,2);
+                Log.d("체크", "확인~~~ : "+tmpStr);
+                calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(tmpStr), false);
+
                 if (position == 0) {
                     adapter.addPrev();
                     pager.setCurrentItem(COUNT_PAGE, false);
@@ -119,6 +136,7 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
                     adapter.addNext();
                     pager.setCurrentItem(adapter.getCount() - (COUNT_PAGE + 1), false);
                 }
+                Log.d("체크", "페이지 좌우");
             }
 
             @Override

@@ -1,9 +1,12 @@
 package yapp.dev_diary.Detail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +29,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import yapp.dev_diary.DB.MyDBHelper;
@@ -50,7 +55,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
     private int mFlexibleSpaceImageHeight;
-    private int mFabMargin;
+    private int mFabMargin, mProgressBarMargin;
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
@@ -59,6 +64,11 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
 
     private MyDBHelper     DBHelper;
     private SQLiteDatabase db;
+
+    ProgressBar mProgressBar, backProgressBar;
+    Handler handler = new Handler();
+    Context context;
+    private TextView record_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +81,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
         final int rowID = intent.getExtras().getInt("rowID");
-        MyItem thisItem = DBHelper.oneSelect(rowID);
+        final MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -94,6 +104,10 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mTitlePic.setText("오늘의\n사진_");
         edit_view = (LinearLayout) findViewById(R.id.edit_view);
         edit_view.bringToFront();
+        record_time = (TextView) findViewById(R.id.record_time);
+        context = this.getApplicationContext();
+        mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
+        backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
 
         Log.d("체크", ""+chk_num+","+thisItem.getP_path().toString());
         if(chk_num == 1){
@@ -133,34 +147,57 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
 
         setTitle(null);
         mFab = findViewById(R.id.fab);
+        Log.d("체크", "음성 패스"+thisItem.getR_path());
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
+                MediaPlayer mPlayer = new MediaPlayer();
+                try {
+                    mPlayer.setDataSource(thisItem.getR_path());
+                    mPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                final int record_sec = mPlayer.getDuration()/1000;
+                mPlayer.start();
+                // 현재 시간을 받아옴
+                mProgressBar.setProgress(record_sec);
+                new Thread(new Runnable() {
+                    int progressStatus = record_sec;
+                    public void run() {
+                        while (progressStatus > 0) {
+                            progressStatus -= 1;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            // Update the progress bar
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    mProgressBar.setProgress(progressStatus);
+                                    record_time.setText("00:" + String.format("%02d", progressStatus));
+                                    Log.e("test",Integer.toString(mProgressBar.getProgress()));
+                                }
+                            });
+                        }
+                    }
+                }).start();
             }
         });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
+
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
 
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
             public void run() {
-//                mScrollView.scrollTo(0, mFlexibleSpaceImageHeight - mActionBarSize);
                 mScrollView.scrollTo(0, 1);
-
-                // If you'd like to start from scrollY == 0, don't write like this:
-                //mScrollView.scrollTo(0, 0);
-                // The initial scrollY is 0, so it won't invoke onScrollChanged().
-                // To do this, use the following:
-                //onScrollChanged(0, false, false);
-
-                // You can also achieve it with the following codes.
-                // This causes scroll change from 1 to 0.
-                //mScrollView.scrollTo(0, 1); 첫화면 고정
-                //mScrollView.scrollTo(0, 0);
             }
         });
+
     }
 
     @Override
@@ -186,12 +223,31 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         ViewHelper.setScaleX(mTitleDate, scale);
         ViewHelper.setScaleY(mTitleDate, scale);
 
+        ViewHelper.setPivotX(record_time,-350);
+        ViewHelper.setPivotY(record_time, 100);
+        ViewHelper.setScaleX(record_time, scale);
+        ViewHelper.setScaleY(record_time, scale);
+
+        ViewHelper.setPivotX(mProgressBar,-350);
+        ViewHelper.setPivotY(mProgressBar, 400);
+        ViewHelper.setScaleX(mProgressBar, scale);
+        ViewHelper.setScaleY(mProgressBar, scale);
+
+        ViewHelper.setPivotX(backProgressBar,-350);
+        ViewHelper.setPivotY(backProgressBar, 400);
+        ViewHelper.setScaleX(backProgressBar, scale);
+        ViewHelper.setScaleY(backProgressBar, scale);
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
         int titleTranslationY = maxTitleTranslationY - scrollY;
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
 
         ViewHelper.setTranslationY(mTitleDate, titleTranslationY);
+
+        ViewHelper.setTranslationY(record_time, titleTranslationY);
+
+        ViewHelper.setTranslationY(backProgressBar,titleTranslationY);
+        ViewHelper.setTranslationY(mProgressBar,titleTranslationY);
 
         // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 2;
@@ -206,9 +262,21 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
 //            lp.leftMargin = mOverlayView.getWidth() - mFabMargin - mFab.getWidth();
             lp.topMargin = (int) fabTranslationY;
             mFab.requestLayout();
+            record_time.getParent().bringChildToFront(mFab);
+
         } else {
 //            ViewHelper.setTranslationX(mFab, mOverlayView.getWidth() - mFabMargin - mFab.getWidth());
             ViewHelper.setTranslationY(mFab, fabTranslationY-150);
+            ViewHelper.setTranslationY(record_time, fabTranslationY-150);
+//            ViewHelper.setTranslationY(mProgressBar, fabTranslationY-150);
+//            mScrollView.getParent().bringChildToFront(mProgressBar);
+//            record_time.bringToFront();
+//            record_time.getParent().bringChildToFront(mFab);
+
+//            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) record_time.getLayoutParams();
+//            ((FrameLayout) mFab.getParent()).addView(record_time);
+            mFab.getParent().bringChildToFront(record_time);
+            record_time.getParent().clearChildFocus(mFab);
         }
 
         // Show/hide FAB

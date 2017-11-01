@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,17 +26,18 @@ import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.R;
-import yapp.dev_diary.SaveActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
     private TimeRecyclerAdapter adapter;
     MyDBHelper     DBHelper;
     SQLiteDatabase db;
+    static boolean cb_check;
 
     private LinearLayout buttonsBottom;
     private Button       buttonBackup;
     private Button       buttonDelete;
     private boolean     BUTTONS = false;
+    ScrollView sv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,9 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         buttonsBottom = (LinearLayout)findViewById(R.id.btns_bottom);
         buttonBackup = (Button)findViewById(R.id.btn_list_backup);
         buttonDelete = (Button)findViewById(R.id.btn_list_delete);
-
-
         RecyclerView mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
+        sv = (ScrollView) findViewById(R.id.scroll_view);
+
         mTimeRecyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -57,13 +59,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         adapter = new TimeRecyclerAdapter(getApplicationContext(), getDataset());
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
-
-
-        this.runOnUiThread(new Runnable(){
-            public void run(){
-                adapter.notifyDataSetChanged();
-            }
-        });
+        cb_check = false;
     }
 
     @Override
@@ -82,9 +78,17 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             case R.id.menu_list_modify :
                 Log.i("optionSelected", "R.id.menu_list_modify");
                 buttonsBottom.setVisibility(View.VISIBLE);
+                cb_check = true;
+
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
+
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
                 break;
             case R.id.menu_list_setting :
                 Log.i("optionSelected", "R.id.menu_list_setting");
@@ -111,8 +115,14 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             toolbar.setNavigationOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+                    cb_check = false;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                     // 체크박스 선택해제, 체크박스 리스트 삭제, 체크박스 안보이게
-
                     slideDownButtons("cancle");
                 }
             });
@@ -120,8 +130,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         else
         {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.setting);
-
-
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -130,12 +138,11 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 }
             });
         }
-
     }
 
     @Override
     public void onItemClick(int position) {
-            Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
         /* 해당 postiion의 MyData 가져오기. DBIndex가져와서 rowID로 인텐트에 담아서 DetailActivity열기 */
         MyData selected = adapter.getItem(position);
         Intent i = new Intent(this, DetailActivity.class);
@@ -164,26 +171,23 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         return dataset;
     }
 
-
-
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_list_backup:
-
                 slideDownButtons("btn_list_backup");
                 BUTTONS = false;
                 initToolbar();
                 break;
             case R.id.btn_list_delete:
                 adapter.deleteSelected(this);
-
+                adapter.notifyDataSetChanged();
                 slideDownButtons("btn_list_delete");
+                cb_check = false;
                 BUTTONS = false;
                 initToolbar();
                 break;
         }
     }
-
 
     private void animSlideDown(View view, String msg){
         Animation slide_down = AnimationUtils.loadAnimation(this, R.anim.slide_down);
@@ -203,7 +207,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         view.setAnimation(slide_down);
         Log.i("anim", "slide_down   / " + msg);
     }
-
 
     private void animSlideUp(View view, String msg){
         Animation slide_up = AnimationUtils.loadAnimation(this, R.anim.slide_up);
@@ -226,7 +229,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
     private void slideDownButtons(String msg)
     {
-        buttonsBottom.setVisibility(View.INVISIBLE);
+        buttonsBottom.setVisibility(View.GONE);
         animSlideDown(buttonsBottom, msg);
         initToolbar();
     }
@@ -238,7 +241,9 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         {
             slideDownButtons("btn_list_delete");
             BUTTONS = false;
+            cb_check = false;
         }
         else super.onBackPressed();
+        finish();
     }
 }

@@ -137,7 +137,31 @@
                 </LinearLayout>
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+    <ProgressBar
+        android:id="@+id/circle_back_progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="90dp"
+        android:layout_height="86dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:layout_marginLeft="29dp"
+        android:scaleType="center"
+        android:progressDrawable="@drawable/circle_progress_background" />
 
+    <ProgressBar
+        android:id="@+id/circle_progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="90dp"
+        android:layout_height="86dp"
+        android:layout_centerInParent="true"
+        android:max="100"
+        android:rotation="-90"
+        android:indeterminate="false"
+        android:layout_marginLeft="29dp"
+        android:scaleType="center"
+        android:progressDrawable="@drawable/circle_progress_foreground" />
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -148,6 +172,15 @@
         android:src="@drawable/sound_play"
         app:fab_colorNormal="@color/white"
         app:fab_colorPressed="@color/white" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_time"
+        android:scaleType="center"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:layout_marginTop="55dp"
+        android:elevation="2dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
