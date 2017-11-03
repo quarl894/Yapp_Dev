@@ -76,7 +76,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         setContentView(R.layout.activity_detail);
 
         DBHelper = new MyDBHelper(DetailActivity.this);
-        db        = DBHelper.getWritableDatabase();
+        db = DBHelper.getWritableDatabase();
 
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
@@ -186,8 +186,12 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                 }).start();
             }
         });
+        Log.e("view 확인", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-
+        record_time.getParent().bringChildToFront(mFab);
+        record_time.bringToFront();
+        record_time.invalidate();
+        Log.e("view 확인2", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
 
@@ -197,7 +201,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                 mScrollView.scrollTo(0, 1);
             }
         });
-
     }
 
     @Override

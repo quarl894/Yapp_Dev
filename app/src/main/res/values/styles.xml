@@ -59,12 +59,4 @@
         <item name="android:textColorHint">#ffffff</item>
     </style>
 
-    <style name="GradientProgressBar" parent="SmoothProgressBar">
-        <item name="spb_stroke_separator_length">0dp</item>
-        <item name="spb_sections_count">1</item>
-        <item name="spb_speed">1</item>
-        <item name="android:interpolator">@android:anim/decelerate_interpolator</item>
-        <item name="spb_colors">@array/p_colors</item>
-        <item name="spb_gradients">true</item>
-    </style>
 </resources>

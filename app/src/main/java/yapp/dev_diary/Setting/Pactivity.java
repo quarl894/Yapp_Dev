@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 import yapp.dev_diary.R;
 
 /**

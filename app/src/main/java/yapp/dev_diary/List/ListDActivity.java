@@ -60,6 +60,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
         cb_check = false;
+        Log.e("buttonBottm1", " " +Integer.toString(buttonsBottom.getVisibility()));
     }
 
     @Override
@@ -78,6 +79,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             case R.id.menu_list_modify :
                 Log.i("optionSelected", "R.id.menu_list_modify");
                 buttonsBottom.setVisibility(View.VISIBLE);
+                Log.e("buttonBottm", " " +Integer.toString(buttonsBottom.getVisibility()));
                 cb_check = true;
                 this.runOnUiThread(new Runnable() {
                     public void run() {
