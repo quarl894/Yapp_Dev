@@ -30,7 +30,10 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
@@ -47,7 +50,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private ViewGroup mSelectedImagesContainer;
     public RequestManager mGlideRequestManager;
     private View mImageView;
-//    private View mOverlayView;
+    //    private View mOverlayView;
     private ObservableScrollView mScrollView;
     private TextView mTitleView;    // 제목
     private TextView mContentView;  // 내용
@@ -96,7 +99,18 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
-        mTitleDate.setText(thisItem.getDate()+"");
+
+        Date nDate = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            nDate = simpleDateFormat.parse(thisItem.getDate()+"");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
+        String strToDay = simpleDateFormat.format(nDate);
+        mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
 
         mTitlePic = (TextView) findViewById(R.id.title_pic);
@@ -153,37 +167,40 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             public void onClick(View v) {
                 Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
                 MediaPlayer mPlayer = new MediaPlayer();
-                try {
-                    mPlayer.setDataSource(thisItem.getR_path());
-                    mPlayer.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                final int record_sec = mPlayer.getDuration()/1000;
-                mPlayer.start();
-                // 현재 시간을 받아옴
-                mProgressBar.setProgress(record_sec);
-                new Thread(new Runnable() {
-                    int progressStatus = record_sec;
-                    public void run() {
-                        while (progressStatus > 0) {
-                            progressStatus -= 1;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            // Update the progress bar
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    mProgressBar.setProgress(progressStatus);
-                                    record_time.setText("00:" + String.format("%02d", progressStatus));
-                                    Log.e("test",Integer.toString(mProgressBar.getProgress()));
-                                }
-                            });
-                        }
+                if (thisItem.getR_path() != null)
+                {
+                    try {
+                        mPlayer.setDataSource(thisItem.getR_path());
+                        mPlayer.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }).start();
+                    final int record_sec = mPlayer.getDuration()/1000;
+                    mPlayer.start();
+                    // 현재 시간을 받아옴
+                    mProgressBar.setProgress(record_sec);
+                    new Thread(new Runnable() {
+                        int progressStatus = record_sec;
+                        public void run() {
+                            while (progressStatus > 0) {
+                                progressStatus -= 1;
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                // Update the progress bar
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        mProgressBar.setProgress(progressStatus);
+                                        record_time.setText("00:" + String.format("%02d", progressStatus));
+                                        Log.e("test",Integer.toString(mProgressBar.getProgress()));
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
             }
         });
         Log.e("view 확인", record_time.getParent().toString() +"//" + mFab.getParent().toString());
