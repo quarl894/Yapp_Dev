@@ -124,7 +124,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
         backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
 
-        Log.d("체크", ""+chk_num+","+thisItem.getP_path().toString());
         if(chk_num == 1){
             ArrayList<String> tmpList = new ArrayList<>();
             if (!thisItem.getP_path().isEmpty())

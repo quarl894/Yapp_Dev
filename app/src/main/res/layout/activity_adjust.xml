@@ -164,6 +164,19 @@
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
+            <Button
+                android:id="@+id/adjust_btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#68e5f4"
+                android:text="확인"
+                android:textSize="22sp"
+                android:textColor="#FFFFFF"
+                app:scale_height="60"
+                app:scale_left="0"
+                app:scale_top="556"
+                app:scale_width="360"
+                app:scale_textsize="22"/>
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
@@ -176,14 +189,13 @@
         android:paddingLeft="@dimen/margin_standard">
 
         <TextView
+            android:id="@+id/adjust_title_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/title_date"
-            android:textSize="11sp"
-            android:textColor="#4a4a4a"
             android:lineSpacingExtra="1sp"
             android:text="2017. 08. 01 화   오후 9: 25"
-            />
+            android:textColor="#4a4a4a"
+            android:textSize="11sp" />
 
         <EditText
             android:id="@+id/title"

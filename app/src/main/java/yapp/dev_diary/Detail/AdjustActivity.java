@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -62,6 +63,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
+    private Button btnSave;
     Uri selectedUri;
 
     private MyDBHelper DBHelper;
@@ -92,7 +94,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mTitleView.setText(thisItem.getTitle());
         mContentView = (EditText) findViewById(R.id.context);
         mContentView.setText(thisItem.getContent());
-        mTitleDate = (TextView) findViewById(R.id.title_date);
+        mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
 
         //***날짜 형식 변경***
         Date nDate = null;
@@ -139,10 +141,21 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
             @Override
             public void onClick(View v) {
                 Toast.makeText(AdjustActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
+        ViewHelper.setScaleX(mFab, 0);
+        ViewHelper.setScaleY(mFab, 0);
+
+        btnSave = (Button) findViewById(R.id.adjust_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 // DB에 추가
                 // 임시 데이터들
                 Intent mainIntent = getIntent();
                 String strP_Path = "";
+
                 if (selectedUriList != null)
                 {
                     for (int i = 0; i < selectedUriList.size(); i++) {
@@ -152,15 +165,19 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                             strP_Path += selectedUriList.get(i) + ",";
                     }
                 }
+                else
+                {
+                    strP_Path = thisItem.getP_path();
+                }
+
                 String p_path = strP_Path;
                 String r_path = thisItem.getR_path();
                 String content = mContentView.getText().toString();
                 String title = mTitleView.getText().toString();
                 int dateInt = 0;
                 Log.d("체크", ""+p_path.toString());
-                dateInt = Integer.valueOf(mTitleDate.getText().toString());
                 //Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
-                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, thisItem.getWeather(), thisItem.getMood(), title, dateInt, 0);
+                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, thisItem.getWeather(), thisItem.getMood(), title, thisItem.getDate(), 0);
                 DBHelper.update(newItem);
 
                 Intent i = new Intent(AdjustActivity.this, DetailActivity.class);
@@ -170,9 +187,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 finish();
             }
         });
-        mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-        ViewHelper.setScaleX(mFab, 0);
-        ViewHelper.setScaleY(mFab, 0);
 
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
