@@ -23,6 +23,7 @@ import android.media.ExifInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -226,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements MediaRecorder.OnI
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu, menu);
+
         return true;
     }
 

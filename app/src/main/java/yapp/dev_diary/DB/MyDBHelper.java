@@ -130,8 +130,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
     public ArrayList<MyItem> searchSelect(String word){
         SQLiteDatabase db = getReadableDatabase();
-        ArrayList<MyItem> list = null;
-        Cursor cursor = db.rawQuery("SELECT * FROM RECORD_TABLE WHERE title LIKE '%"+word+"%' OR content LIKE '%"+word+"%;", null);
+        ArrayList<MyItem> list = new ArrayList<MyItem>();
+
+        Cursor cursor = db.rawQuery("SELECT * from RECORD_TABLE WHERE title LIKE '%" + word+"%' or content LIKE '%"+ word+"%'", null);
         while (cursor.moveToNext()) {
             int _index = cursor.getInt(0);
             String p_path = cursor.getString(1);
@@ -143,7 +144,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
             int date = cursor.getInt(7);
             int backup = cursor.getInt(8);
 
-            MyItem item = new MyItem(_index, p_path,r_path, content, weather, mood, title, date, backup );
+            MyItem item = new MyItem(_index, p_path,r_path, content, weather, mood, title, date, backup);
             list.add(item);
         }
         cursor.close();

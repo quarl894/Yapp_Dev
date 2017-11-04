@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import yapp.dev_diary.Calendar.Activity.MultiCalendarActivity;
 import yapp.dev_diary.R;
+import yapp.dev_diary.Voice.VoiceActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
 
@@ -48,6 +49,9 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         int id = item.getItemId();
         switch(id){
             case R.id.menu_start :
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
+                return true;
             case R.id.menu_list :
         }
         return super.onOptionsItemSelected(item);
