@@ -100,6 +100,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
 
+        //***날짜 형식 변경***
         Date nDate = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         try {
@@ -107,9 +108,9 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
         String strToDay = simpleDateFormat.format(nDate);
+
         mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
 

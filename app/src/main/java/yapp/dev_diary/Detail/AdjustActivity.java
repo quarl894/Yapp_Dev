@@ -29,7 +29,10 @@ import com.gun0912.tedpermission.TedPermission;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import yapp.dev_diary.DB.MyDBHelper;
@@ -90,7 +93,19 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mContentView = (EditText) findViewById(R.id.context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.title_date);
-        mTitleDate.setText(thisItem.getDate()+"");
+
+        //***날짜 형식 변경***
+        Date nDate = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            nDate = simpleDateFormat.parse(thisItem.getDate()+"");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
+        String strToDay = simpleDateFormat.format(nDate);
+
+        mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
         mTitlePic = (TextView) findViewById(R.id.title_pic);
         mTitleDiary.setText("오늘의\n일기_");
@@ -128,12 +143,14 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 // 임시 데이터들
                 Intent mainIntent = getIntent();
                 String strP_Path = "";
-                for (int i = 0; i < selectedUriList.size(); i++)
+                if (selectedUriList != null)
                 {
-                    if (i == selectedUriList.size()-1)
-                        strP_Path += selectedUriList.get(i);
-                    else
-                        strP_Path += selectedUriList.get(i)+",";
+                    for (int i = 0; i < selectedUriList.size(); i++) {
+                        if (i == selectedUriList.size() - 1)
+                            strP_Path += selectedUriList.get(i);
+                        else
+                            strP_Path += selectedUriList.get(i) + ",";
+                    }
                 }
                 String p_path = strP_Path;
                 String r_path = thisItem.getR_path();
