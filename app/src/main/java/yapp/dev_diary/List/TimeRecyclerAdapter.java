@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import yapp.dev_diary.DB.MyDBHelper;
@@ -76,6 +77,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             result.add(data);
         }
+
         return result;
     }
 
@@ -126,6 +128,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof TimeViewHolder) {  // TimeViewHolder
             TimeViewHolder tHolder = (TimeViewHolder) holder;
             AdapterItem item = itemList.get(position);
+
             tHolder.timeItemView.setText(item.getTimeToString());
             tHolder.tv_year.setText(item.getYearToString());
 
@@ -182,6 +185,13 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             });
+        }
+
+
+        Log.i("마지막 아이템", "position : " + position + " / " + getItemCount());
+        if( getItemCount()-1 == position){
+//            ScrollView sv = sv = (ScrollView) context.findViewById(R.id.scroll_view);
+
         }
     }
 
