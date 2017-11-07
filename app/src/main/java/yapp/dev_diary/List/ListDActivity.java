@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -110,6 +111,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
         if( BUTTONS )
         {
+
             // 텍스트로 못해서 일단 아이콘으로 둡니다.................
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.reset);
             toolbar.setNavigationOnClickListener(new View.OnClickListener(){

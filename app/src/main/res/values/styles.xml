@@ -59,4 +59,8 @@
         <item name="android:textColorHint">#ffffff</item>
     </style>
 
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#fb6969</item>
+    </style>
+
 </resources>

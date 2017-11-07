@@ -7,6 +7,11 @@
     xmlns:sl="http://schemas.android.com/apk/res-auto"
     android:layout_margin="0dp"
     android:background="#FFFFFF">
+    <com.ssomai.android.scalablelayout.ScalableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        sl:scale_base_height="616"
+        sl:scale_base_width="360">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,11 +20,19 @@
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        sl:scale_height="56"
+        sl:scale_left="0"
+        sl:scale_top="0"
+        sl:scale_width="360">
     </android.support.v7.widget.Toolbar>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        sl:scale_height="616"
+        sl:scale_left="0"
+        sl:scale_top="0"
+        sl:scale_width="360">
         <com.ssomai.android.scalablelayout.ScalableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,4 +189,5 @@
                 sl:scale_textsize="10"/>
         </com.ssomai.android.scalablelayout.ScalableLayout>
     </RelativeLayout>
+    </com.ssomai.android.scalablelayout.ScalableLayout>
 </FrameLayout>
