@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import yapp.dev_diary.Calendar.adapters.AdapterFrgCalendar;
@@ -44,7 +45,7 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
     private MyDBHelper DBHelper;
     private SQLiteDatabase db;
     public static List<MyItem> itemList;
-    public static ArrayList calendar_Month_List;
+    public static HashMap<String, Integer> calendar_Month_List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,19 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
             mList.add("일기를 추가해주세요");
         }
 
-        calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(strToDay.substring(0, 6).toString()), false);
+        if (calendar_Month_List == null)
+        {
+            calendar_Month_List = new HashMap<>();
+            ArrayList tmpList = DBHelper.monthSelect(Integer.valueOf(strToDay.substring(0, 6).toString()), false);
+            String tmpListItem = "";
+            if (tmpList != null)
+            {
+                for (int i = 0; i < tmpList.size(); i++) {
+                    tmpListItem = tmpList.get(i).toString();
+                    calendar_Month_List.put(tmpListItem, Integer.valueOf(tmpListItem));
+                }
+            }
+        }
     }
 
     @Override
@@ -118,16 +131,16 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
 
                 Calendar calendar = Calendar.getInstance();
 
-                MyDBHelper DBHelper = new MyDBHelper(MultiCalendarActivity.this);
-                SQLiteDatabase db = DBHelper.getWritableDatabase();
-                String tmpStr = ""+calendar.get(Calendar.YEAR);
-
-                if (adapter.getMonthDisplayed(position).length() < 3)
-                    tmpStr += ("0"+adapter.getMonthDisplayed(position).substring(0,1));
-                else
-                    tmpStr += adapter.getMonthDisplayed(position).substring(0,2);
-                Log.d("체크", "확인~~~ : "+tmpStr);
-                calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(tmpStr), false);
+//                MyDBHelper DBHelper = new MyDBHelper(MultiCalendarActivity.this);
+//                SQLiteDatabase db = DBHelper.getWritableDatabase();
+//                String tmpStr = ""+calendar.get(Calendar.YEAR);
+//
+//                if (adapter.getMonthDisplayed(position).length() < 3)
+//                    tmpStr += ("0"+adapter.getMonthDisplayed(position).substring(0,1));
+//                else
+//                    tmpStr += adapter.getMonthDisplayed(position).substring(0,2);
+//                Log.d("체크", "확인~~~ : "+tmpStr);
+//                calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(tmpStr), false);
 
                 if (position == 0) {
                     adapter.addPrev();
