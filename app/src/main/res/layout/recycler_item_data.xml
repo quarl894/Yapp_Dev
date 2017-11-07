@@ -13,9 +13,7 @@
         android:layout_height="18dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="14dp"
-        android:visibility="visible"
-        android:buttonTint="#fb6969"
-        android:theme="@style/MyCheckBox"/>
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/timeView"
