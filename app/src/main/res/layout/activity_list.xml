@@ -47,19 +47,19 @@
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:background="#ABABAB"
+        android:background="#FFFFFF"
         android:visibility="gone">
         <Button
             android:id="@+id/btn_list_backup"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:drawableTop="@drawable/backup_all"
+            android:drawableTop="@drawable/backup"
             android:paddingTop="12dp"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
             android:onClick="onClick"
+            android:background="#FFFFFF"
             />
 
         <Button

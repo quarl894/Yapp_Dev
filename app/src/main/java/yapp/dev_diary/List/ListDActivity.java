@@ -212,6 +212,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             case R.id.btn_list_backup:
                 Toast.makeText(this, "준비 중 입니다. :)", Toast.LENGTH_SHORT).show();
                 slideDownButtons("btn_list_backup");
+                cb_check = false;
                 initToolbar();
                 break;
 
