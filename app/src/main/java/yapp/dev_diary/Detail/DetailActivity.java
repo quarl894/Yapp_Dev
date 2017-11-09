@@ -30,7 +30,10 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
@@ -47,7 +50,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private ViewGroup mSelectedImagesContainer;
     public RequestManager mGlideRequestManager;
     private View mImageView;
-//    private View mOverlayView;
+    //    private View mOverlayView;
     private ObservableScrollView mScrollView;
     private TextView mTitleView;    // 제목
     private TextView mContentView;  // 내용
@@ -69,14 +72,16 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     Handler handler = new Handler();
     Context context;
     private TextView record_time;
-
+    private ImageButton weather_btn;
+    private ImageButton feel_btn;
+    private int weather, feel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         DBHelper = new MyDBHelper(DetailActivity.this);
-        db        = DBHelper.getWritableDatabase();
+        db = DBHelper.getWritableDatabase();
 
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
@@ -96,7 +101,58 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
-        mTitleDate.setText(thisItem.getDate()+"");
+        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
+        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
+
+        weather = thisItem.getWeather();
+        feel = thisItem.getMood();
+
+        switch(weather) {
+            case 1:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case 2:
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case 3:
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case 4:
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            default:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+        }
+        switch(feel){
+            case 1 :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case 2 :
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case 3 :
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case 4 :
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+        }
+        //***날짜 형식 변경***
+        Date nDate = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            nDate = simpleDateFormat.parse(thisItem.getDate()+"");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
+        String strToDay = simpleDateFormat.format(nDate);
+
+        mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
 
         mTitlePic = (TextView) findViewById(R.id.title_pic);
@@ -109,7 +165,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
         backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
 
-        Log.d("체크", ""+chk_num+","+thisItem.getP_path().toString());
         if(chk_num == 1){
             ArrayList<String> tmpList = new ArrayList<>();
             if (!thisItem.getP_path().isEmpty())
@@ -153,41 +208,48 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             public void onClick(View v) {
                 Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
                 MediaPlayer mPlayer = new MediaPlayer();
-                try {
-                    mPlayer.setDataSource(thisItem.getR_path());
-                    mPlayer.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                final int record_sec = mPlayer.getDuration()/1000;
-                mPlayer.start();
-                // 현재 시간을 받아옴
-                mProgressBar.setProgress(record_sec);
-                new Thread(new Runnable() {
-                    int progressStatus = record_sec;
-                    public void run() {
-                        while (progressStatus > 0) {
-                            progressStatus -= 1;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            // Update the progress bar
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    mProgressBar.setProgress(progressStatus);
-                                    record_time.setText("00:" + String.format("%02d", progressStatus));
-                                    Log.e("test",Integer.toString(mProgressBar.getProgress()));
-                                }
-                            });
-                        }
+                if (thisItem.getR_path() != null)
+                {
+                    try {
+                        mPlayer.setDataSource(thisItem.getR_path());
+                        mPlayer.prepare();
+                    }catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }).start();
+                    final int record_sec = mPlayer.getDuration()/1000;
+                    mPlayer.start();
+                    // 현재 시간을 받아옴
+                    mProgressBar.setProgress(record_sec);
+                    new Thread(new Runnable() {
+                        int progressStatus = record_sec;
+                        public void run() {
+                            while (progressStatus > 0) {
+                                progressStatus -= 1;
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                // Update the progress bar
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        mProgressBar.setProgress(progressStatus);
+                                        record_time.setText("00:" + String.format("%02d", progressStatus));
+                                        Log.e("test",Integer.toString(mProgressBar.getProgress()));
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
             }
         });
+        Log.e("view 확인", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-
+        record_time.getParent().bringChildToFront(mFab);
+        record_time.bringToFront();
+        record_time.invalidate();
+        Log.e("view 확인2", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
 
@@ -197,7 +259,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                 mScrollView.scrollTo(0, 1);
             }
         });
-
     }
 
     @Override

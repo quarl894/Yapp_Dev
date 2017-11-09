@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -29,7 +30,10 @@ import com.gun0912.tedpermission.TedPermission;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import gun0912.tedbottompicker.TedBottomPicker;
 import yapp.dev_diary.DB.MyDBHelper;
@@ -59,7 +63,11 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
+    private Button btnSave;
     Uri selectedUri;
+    private ImageButton weather_btn;
+    private ImageButton feel_btn;
+    private int weather, feel;
 
     private MyDBHelper DBHelper;
     private SQLiteDatabase db;
@@ -89,8 +97,60 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mTitleView.setText(thisItem.getTitle());
         mContentView = (EditText) findViewById(R.id.context);
         mContentView.setText(thisItem.getContent());
-        mTitleDate = (TextView) findViewById(R.id.title_date);
-        mTitleDate.setText(thisItem.getDate()+"");
+        mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
+        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
+        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
+
+        weather = thisItem.getWeather();
+        feel = thisItem.getMood();
+
+        switch(weather) {
+            case 1:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case 2:
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case 3:
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case 4:
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            default:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+        }
+        switch(feel){
+            case 1 :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case 2 :
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case 3 :
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case 4 :
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+        }
+
+        //***날짜 형식 변경***
+        Date nDate = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            nDate = simpleDateFormat.parse(thisItem.getDate()+"");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
+        String strToDay = simpleDateFormat.format(nDate);
+
+        mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
         mTitlePic = (TextView) findViewById(R.id.title_pic);
         mTitleDiary.setText("오늘의\n일기_");
@@ -124,26 +184,43 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
             @Override
             public void onClick(View v) {
                 Toast.makeText(AdjustActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
+        ViewHelper.setScaleX(mFab, 0);
+        ViewHelper.setScaleY(mFab, 0);
+
+        btnSave = (Button) findViewById(R.id.adjust_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 // DB에 추가
                 // 임시 데이터들
                 Intent mainIntent = getIntent();
                 String strP_Path = "";
-                for (int i = 0; i < selectedUriList.size(); i++)
+
+                if (selectedUriList != null)
                 {
-                    if (i == selectedUriList.size()-1)
-                        strP_Path += selectedUriList.get(i);
-                    else
-                        strP_Path += selectedUriList.get(i)+",";
+                    for (int i = 0; i < selectedUriList.size(); i++) {
+                        if (i == selectedUriList.size() - 1)
+                            strP_Path += selectedUriList.get(i);
+                        else
+                            strP_Path += selectedUriList.get(i) + ",";
+                    }
                 }
+                else
+                {
+                    strP_Path = thisItem.getP_path();
+                }
+
                 String p_path = strP_Path;
                 String r_path = thisItem.getR_path();
                 String content = mContentView.getText().toString();
                 String title = mTitleView.getText().toString();
                 int dateInt = 0;
                 Log.d("체크", ""+p_path.toString());
-                dateInt = Integer.valueOf(mTitleDate.getText().toString());
                 //Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
-                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, thisItem.getWeather(), thisItem.getMood(), title, dateInt, 0);
+                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, thisItem.getWeather(), thisItem.getMood(), title, thisItem.getDate(), 0);
                 DBHelper.update(newItem);
 
                 Intent i = new Intent(AdjustActivity.this, DetailActivity.class);
@@ -153,9 +230,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 finish();
             }
         });
-        mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-        ViewHelper.setScaleX(mFab, 0);
-        ViewHelper.setScaleY(mFab, 0);
 
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override

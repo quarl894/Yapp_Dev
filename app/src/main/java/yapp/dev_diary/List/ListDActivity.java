@@ -14,12 +14,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,9 +101,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
-//                Log.i("height1", Integer.toString( buttonsBottom.getHeight() ));    //90
-//                Log.i("height2", Integer.toString( buttonDelete.getPaddingTop() )); //18
                 sv.setPadding(0,0,0, 90);    // 뭔가 어색함
+
+                Log.i("height1", Integer.toString( mTimeRecyclerView.getHeight() ));    //90
+                Log.i("height3", Integer.toString( sv.getHeight() )); //18
 
                 cb_check = true;
                 this.runOnUiThread(new Runnable() {
@@ -162,7 +165,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         }
         else
         {
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.setting);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.calendar);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -174,7 +177,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
         onPrepareOptionsMenu(menu);
     }
-
     @Override
     public void onItemClick(int position) {
         Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();

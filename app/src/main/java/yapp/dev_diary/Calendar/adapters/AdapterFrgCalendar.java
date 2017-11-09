@@ -33,7 +33,6 @@ public class AdapterFrgCalendar extends FragmentStatePagerAdapter {
 
     private void clearPrevFragments(FragmentManager fm) {
         List<Fragment> listFragment = fm.getFragments();
-
         if (listFragment != null) {
             FragmentTransaction ft = fm.beginTransaction();
 

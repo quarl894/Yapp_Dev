@@ -187,6 +187,7 @@ public class CalendarView extends ViewGroup {
         if (getParent() instanceof ViewPager) {
             ViewPager pager = (ViewPager) getParent();
             View tagView = (View) pager.getTag();
+
             if (tagView != null) {
                 long time = (long) tagView.getTag();
                 Calendar c = Calendar.getInstance();

@@ -31,9 +31,6 @@
         <activity android:name=".Detail.DetailActivity"></activity>
         <activity android:name=".List.ListDActivity"></activity>
         <activity android:name=".Calendar.Activity.MultiCalendarActivity"></activity>
-        <activity android:name=".Lock.HomePage"
-                  android:windowSoftInputMode="adjustResize">
-        </activity>
         <activity android:name=".Lock.core.AppLockActivity"
                   android:windowSoftInputMode="stateHidden" >
         </activity>
