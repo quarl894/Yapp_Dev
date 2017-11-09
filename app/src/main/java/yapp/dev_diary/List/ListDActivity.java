@@ -42,22 +42,23 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     static boolean cb_check;
 
     private LinearLayout buttonsBottom;
-    private Button       buttonBackup;
-    private Button       buttonDelete;
+    // buttonBackup, buttonDelete 필요없어서 지웁니당
     private boolean     BUTTONS = false;
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
 
     private TextView tv;
 
+    private boolean allChecked = false;
+
+    private Toolbar toolbar = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
         buttonsBottom = (LinearLayout)findViewById(R.id.btns_bottom);
-        buttonBackup = (Button)findViewById(R.id.btn_list_backup);
-        buttonDelete = (Button)findViewById(R.id.btn_list_delete);
+
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         sv = (ScrollView) findViewById(R.id.scroll_view);
 
@@ -80,7 +81,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private Menu menu;
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-//        Log.i("onCreateOptionsMenu", "ㅁㅁㅁㅁ");
         this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
@@ -101,10 +101,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
+                sv.setPadding(0,0,0, 90);    // 뭔가 어색함
 
                 Log.i("height1", Integer.toString( mTimeRecyclerView.getHeight() ));    //90
                 Log.i("height3", Integer.toString( sv.getHeight() )); //18
-
 
                 cb_check = true;
                 this.runOnUiThread(new Runnable() {
@@ -120,13 +120,20 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
 
             case R.id.menu_select_all :
-                Log.i("optionSelected", "R.id.menu_select_all");
+                Log.i("optionSelected", "R.id.menu_select_all / allChecked : " + allChecked);
+                if( allChecked == false){
+                    adapter.checkAll(true);
+                    allChecked = true;
+                }else{
+                    adapter.checkAll(false);
+                    allChecked = false;
+                }
+
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private Toolbar toolbar = null;
     private void initToolbar() {
         if( toolbar==null ) {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -152,7 +159,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                     });
                     // 하단 버튼들
                     slideDownButtons("cancle");
-                    BUTTONS = false;
                     initToolbar();
                 }
             });
@@ -206,8 +212,9 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_list_backup:
+                Toast.makeText(this, "준비 중 입니다. :)", Toast.LENGTH_SHORT).show();
                 slideDownButtons("btn_list_backup");
-                BUTTONS = false;
+                cb_check = false;
                 initToolbar();
                 break;
 
@@ -216,9 +223,9 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 adapter.notifyDataSetChanged();
                 slideDownButtons("btn_list_delete");
                 cb_check = false;
-                BUTTONS = false;
                 initToolbar();
                 break;
+
         }
     }
 
@@ -260,12 +267,14 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         Log.i("anim", "slide_up / " + msg);
     }
 
-    // 버튼 내리는 애니메이션, visibility
+    // BUTTONS to false, visibility, 내리는 애니메이션, 스크롤뷰 패딩 설정, adapter 함수 호출
     private void slideDownButtons(String msg)
     {
+        BUTTONS = false;
         buttonsBottom.setVisibility(View.GONE);
         animSlideDown(buttonsBottom, msg);
         sv.setPadding(0,0,0,0);
+        adapter.checkAll(false);
     }
 
     // 하단에 버튼 올라와 있으면 버튼 내리기
@@ -291,19 +300,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             else {
                 if (BUTTONS) {
                     menu.clear();
-//                    tv.setText("전체");
-//                    tv.setTextColor(getResources().getColor(R.color.red));
-//                    tv.setVisibility(View.VISIBLE);
-//                    tv.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Log.i("전체", "리스너!!!");
-//                        }
-//                    });
+
                     getMenuInflater().inflate(R.menu.menu_list2, menu);
 
-//                    menu.add("AddTitle");
-//                    ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setText("전체");
+
                 }else {
                     menu.clear();
                     getMenuInflater().inflate(R.menu.menu_list, menu);

@@ -50,12 +50,13 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:drawableTop="@drawable/backup_all"
-            android:paddingTop="20dp"
+            android:drawableTop="@drawable/backup"
+            android:paddingTop="12dp"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
-            android:onClick="onClick" />
+            android:onClick="onClick"
+            android:background="#FFFFFF"
+            />
         <Button
             android:layout_alignParentBottom="true"
             android:id="@+id/btn_list_delete"
