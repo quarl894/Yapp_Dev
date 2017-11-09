@@ -72,7 +72,9 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     Handler handler = new Handler();
     Context context;
     private TextView record_time;
-
+    private ImageButton weather_btn;
+    private ImageButton feel_btn;
+    private int weather, feel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +101,46 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
+        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
+        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
 
+        weather = thisItem.getWeather();
+        feel = thisItem.getMood();
+
+        switch(weather) {
+            case 1:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case 2:
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case 3:
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case 4:
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            default:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+        }
+        switch(feel){
+            case 1 :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case 2 :
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case 3 :
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case 4 :
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+        }
         //***날짜 형식 변경***
         Date nDate = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -172,7 +213,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                     try {
                         mPlayer.setDataSource(thisItem.getR_path());
                         mPlayer.prepare();
-                    } catch (IOException e) {
+                    }catch (IOException e) {
                         e.printStackTrace();
                     }
                     final int record_sec = mPlayer.getDuration()/1000;

@@ -65,6 +65,9 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private TextView mTitleDiary, mTitlePic;
     private Button btnSave;
     Uri selectedUri;
+    private ImageButton weather_btn;
+    private ImageButton feel_btn;
+    private int weather, feel;
 
     private MyDBHelper DBHelper;
     private SQLiteDatabase db;
@@ -95,6 +98,46 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mContentView = (EditText) findViewById(R.id.context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
+        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
+        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
+
+        weather = thisItem.getWeather();
+        feel = thisItem.getMood();
+
+        switch(weather) {
+            case 1:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case 2:
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case 3:
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case 4:
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            default:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+        }
+        switch(feel){
+            case 1 :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case 2 :
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case 3 :
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case 4 :
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+        }
 
         //***날짜 형식 변경***
         Date nDate = null;
