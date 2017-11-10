@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,12 +70,16 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private SQLiteDatabase db;
 
     ProgressBar mProgressBar, backProgressBar;
-    Handler handler = new Handler();
+
     Context context;
     private TextView record_time;
     private ImageButton weather_btn;
     private ImageButton feel_btn;
     private int weather, feel;
+    String item_path;
+    P_Thread pro_thread;
+    int count;
+    Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +111,9 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
 
         weather = thisItem.getWeather();
         feel = thisItem.getMood();
+        item_path = thisItem.getR_path();
 
+        count=0;
         switch(weather) {
             case 1:
                 weather_btn.setImageResource(R.drawable.page_1);
@@ -163,7 +170,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         record_time = (TextView) findViewById(R.id.record_time);
         context = this.getApplicationContext();
         mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
-        backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
+//        backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
 
         if(chk_num == 1){
             ArrayList<String> tmpList = new ArrayList<>();
@@ -207,40 +214,19 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             @Override
             public void onClick(View v) {
                 Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
-                MediaPlayer mPlayer = new MediaPlayer();
-                if (thisItem.getR_path() != null)
-                {
-                    try {
-                        mPlayer.setDataSource(thisItem.getR_path());
-                        mPlayer.prepare();
-                    }catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    final int record_sec = mPlayer.getDuration()/1000;
-                    mPlayer.start();
-                    // 현재 시간을 받아옴
-                    mProgressBar.setProgress(record_sec);
-                    new Thread(new Runnable() {
-                        int progressStatus = record_sec;
-                        public void run() {
-                            while (progressStatus > 0) {
-                                progressStatus -= 1;
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                // Update the progress bar
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        mProgressBar.setProgress(progressStatus);
-                                        record_time.setText("00:" + String.format("%02d", progressStatus));
-                                        Log.e("test",Integer.toString(mProgressBar.getProgress()));
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
+                if(count==0){
+                    handler = new Handler();
+                    pro_thread = new P_Thread();
+                    pro_thread.start();
+                    pro_thread.stop = false;
+                    pro_thread.work =true;
+                    count=1;
+                }else if(count ==1){
+                    pro_thread.stop = true;
+                    pro_thread.work =false;
+                    count =0;
+                    Log.e("btnRecord 재시작"," "+pro_thread.getState().toString());
+                    Toast.makeText(DetailActivity.this, "녹음파일을 종료합니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -289,15 +275,15 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         ViewHelper.setScaleX(record_time, scale);
         ViewHelper.setScaleY(record_time, scale);
 
-        ViewHelper.setPivotX(mProgressBar,-350);
-        ViewHelper.setPivotY(mProgressBar, 400);
-        ViewHelper.setScaleX(mProgressBar, scale);
-        ViewHelper.setScaleY(mProgressBar, scale);
-
-        ViewHelper.setPivotX(backProgressBar,-350);
-        ViewHelper.setPivotY(backProgressBar, 400);
-        ViewHelper.setScaleX(backProgressBar, scale);
-        ViewHelper.setScaleY(backProgressBar, scale);
+//        ViewHelper.setPivotX(mProgressBar,-350);
+//        ViewHelper.setPivotY(mProgressBar, 400);
+//        ViewHelper.setScaleX(mProgressBar, scale);
+//        ViewHelper.setScaleY(mProgressBar, scale);
+//
+//        ViewHelper.setPivotX(backProgressBar,-350);
+//        ViewHelper.setPivotY(backProgressBar, 400);
+//        ViewHelper.setScaleX(backProgressBar, scale);
+//        ViewHelper.setScaleY(backProgressBar, scale);
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
         int titleTranslationY = maxTitleTranslationY - scrollY;
@@ -307,8 +293,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
 
         ViewHelper.setTranslationY(record_time, titleTranslationY);
 
-        ViewHelper.setTranslationY(backProgressBar,titleTranslationY);
-        ViewHelper.setTranslationY(mProgressBar,titleTranslationY);
+//        ViewHelper.setTranslationY(backProgressBar,titleTranslationY);
+//        ViewHelper.setTranslationY(mProgressBar,titleTranslationY);
 
         // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 2;
@@ -386,6 +372,71 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                     .into(thumbnail);
             mSelectedImagesContainer.addView(imageHolder);
             thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(pro_thread != null){
+            pro_thread.work = false;
+            pro_thread.stop = true;
+            count = 0;
+            Log.e("btnReset 리셋"," "+pro_thread.getState().toString());
+        }
+    }
+
+    private class P_Thread extends Thread{
+        public boolean stop = false;
+        public boolean work = true;
+        private int progressStatus;
+        MediaPlayer mPlayer = new MediaPlayer();
+
+        public void run() {
+            try{
+                mPlayer.setDataSource(item_path);
+                mPlayer.prepare();
+            }catch(Exception e){ e.printStackTrace();}
+            final int record_sec = mPlayer.getDuration()/1000;
+            progressStatus = record_sec;
+                while (progressStatus > 0 && !item_path.equals(null) && !Thread.currentThread().isInterrupted()) {
+                    if(work){
+                    mPlayer.start();
+                    mProgressBar.setProgress(record_sec);
+                    try {
+                        progressStatus -= 1;
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // Update the progress bar
+                    handler.post(new Runnable() {
+                        public void run() {
+                            mProgressBar.setProgress(progressStatus);
+                            record_time.setText("00:" + String.format("%02d", progressStatus));
+                            Log.e("test",Integer.toString(mProgressBar.getProgress()));
+                        }
+                    });
+                }else{
+                        Log.e("hello", " " + Thread.currentThread().getState());
+                        progressStatus =record_sec;
+                        mPlayer.pause();
+                        handler.post(new Runnable() {
+                            public void run() {
+                                mProgressBar.setProgress(progressStatus);
+                                record_time.setText("00:" + String.format("%02d", progressStatus));
+                            }
+                        });
+                        break;
+                    }
+                }
+            Log.e("끝남끝남끝남", "끝남끝남끝남");
+            Log.e("hello", " " + Thread.currentThread().getState());
+            mPlayer.stop();
+            progressStatus = record_sec;
+            stop = false;
+            work = true;
+            count=0;
         }
     }
 }

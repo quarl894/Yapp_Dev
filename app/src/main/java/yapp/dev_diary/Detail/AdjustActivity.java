@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ import yapp.dev_diary.R;
  * Created by YoungJung on 2017-09-17.
  */
 
-public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks{
     ArrayList<String> select_pic = new ArrayList<>();
     ArrayList<Uri> selectedUriList;
     private ViewGroup mSelectedImagesContainer;
@@ -71,6 +72,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
 
     private MyDBHelper DBHelper;
     private SQLiteDatabase db;
+    LinearLayout show_img;
+    LinearLayout show_img2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +103,23 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
         weather_btn = (ImageButton) findViewById(R.id.btn_status1);
         feel_btn = (ImageButton) findViewById(R.id.btn_status2);
+        show_img = (LinearLayout) findViewById(R.id.show_img);
+        show_img2 = (LinearLayout) findViewById(R.id.show_img2);
 
         weather = thisItem.getWeather();
         feel = thisItem.getMood();
+        weather_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_img.setVisibility(View.VISIBLE);
+            }
+        });
+        feel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_img2.setVisibility(View.VISIBLE);
+            }
+        });
 
         switch(weather) {
             case 1:
@@ -220,7 +237,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 int dateInt = 0;
                 Log.d("체크", ""+p_path.toString());
                 //Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
-                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, thisItem.getWeather(), thisItem.getMood(), title, thisItem.getDate(), 0);
+                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, weather, feel, title, thisItem.getDate(), 0);
                 DBHelper.update(newItem);
 
                 Intent i = new Intent(AdjustActivity.this, DetailActivity.class);
@@ -386,6 +403,46 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
             mSelectedImagesContainer.addView(imageHolder);
             thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
         }
+    }
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.img1 :
+                weather = 1;
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case R.id.img2:
+                weather = 2;
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case R.id.img3:
+                weather = 3;
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case R.id.img4:
+                weather = 4;
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            case R.id.img5 :
+                feel = 1;
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case R.id.img6:
+                feel = 2;
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case R.id.img7:
+                feel = 3;
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case R.id.img8:
+                feel = 4;
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default:
+                break;
+        }
+        show_img2.setVisibility(View.GONE);
+        show_img.setVisibility(View.GONE);
     }
 }
 

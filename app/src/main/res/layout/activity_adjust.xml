@@ -56,7 +56,7 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="58dp"
-                    android:background="#aba0ff"
+                    android:background="@drawable/roundcorner"
                     android:src="@drawable/page_1" />
 
                 <ImageButton
@@ -67,8 +67,86 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="22dp"
-                    android:background="#aba0ff"
+                    android:background="@drawable/roundcorner"
                     android:src="@drawable/smile_contents" />
+                <LinearLayout
+                    android:layout_width="144dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/show_img"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="invisible">
+                    <ImageButton
+                        android:id="@+id/img1"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/page_1"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img2"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/cloudy_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img3"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/rainy_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img4"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/snowy_contents"
+                        android:onClick="onClick"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="144dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/show_img2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="invisible">
+                    <ImageButton
+                        android:id="@+id/img5"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/smile_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img6"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/notbad_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img7"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/sad_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img8"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/angry_contents"
+                        android:onClick="onClick"/>
+                </LinearLayout>
             </RelativeLayout>
 
             <EditText
@@ -114,7 +192,7 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="22dp"
-                    android:background="#aba0ff"
+                    android:background="@drawable/roundcorner"
                     android:src="@drawable/edit" />
             </RelativeLayout>
 

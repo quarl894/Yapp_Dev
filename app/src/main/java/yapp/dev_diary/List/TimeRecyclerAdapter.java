@@ -252,7 +252,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         Log.e("여기서 고친다", Integer.toString(itemList.get(k).getMonth()));
                         if (tmpItem.getMonth() == itemList.get(k).getMonth()) {
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
-
                             itemList.remove(k);
                         }
                     }
