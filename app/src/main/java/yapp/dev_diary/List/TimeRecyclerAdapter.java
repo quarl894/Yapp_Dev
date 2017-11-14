@@ -185,16 +185,14 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.e("position check", " " + itemList.get(pos).toString());
+                        Log.e("is checked", " " + itemList.get(pos).toString());
                         checkedList.add(pos);
-                        Log.e("position", " " + Integer.toString(checkedList.size()));
                     } else {
+                        Log.e("is unchecked", " " + pos); //itemList.get(pos).toString());
                         if(checkedList.size() !=0){
                             int index = checkedList.indexOf(pos);
                             Log.e("position_111", " " + Integer.toString(index));
                             checkedList.remove(index);
-                            if( index  > 0 )
-                                checkBoxes.remove(index);
                             Log.e("position_remove", " " + Integer.toString(checkedList.size()));
                         }
                     }
@@ -245,6 +243,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 Log.e("DBIndex", Integer.toString(((MyData) tmpItem).getDayOfMonth()) + "pos : "  + pos);
                 DBHelper.delete(((MyData) tmpItem).getDBIndex());
                 itemList.remove(pos);
+                checkBoxes.remove(pos);
                 ArrayList<Integer> days = DBHelper.monthSelect(tmpItem.getMonth(), true);
                 if(days==null){
                     Log.e("onCreateViewHolder", "해당 달에 일기 없음 [" + Integer.toString(tmpItem.getMonth()) + "]");
@@ -254,6 +253,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
 
                             itemList.remove(k);
+                            checkBoxes.remove(k);
                         }
                     }
                 }
@@ -266,11 +266,11 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void checkAll(boolean to){
-        Log.i("checkedList", "(" + checkedList.size() + ")");
-        Log.i("checkBoxes", "(" + checkBoxes.size() + ")");
-
+        Log.i("checkAll to", Boolean.toString(to));
         for(CheckBox cb : checkBoxes){
             if ( cb != null ) cb.setChecked(to);
         }
+        Log.i("checkedList", "(" + checkedList.size() + ")");
+        Log.i("checkBoxes", "(" + checkBoxes.size() + ")");
     }
 }

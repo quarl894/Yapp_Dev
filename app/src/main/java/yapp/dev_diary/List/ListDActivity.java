@@ -125,7 +125,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                     adapter.checkAll(false);
                     allChecked = false;
                 }
-
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -272,7 +271,11 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         buttonsBottom.setVisibility(View.GONE);
         animSlideDown(buttonsBottom, msg);
         sv.setPadding(0,0,0,0);
-        adapter.checkAll(false);
+
+        if( allChecked == true ){
+            adapter.checkAll(false);
+            allChecked = false;
+        }
     }
 
     // 하단에 버튼 올라와 있으면 버튼 내리기
@@ -281,7 +284,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         if(BUTTONS)
         {
             slideDownButtons("btn_list_delete");
-            BUTTONS = false;
             cb_check = false;
         }
         else super.onBackPressed();
