@@ -1,21 +1,14 @@
 package yapp.dev_diary.Setting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import yapp.dev_diary.R;
 
 /**
@@ -63,5 +56,5 @@ public class Pactivity extends AppCompatActivity {
                 return i;
             }
         }).start();
-    }
+    };
 }

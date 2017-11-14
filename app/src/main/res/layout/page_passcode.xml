@@ -70,20 +70,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:gravity="bottom"
+            android:gravity="center"
             android:shrinkColumns="*"
             android:stretchColumns="*">
-
             <TableRow>
-
                 <Button
                     android:id="@+id/button1"
                     style="@style/PasscodeButtonStyle"
+                    android:gravity="center"
                     android:text="1" />
 
                 <Button
                     android:id="@+id/button2"
                     style="@style/PasscodeButtonStyle"
+                    android:gravity="center"
                     android:text="2" />
 
                 <Button

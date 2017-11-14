@@ -13,6 +13,7 @@
     <color name="today">@color/black</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="opacity">#140000</color>
+    <color name="red">#EE3311</color>
 
     <color name="light_gray">#FFE5E5E5</color>
     <color name="light_blue">#FF78c8e6</color>

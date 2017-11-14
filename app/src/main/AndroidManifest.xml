@@ -15,12 +15,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".Setting.SetActivity"></activity>
         <activity android:name=".Setting.LockActivity"></activity>
@@ -31,9 +32,6 @@
         <activity android:name=".Detail.DetailActivity"></activity>
         <activity android:name=".List.ListDActivity"></activity>
         <activity android:name=".Calendar.Activity.MultiCalendarActivity"></activity>
-        <activity android:name=".Lock.HomePage"
-                  android:windowSoftInputMode="adjustResize">
-        </activity>
         <activity android:name=".Lock.core.AppLockActivity"
                   android:windowSoftInputMode="stateHidden" >
         </activity>

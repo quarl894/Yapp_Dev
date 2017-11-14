@@ -37,6 +37,7 @@
         <item name="android:background">@drawable/button_background</item>
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">60dp</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="PasscodeButtonStyle2" parent="@android:style/Widget.Button">
@@ -46,6 +47,7 @@
         <item name="android:background">@drawable/button_background2</item>
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">60dp</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="PasscodeShowButtonStyle" parent="@android:style/Widget.Button">
@@ -57,6 +59,10 @@
         <item name="android:layout_height">90dp</item>
         <item name="android:hint">○</item>
         <item name="android:textColorHint">#ffffff</item>
+    </style>
+
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#fb6969</item>
     </style>
 
 </resources>

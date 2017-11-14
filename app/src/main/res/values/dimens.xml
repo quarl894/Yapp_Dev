@@ -15,4 +15,5 @@
     <dimen name="intersection_height">16dp</dimen>
 
     <dimen name="cmm_height">72dp</dimen>
+
 </resources>

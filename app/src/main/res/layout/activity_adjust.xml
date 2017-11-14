@@ -1,22 +1,7 @@
-<!--
-  Copyright 2014 Soichiro Kashima
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/image"
@@ -24,12 +9,6 @@
         android:layout_height="@dimen/flexible_space_image_height"
         android:scaleType="centerCrop"
         android:src="@drawable/pot_2" />
-
-    <!--<View-->
-        <!--android:id="@+id/overlay"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/flexible_space_image_height"-->
-        <!--android:background="?attr/colorPrimary" />-->
 
     <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
         android:id="@+id/scroll"
@@ -77,8 +56,8 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="58dp"
-                    android:background="#aba0ff"
-                    android:src="@drawable/sun" />
+                    android:background="@drawable/roundcorner"
+                    android:src="@drawable/page_1" />
 
                 <ImageButton
                     android:id="@+id/adjust_imgbtn_emotion"
@@ -88,8 +67,86 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="22dp"
-                    android:background="#aba0ff"
-                    android:src="@drawable/smile" />
+                    android:background="@drawable/roundcorner"
+                    android:src="@drawable/smile_contents" />
+                <LinearLayout
+                    android:layout_width="144dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/show_img"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="invisible">
+                    <ImageButton
+                        android:id="@+id/img1"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/page_1"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img2"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/cloudy_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img3"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/rainy_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img4"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/snowy_contents"
+                        android:onClick="onClick"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="144dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/show_img2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="invisible">
+                    <ImageButton
+                        android:id="@+id/img5"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/smile_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img6"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/notbad_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img7"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/sad_contents"
+                        android:onClick="onClick"/>
+                    <ImageButton
+                        android:id="@+id/img8"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/angry_contents"
+                        android:onClick="onClick"/>
+                </LinearLayout>
             </RelativeLayout>
 
             <EditText
@@ -135,7 +192,7 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="22dp"
-                    android:background="#aba0ff"
+                    android:background="@drawable/roundcorner"
                     android:src="@drawable/edit" />
             </RelativeLayout>
 
