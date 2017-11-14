@@ -103,8 +103,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mContentView = (EditText) findViewById(R.id.context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
-        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
-        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
+        weather_btn = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+        feel_btn = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
         show_img = (LinearLayout) findViewById(R.id.show_img);
         show_img2 = (LinearLayout) findViewById(R.id.show_img2);
 
@@ -197,7 +197,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         }
 
         adjust_imgbtn_weather = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
-        int weather = thisItem.getWeather();
         switch (weather)
         {
             case 0 :
