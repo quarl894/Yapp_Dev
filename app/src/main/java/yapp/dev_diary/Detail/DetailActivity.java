@@ -62,7 +62,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private ImageButton btn_edit, btn_backup;
+    private ImageButton btn_edit, btn_backup, detail_imgbtn_weather, detail_imgbtn_emotion;
     private LinearLayout edit_view;
 
     private MyDBHelper     DBHelper;
@@ -99,6 +99,41 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
+
+        detail_imgbtn_weather = (ImageButton) findViewById(R.id.detail_imgbtn_weather);
+        int weather = thisItem.getWeather();
+        switch (weather)
+        {
+            case 0 :
+                detail_imgbtn_weather.setImageResource(R.drawable.sun);
+                break;
+            case 1 :
+                detail_imgbtn_weather.setImageResource(R.drawable.cloud);
+                break;
+            case 2 :
+                detail_imgbtn_weather.setImageResource(R.drawable.rain);
+                break;
+            case 3 :
+                detail_imgbtn_weather.setImageResource(R.drawable.snow);
+                break;
+        }
+        detail_imgbtn_emotion = (ImageButton) findViewById(R.id.detail_imgbtn_emotion);
+        int emotion = thisItem.getMood();
+        switch (emotion)
+        {
+            case 0 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.smile);
+                break;
+            case 1 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.notbad);
+                break;
+            case 2 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.sad);
+                break;
+            case 3 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.angry);
+                break;
+        }
 
         //***날짜 형식 변경***
         Date nDate = null;

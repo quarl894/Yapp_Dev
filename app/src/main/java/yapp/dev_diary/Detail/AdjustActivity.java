@@ -64,6 +64,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
     private Button btnSave;
+    private ImageButton adjust_imgbtn_weather, adjust_imgbtn_emotion;
+
     Uri selectedUri;
 
     private MyDBHelper DBHelper;
@@ -132,6 +134,42 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 select_pic.clear();
         }else{
             select_pic.clear();
+        }
+
+        adjust_imgbtn_weather = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+        int weather = thisItem.getWeather();
+        switch (weather)
+        {
+            case 0 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.sun);
+                break;
+            case 1 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.cloud);
+                break;
+            case 2 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.rain);
+                break;
+            case 3 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.snow);
+                break;
+        }
+
+        adjust_imgbtn_emotion = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
+        int emotion = thisItem.getMood();
+        switch (emotion)
+        {
+            case 0 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.smile);
+                break;
+            case 1 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad);
+                break;
+            case 2 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.sad);
+                break;
+            case 3 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.angry);
+                break;
         }
 
         showStringgList(select_pic);
