@@ -48,7 +48,7 @@
         android:visibility="gone">
         <Button
             android:id="@+id/btn_list_backup"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:drawableTop="@drawable/backup"
@@ -61,7 +61,7 @@
 
         <Button
             android:id="@+id/btn_list_delete"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"

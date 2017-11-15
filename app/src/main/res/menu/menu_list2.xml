@@ -9,13 +9,5 @@
         app:showAsAction="always"
         android:icon="@drawable/checked"
         >
-
-        <!--android:actionViewClass="android.widget.CheckBox"-->
-        <!--android:checkable="false"-->
-        <!--android:textColor="@color/red"-->
-
-        <!--android:actionViewClass="android.widget.TextView"-->
-
-
     </item>
 </menu>

@@ -12,14 +12,21 @@
         android:title="menu_list"
         android:icon="@drawable/overflow_menu"
         app:showAsAction="always"
-        android:id="@+id/menu_list">
+        android:id="@+id/menu_list"
+        >
         <menu>
             <item
                 android:id="@+id/menu_list_modify"
-                android:title="수정" />
+                android:title="수정"
+                android:icon="@drawable/edit_overflow"
+                app:showAsAction="withText"
+                />
             <item
                 android:id="@+id/menu_list_setting"
-                android:title="설정" />
+                android:title="설정"
+                android:icon="@drawable/group"
+                app:showAsAction="withText"
+                />
         </menu>
     </item>
 
