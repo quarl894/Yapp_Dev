@@ -12,7 +12,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,7 +29,6 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +61,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private ImageButton btn_edit, btn_backup;
+    private ImageButton btn_edit, btn_backup, detail_imgbtn_weather, detail_imgbtn_emotion;
     private LinearLayout edit_view;
 
     private MyDBHelper     DBHelper;
@@ -106,48 +104,42 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
-        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
-        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
 
-        weather = thisItem.getWeather();
-        feel = thisItem.getMood();
-        item_path = thisItem.getR_path();
-
-        count=0;
-        switch(weather) {
-            case 1:
-                weather_btn.setImageResource(R.drawable.page_1);
+        detail_imgbtn_weather = (ImageButton) findViewById(R.id.detail_imgbtn_weather);
+        int weather = thisItem.getWeather();
+        switch (weather)
+        {
+            case 0 :
+                detail_imgbtn_weather.setImageResource(R.drawable.sun);
                 break;
-            case 2:
-                weather_btn.setImageResource(R.drawable.cloudy_contents);
-                break;
-            case 3:
-                weather_btn.setImageResource(R.drawable.rainy_contents);
-                break;
-            case 4:
-                weather_btn.setImageResource(R.drawable.snowy_contents);
-                break;
-            default:
-                weather_btn.setImageResource(R.drawable.page_1);
-                break;
-        }
-        switch(feel){
             case 1 :
-                feel_btn.setImageResource(R.drawable.smile_contents);
+                detail_imgbtn_weather.setImageResource(R.drawable.cloud);
                 break;
             case 2 :
-                feel_btn.setImageResource(R.drawable.notbad_contents);
+                detail_imgbtn_weather.setImageResource(R.drawable.rain);
                 break;
             case 3 :
-                feel_btn.setImageResource(R.drawable.sad_contents);
-                break;
-            case 4 :
-                feel_btn.setImageResource(R.drawable.angry_contents);
-                break;
-            default :
-                feel_btn.setImageResource(R.drawable.smile_contents);
+                detail_imgbtn_weather.setImageResource(R.drawable.snow);
                 break;
         }
+        detail_imgbtn_emotion = (ImageButton) findViewById(R.id.detail_imgbtn_emotion);
+        int emotion = thisItem.getMood();
+        switch (emotion)
+        {
+            case 0 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.smile);
+                break;
+            case 1 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.notbad);
+                break;
+            case 2 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.sad);
+                break;
+            case 3 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.angry);
+                break;
+        }
+
         //***날짜 형식 변경***
         Date nDate = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");

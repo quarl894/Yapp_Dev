@@ -49,7 +49,7 @@
                     android:textSize="22sp" />
 
                 <ImageButton
-                    android:id="@+id/btn_status1"
+                    android:id="@+id/adjust_imgbtn_weather"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
@@ -60,7 +60,7 @@
                     android:src="@drawable/page_1" />
 
                 <ImageButton
-                    android:id="@+id/btn_status2"
+                    android:id="@+id/adjust_imgbtn_emotion"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"

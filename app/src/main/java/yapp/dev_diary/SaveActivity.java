@@ -138,6 +138,7 @@ public class SaveActivity extends AppCompatActivity {
                 img1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        weather = 0;
                         img1.setImageAlpha(2000);
                         img2.setImageAlpha(50);
                         img3.setImageAlpha(50);
@@ -148,6 +149,7 @@ public class SaveActivity extends AppCompatActivity {
                 img2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        weather = 1;
                         img2.setImageAlpha(2000);
                         img1.setImageAlpha(50);
                         img3.setImageAlpha(50);
@@ -158,6 +160,7 @@ public class SaveActivity extends AppCompatActivity {
                 img3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        weather = 2;
                         img3.setImageAlpha(2000);
                         img2.setImageAlpha(50);
                         img1.setImageAlpha(50);
@@ -168,6 +171,7 @@ public class SaveActivity extends AppCompatActivity {
                 img4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        weather = 3;
                         img4.setImageAlpha(2000);
                         img2.setImageAlpha(50);
                         img3.setImageAlpha(50);
@@ -202,6 +206,7 @@ public class SaveActivity extends AppCompatActivity {
                 img5.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        feel = 0;
                         img5.setImageAlpha(2000);
                         img6.setImageAlpha(50);
                         img7.setImageAlpha(50);
@@ -212,6 +217,7 @@ public class SaveActivity extends AppCompatActivity {
                 img6.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        feel = 1;
                         img6.setImageAlpha(2000);
                         img5.setImageAlpha(50);
                         img7.setImageAlpha(50);
@@ -222,6 +228,7 @@ public class SaveActivity extends AppCompatActivity {
                 img7.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        feel = 2;
                         img7.setImageAlpha(2000);
                         img6.setImageAlpha(50);
                         img5.setImageAlpha(50);
@@ -232,6 +239,7 @@ public class SaveActivity extends AppCompatActivity {
                 img8.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        feel = 3;
                         img8.setImageAlpha(2000);
                         img5.setImageAlpha(50);
                         img6.setImageAlpha(50);

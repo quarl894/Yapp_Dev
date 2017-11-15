@@ -65,6 +65,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
     private Button btnSave;
+    private ImageButton adjust_imgbtn_weather, adjust_imgbtn_emotion;
+
     Uri selectedUri;
     private ImageButton weather_btn;
     private ImageButton feel_btn;
@@ -101,8 +103,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mContentView = (EditText) findViewById(R.id.context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
-        weather_btn = (ImageButton) findViewById(R.id.btn_status1);
-        feel_btn = (ImageButton) findViewById(R.id.btn_status2);
+        weather_btn = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+        feel_btn = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
         show_img = (LinearLayout) findViewById(R.id.show_img);
         show_img2 = (LinearLayout) findViewById(R.id.show_img2);
 
@@ -192,6 +194,41 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 select_pic.clear();
         }else{
             select_pic.clear();
+        }
+
+        adjust_imgbtn_weather = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+        switch (weather)
+        {
+            case 0 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.sun);
+                break;
+            case 1 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.cloud);
+                break;
+            case 2 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.rain);
+                break;
+            case 3 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.snow);
+                break;
+        }
+
+        adjust_imgbtn_emotion = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
+        int emotion = thisItem.getMood();
+        switch (emotion)
+        {
+            case 0 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.smile);
+                break;
+            case 1 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad);
+                break;
+            case 2 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.sad);
+                break;
+            case 3 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.angry);
+                break;
         }
 
         showStringgList(select_pic);
