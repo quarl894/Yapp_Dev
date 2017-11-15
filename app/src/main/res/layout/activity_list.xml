@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".List.ListDActivity">
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,28 +15,26 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     </android.support.v7.widget.Toolbar>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="56dp"
         android:id="@+id/scroll_view"
         android:fillViewport="true"
-
-        >
-        <!-- 아이템 하나의 height 알 수 있음? -->
-        <RelativeLayout
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/mTimeRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                />
-
-        </RelativeLayout>
+                android:layout_weight="1" />
+        </LinearLayout>
     </ScrollView>
 
     <LinearLayout
@@ -64,8 +61,8 @@
 
         <Button
             android:id="@+id/btn_list_delete"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -73,6 +70,6 @@
             android:drawableTop="@drawable/delete"
             android:onClick="onClick"
             android:paddingTop="12dp" />
+
     </LinearLayout>
 </RelativeLayout>
-

@@ -14,12 +14,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +47,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
 
-    private TextView tv;
+//    private TextView tv;
 
     private boolean allChecked = false;
 
@@ -60,7 +62,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         sv = (ScrollView) findViewById(R.id.scroll_view);
 
-        tv = (TextView) findViewById(R.id.menu_select_all);
+//        tv = (TextView) findViewById(R.id.menu_select_all);
 
         initToolbar();
 
@@ -99,9 +101,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
-//                Log.i("height1", Integer.toString( buttonsBottom.getHeight() ));    //90
-//                Log.i("height2", Integer.toString( buttonDelete.getPaddingTop() )); //18
-                sv.setPadding(0,0,0, 90);    // 뭔가 어색함
+
+                sv.setPadding(0,0,0, 90);
+                Log.i("height1", Integer.toString( mTimeRecyclerView.getHeight() ));    //90
+                Log.i("height3", Integer.toString( sv.getHeight() )); //18
 
                 cb_check = true;
                 this.runOnUiThread(new Runnable() {
@@ -121,9 +124,12 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 if( allChecked == false){
                     adapter.checkAll(true);
                     allChecked = true;
+
+                    ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.checked));
                 }else{
                     adapter.checkAll(false);
                     allChecked = false;
+                    ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.unchecked));
                 }
                 break;
         }
@@ -153,7 +159,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                             adapter.notifyDataSetChanged();
                         }
                     });
-                    // 하단 버튼들
                     slideDownButtons("cancle");
                     initToolbar();
                 }
@@ -161,7 +166,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         }
         else
         {
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.setting);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.calendar);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -170,7 +175,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 }
             });
         }
-
         onPrepareOptionsMenu(menu);
     }
 
