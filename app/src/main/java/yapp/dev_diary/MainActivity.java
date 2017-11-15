@@ -189,13 +189,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 
         DBHelper = new MyDBHelper(MainActivity.this);
         db        = DBHelper.getWritableDatabase();
-        Button test_btn = (Button) findViewById(R.id.test_btn);
-        test_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlarmHATT(getApplicationContext()).Alarm();
-            }
-        });
 
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
@@ -213,41 +206,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                 .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_CALENDAR)
                 .check();
-
-        /* 테스트 버튼 ㅎㅎ */
-        Button db_button = (Button)findViewById(R.id.db_button);
-        db_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("db", "DBHelper.allSelect()");
-                List<MyItem> itemList = DBHelper.allSelect();
-                for(int i = 0; i < itemList.size(); i++)
-                    Log.i("db", "[" + itemList.get(i).get_Index() + "]" + itemList.get(i).getString());
-
-                // calendarSelct null?
-                ArrayList<MyItem> tmpItems = DBHelper.calendarSelect(20171022);
-                if ( tmpItems != null ) {
-                    String itemsString = "";
-
-                    for (MyItem i : tmpItems) {
-                        itemsString += i.getTitle();
-                    }
-                    Log.i("calendarSelect", itemsString);
-                }
-
-                // monthSelect
-                ArrayList<Integer> days = DBHelper.monthSelect(201710, false);
-                String str = "";
-                if( days != null ){
-                    for(int i : days){
-                        str += Integer.toString(i) + " ";
-                    }
-                }
-                else str = "null";
-                Log.i("monthSelect", "201710 : " + str);
-            }
-        });
-
 
         outputSttList = new ArrayList<String>();
         long now = System.currentTimeMillis();

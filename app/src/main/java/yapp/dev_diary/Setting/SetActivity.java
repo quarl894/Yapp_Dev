@@ -3,6 +3,7 @@ package yapp.dev_diary.Setting;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -10,10 +11,11 @@ import android.widget.Toast;
 import yapp.dev_diary.Lock.core.AppLock;
 import yapp.dev_diary.Lock.core.AppLockActivity;
 import yapp.dev_diary.Lock.core.LockManager;
+import yapp.dev_diary.MainActivity;
+import yapp.dev_diary.Mark.MarkActivity;
 import yapp.dev_diary.R;
 
 public class SetActivity extends Activity {
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -50,9 +52,7 @@ public class SetActivity extends Activity {
                 onClickEvent(view);
             }
         });
-
     }
-
     /**
      * onClick시 Event 분기 메소드
      * @param view Event가 발생한 View를 인자 그대로 넘기면 된다.
@@ -68,12 +68,9 @@ public class SetActivity extends Activity {
                 startActivity(intent2);
                 break;
             case R.id.setting_layout_allbackup :
-                Intent i3 = new Intent(this, Pactivity.class);
-                startActivity(i3);
-                //Toast.makeText(this, "전체백업은 백업 되면은...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "추후 Update 예정입니다.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_layout_allclear :
-                Toast.makeText(this, "전체초기화는 DB다 되면...", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

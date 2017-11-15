@@ -42,7 +42,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     static boolean cb_check;
 
     private LinearLayout buttonsBottom;
-    // buttonBackup, buttonDelete 필요없어서 지웁니당
     private boolean     BUTTONS = false;
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
@@ -128,7 +127,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                     adapter.checkAll(false);
                     allChecked = false;
                 }
-
                 break;
         }
         return super.onOptionsItemSelected(item);

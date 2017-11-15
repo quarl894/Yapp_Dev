@@ -11,7 +11,7 @@
     <application
         android:name=".Lock.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_img"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -35,7 +35,7 @@
         <activity android:name=".Lock.core.AppLockActivity"
                   android:windowSoftInputMode="stateHidden" >
         </activity>
-        <activity android:name=".Setting.Pactivity"></activity>
+        <activity android:name=".Mark.MarkActivity"></activity>
         <receiver android:name=".Setting.BroadcastD"></receiver>
     </application>
 </manifest>

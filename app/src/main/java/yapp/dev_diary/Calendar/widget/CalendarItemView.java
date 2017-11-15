@@ -72,8 +72,8 @@ public class CalendarItemView extends View {
         mPaintTextWhite.setColor(Color.WHITE);
         mPaintTextWhite.setTextSize(dp11);
         mPaintTextWhite.setTextAlign(Paint.Align.CENTER);
-        mPaintBackground.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-        mPaintBackgroundToday.setColor(ContextCompat.getColor(getContext(), R.color.today));
+        mPaintBackground.setColor(ContextCompat.getColor(getContext(), R.color.p_color1));
+        mPaintBackgroundToday.setColor(ContextCompat.getColor(getContext(), R.color.p_color1));
         mPaintBackgroundEvent.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         setClickable(true);
         setOnTouchListener(new OnTouchListener() {
