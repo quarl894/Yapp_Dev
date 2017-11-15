@@ -71,21 +71,18 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ArrayList<AdapterItem> initItemList(ArrayList<MyData> dataset) {
         checkBoxes = new ArrayList<CheckBox>();
 
-
         ArrayList<AdapterItem> result = new ArrayList<>();
         int year = 0, month = 0;
         for (MyData data : dataset) {
             if (year != data.getYear() || month != data.getMonth()) {
                 result.add(new TimeItem(data.getYear(), data.getMonth(), data.getDayOfMonth()));
+                checkBoxes.add(null);
                 year = data.getYear();
                 month = data.getMonth();
-
-                checkBoxes.add(null);
             }
             result.add(data);
             checkBoxes.add(null);
         }
-
         return result;
     }
 
@@ -111,6 +108,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.i("*** onCreateViewHolder", Integer.toString(viewType));
         View view;
         if (viewType == AdapterItem.TYPE_TIME)
             return new TimeViewHolder(
@@ -178,22 +176,25 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 dHolder.cb.setChecked(false);
             }
 
-            Log.i("ch", "pos : " + pos);
-            if( checkBoxes.get(pos) == null ) checkBoxes.set(pos, dHolder.cb);
+            Log.i("*** CB set", "pos : " + pos + " / " + checkBoxes.get(pos));
+//            if( checkBoxes.get(pos) == null )
+                checkBoxes.set(pos, dHolder.cb);
 
             dHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.e("is checked", " " + itemList.get(pos).toString());
-                        checkedList.add(pos);
+                        Log.e("is checked", " " + checkBoxes.get(pos).toString() + " (" + pos + ") [" + buttonView.toString() + "] ");
+//                        buttonView.getVerticalScrollbarPosition() // 0
+                        checkedList.add(pos);   // 달라짐,,
+
                     } else {
                         Log.e("is unchecked", " " + pos); //itemList.get(pos).toString());
                         if(checkedList.size() !=0){
                             int index = checkedList.indexOf(pos);
-                            Log.e("position_111", " " + Integer.toString(index));
+                            Log.e("position_111 (index)", " " + Integer.toString(index));
                             checkedList.remove(index);
-                            Log.e("position_remove", " " + Integer.toString(checkedList.size()));
+                            Log.e("position_remove (size)", " " + Integer.toString(checkedList.size()));
                         }
                     }
                 }
@@ -201,11 +202,10 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
 
-        Log.i("마지막 아이템", "position : " + position + " / " + getItemCount());
-        if( getItemCount()-1 == position){
+//        Log.i("마지막 아이템", "position : " + position + " / " + getItemCount());
+//        if( getItemCount()-1 == position){
 //            ScrollView sv = sv = (ScrollView) context.findViewById(R.id.scroll_view);
-
-        }
+//        }
     }
 
     @Override
@@ -266,11 +266,38 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void checkAll(boolean to){
-        Log.i("checkAll to", Boolean.toString(to));
+        Log.i("*** checkAll to", Boolean.toString(to));
+        int i = 0;
         for(CheckBox cb : checkBoxes){
-            if ( cb != null ) cb.setChecked(to);
+            if( cb != null ){   // Data
+                Log.i("***", cb.toString() + " (" + i + ")");
+                cb.setChecked(to);
+                checkedList.add(i);
+            }
+            i++;
         }
-        Log.i("checkedList", "(" + checkedList.size() + ")");
-        Log.i("checkBoxes", "(" + checkBoxes.size() + ")");
+        if( to == false ) checkedList.clear();
+
+        Log.i("*** checkedList", "(" + checkedList.size() + ")");
+        Log.i("*** checkBoxes", "(" + checkBoxes.size() + ")");
+        /*
+        String str = "";
+        for(int ii : checkedList){
+            str += ii;
+            str += " ";
+        }
+        Log.i("#", str);
+
+        i = 0;
+        for(CheckBox cb : checkBoxes){
+            if(cb == null) str = "-1";
+            else{
+                if (cb.isChecked() == true) str = "1";
+                else str = "0";
+            }
+            Log.i("##", "[" + Integer.toString(i) + "]" + " " + cb);
+            i++;
+        }
+        */
     }
 }
