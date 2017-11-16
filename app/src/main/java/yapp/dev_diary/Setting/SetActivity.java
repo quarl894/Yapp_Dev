@@ -5,18 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.List;
+
 import yapp.dev_diary.DB.MyDBHelper;
-import yapp.dev_diary.List.ListDActivity;
-import yapp.dev_diary.Lock.core.AppLock;
-import yapp.dev_diary.Lock.core.AppLockActivity;
-import yapp.dev_diary.Lock.core.LockManager;
-import yapp.dev_diary.MainActivity;
-import yapp.dev_diary.Mark.MarkActivity;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.R;
 
 public class SetActivity extends Activity {
@@ -75,7 +71,50 @@ public class SetActivity extends Activity {
                 Toast.makeText(this, "추후 Update 예정입니다.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.setting_layout_allclear :
+                deleteDialog();
                 break;
         }
+    }
+
+    /**
+     * 전체삭제시 보여주는 다이얼로그 메소드
+     * */
+    private void deleteDialog(){
+        String title, contents;
+
+        title = "초기화";
+        contents = "전체 초기화 하시겠습니까?";
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(title)
+                .setMessage(contents)
+                .setCancelable(false)
+                .setPositiveButton("예",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                MyDBHelper myDBHelper = new MyDBHelper(SetActivity.this);
+                                List<MyItem> list = myDBHelper.allSelect();
+
+                                for (int num = 0; num < list.size(); num++)
+                                {
+                                    myDBHelper.delete(list.get(num).get_Index());
+                                }
+                                Toast.makeText(SetActivity.this, "전체 초기화 완료", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                .setNegativeButton("아니요",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+
+        //생성
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        //활성화
+        alertDialog.show();
     }
 }
