@@ -1,13 +1,17 @@
 package yapp.dev_diary.Setting;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Lock.core.AppLock;
 import yapp.dev_diary.Lock.core.AppLockActivity;
 import yapp.dev_diary.Lock.core.LockManager;
