@@ -65,12 +65,9 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_start:
-
                 Intent i = new Intent(this, MainActivity.class);
                 startActivity(i);
                 return true;
