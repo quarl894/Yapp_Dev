@@ -13,9 +13,15 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.database.Cursor;
+import android.database.CursorJoiner;
+import android.media.ExifInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
