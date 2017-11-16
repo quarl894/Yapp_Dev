@@ -36,10 +36,6 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
         mBtnSave2 = (Button)findViewById(R.id.btnSave2);
         txtResult = (EditText) findViewById(R.id.txt_result);
         txtResult.setText("");
-        Toast toast = Toast.makeText(getApplicationContext(),
-                "토스트창에 출력될 문자", Toast.LENGTH_LONG);
-
-        toast.show();
         initToolbar();
     }
 

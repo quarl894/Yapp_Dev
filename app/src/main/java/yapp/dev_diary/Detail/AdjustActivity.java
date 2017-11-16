@@ -200,16 +200,20 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         switch (weather)
         {
             case 0 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.sun);
+                adjust_imgbtn_weather.setImageResource(R.drawable.page_1);
+                weather = 1;
                 break;
             case 1 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.cloud);
+                adjust_imgbtn_weather.setImageResource(R.drawable.cloudy_contents);
+                weather = 2;
                 break;
             case 2 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.rain);
+                adjust_imgbtn_weather.setImageResource(R.drawable.rainy_contents);
+                weather = 3;
                 break;
             case 3 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.snow);
+                adjust_imgbtn_weather.setImageResource(R.drawable.snowy_contents);
+                weather = 4;
                 break;
         }
 
@@ -218,16 +222,20 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         switch (emotion)
         {
             case 0 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.smile);
+                adjust_imgbtn_emotion.setImageResource(R.drawable.smile_contents);
+                feel = 1;
                 break;
             case 1 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad);
+                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad_contents);
+                feel = 2;
                 break;
             case 2 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.sad);
+                adjust_imgbtn_emotion.setImageResource(R.drawable.sad_contents);
+                feel = 3;
                 break;
             case 3 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.angry);
+                adjust_imgbtn_emotion.setImageResource(R.drawable.angry_contents);
+                feel = 4;
                 break;
         }
 

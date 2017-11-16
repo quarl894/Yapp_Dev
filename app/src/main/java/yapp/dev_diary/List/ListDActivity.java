@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,12 +18,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import yapp.dev_diary.Calendar.Activity.MultiCalendarActivity;
 import yapp.dev_diary.DB.MyDBHelper;
@@ -37,11 +41,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     static boolean cb_check;
 
     private LinearLayout buttonsBottom;
+    private int buttonsBottomHeight;
     private boolean     BUTTONS = false;
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
-
-    private TextView tv;
 
     private boolean allChecked = false;
 
@@ -53,10 +56,17 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
         buttonsBottom = (LinearLayout)findViewById(R.id.btns_bottom);
 
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask(){
+            public void run(){
+                Log.i("height3", Integer.toString( buttonsBottom.getHeight() )); //90
+                buttonsBottomHeight = buttonsBottom.getHeight();
+            }
+        };
+        timer.schedule(task, 500);
+
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         sv = (ScrollView) findViewById(R.id.scroll_view);
-
-        tv = (TextView) findViewById(R.id.menu_select_all);
 
         initToolbar();
 
@@ -92,15 +102,26 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
             case R.id.menu_list_modify :
                 Log.i("optionSelected", "R.id.menu_list_modify");
+
                 // 하단 버튼들 (백업, 삭제)
                 buttonsBottom.setVisibility(View.VISIBLE);
+                /*
+                Timer timer = new Timer();
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        Log.i("height_task", Integer.toString( buttonsBottom.getHeight() )); //90
+                        buttonsBottomHeight = buttonsBottom.getHeight();
+                    }
+                };
+                timer.schedule(task, 200);
+                Log.i("height1", Integer.toString( mTimeRecyclerView.getHeight() ));    // //984
+                Log.i("height2", Integer.toString( sv.getHeight() )); ////678
+                Log.i("height3", Integer.toString( buttonsBottom.getHeight() )); //90
+                */
+
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
-                sv.setPadding(0,0,0, 90);    // 뭔가 어색함
-
-                Log.i("height1", Integer.toString( mTimeRecyclerView.getHeight() ));    //90
-                Log.i("height3", Integer.toString( sv.getHeight() )); //18
 
                 cb_check = true;
                 this.runOnUiThread(new Runnable() {
@@ -108,6 +129,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                         adapter.notifyDataSetChanged();
                     }
                 });
+
+                sv.setPadding(0,0,0, 90);
                 break;
 
             case R.id.menu_list_setting :
@@ -120,9 +143,11 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 if( allChecked == false){
                     adapter.checkAll(true);
                     allChecked = true;
+                    ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.checked));
                 }else{
                     adapter.checkAll(false);
                     allChecked = false;
+                    ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.unchecked));
                 }
                 break;
         }
@@ -152,7 +177,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                             adapter.notifyDataSetChanged();
                         }
                     });
-                    // 하단 버튼들
                     slideDownButtons("cancle");
                     initToolbar();
                 }
@@ -169,7 +193,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 }
             });
         }
-
         onPrepareOptionsMenu(menu);
     }
     @Override
@@ -318,7 +341,11 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         buttonsBottom.setVisibility(View.GONE);
         animSlideDown(buttonsBottom, msg);
         sv.setPadding(0,0,0,0);
-        adapter.checkAll(false);
+
+        if( allChecked == true ){
+            adapter.checkAll(false);
+            allChecked = false;
+        }
     }
 
     // 하단에 버튼 올라와 있으면 버튼 내리기
@@ -327,7 +354,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         if(BUTTONS)
         {
             slideDownButtons("btn_list_delete");
-            BUTTONS = false;
             cb_check = false;
         }
         else super.onBackPressed();

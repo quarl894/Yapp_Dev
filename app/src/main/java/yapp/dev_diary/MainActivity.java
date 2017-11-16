@@ -92,11 +92,8 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     ArrayList<String> outputSttList;
     String mFilePath =  null;
     ImageButton mBtnRecord; //재생&일시정지
-
     ImageButton mBtnStop; //저장 버튼
-
     ImageButton mBtnPlay; //재생 버튼
-
     ImageButton mBtnReset;// 초기화 버튼
     Button mBtnSave;
     ProgressBar p_gradient;
@@ -211,6 +208,50 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         DBHelper = new MyDBHelper(MainActivity.this);
         db        = DBHelper.getWritableDatabase();
 
+        /* 테스트 버튼 ㅎㅎ 나중에 지우면 MainActivity에서 DB 쓸 일도 없음 */
+        MyItem item = new MyItem("p_path", "r_path", "content", 1, 2, "title", 20171118, 0);
+        DBHelper.insert(item);
+        item = new MyItem("p_path1", "r_path1", "content1", 1, 2, "title", 20171118, 0);
+        DBHelper.insert(item);
+        item = new MyItem("p_path2", "r_path2", "content2", 1, 2, "title", 20171118, 0);
+        DBHelper.insert(item);
+        item = new MyItem("p_path3", "r_path3", "content3", 1, 2, "title", 20170818, 0);
+        DBHelper.insert(item);
+/*
+        Button db_button = (Button)findViewById(R.id.db_button);
+        db_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("db", "DBHelper.allSelect()");
+                List<MyItem> itemList = DBHelper.allSelect();
+                for(int i = 0; i < itemList.size(); i++)
+                    Log.i("db", "[" + itemList.get(i).get_Index() + "]" + itemList.get(i).getString());
+
+                // calendarSelct null?
+                ArrayList<MyItem> tmpItems = DBHelper.calendarSelect(20171022);
+                if ( tmpItems != null ) {
+                    String itemsString = "";
+
+                    for (MyItem i : tmpItems) {
+                        itemsString += i.getTitle();
+                    }
+                    Log.i("calendarSelect", itemsString);
+                }
+
+                // monthSelect
+                ArrayList<Integer> days = DBHelper.monthSelect(201710, false);
+                String str = "";
+                if( days != null ){
+                    for(int i : days){
+                        str += Integer.toString(i) + " ";
+                    }
+                }
+                else str = "null";
+                Log.i("monthSelect", "201710 : " + str);
+            }
+        });
+        // 여기까지 테스트용
+*/
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
