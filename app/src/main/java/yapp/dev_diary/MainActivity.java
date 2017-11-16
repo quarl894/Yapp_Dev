@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         DBHelper.insert(item);
         item = new MyItem("p_path3", "r_path3", "content3", 1, 2, "title", 20170818, 0);
         DBHelper.insert(item);
-
+/*
         Button db_button = (Button)findViewById(R.id.db_button);
         db_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,7 +251,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
             }
         });
         // 여기까지 테스트용
-
+*/
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
