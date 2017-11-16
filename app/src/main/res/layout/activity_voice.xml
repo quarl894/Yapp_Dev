@@ -29,7 +29,7 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal">
         <Button
-            android:id="@+id/btnSave"
+            android:id="@+id/btnSave2"
             android:onClick="onClick"
             android:layout_width="360dp"
             android:layout_height="60dp"

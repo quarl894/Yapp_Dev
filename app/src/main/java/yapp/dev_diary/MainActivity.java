@@ -1,4 +1,16 @@
 package yapp.dev_diary;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.lang.ref.WeakReference;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -80,8 +92,11 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     ArrayList<String> outputSttList;
     String mFilePath =  null;
     ImageButton mBtnRecord; //재생&일시정지
+
     ImageButton mBtnStop; //저장 버튼
+
     ImageButton mBtnPlay; //재생 버튼
+
     ImageButton mBtnReset;// 초기화 버튼
     Button mBtnSave;
     ProgressBar p_gradient;
