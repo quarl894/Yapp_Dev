@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
+import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.R;
 
 /**
@@ -59,7 +60,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private ImageButton btn_edit, btn_backup;
+    private ImageButton btn_edit, btn_backup, btn_list;
     private LinearLayout edit_view;
 
     private MyDBHelper     DBHelper;
@@ -108,7 +109,16 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         context = this.getApplicationContext();
         mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
         backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
-
+        btn_list = (ImageButton) findViewById(R.id.btn_list);
+        btn_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // Toast.makeText(DetailActivity.this, "hi", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(DetailActivity.this, ListDActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         Log.d("체크", ""+chk_num+","+thisItem.getP_path().toString());
         if(chk_num == 1){
             ArrayList<String> tmpList = new ArrayList<>();
