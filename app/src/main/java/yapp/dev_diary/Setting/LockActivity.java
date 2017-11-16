@@ -5,20 +5,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import java.util.concurrent.Delayed;
-import java.util.concurrent.locks.Lock;
-
 import yapp.dev_diary.Lock.core.AppLock;
 import yapp.dev_diary.Lock.core.AppLockActivity;
-import yapp.dev_diary.Lock.core.AppLockImpl;
-import yapp.dev_diary.Lock.core.BaseActivity;
 import yapp.dev_diary.Lock.core.LockManager;
 import yapp.dev_diary.R;
 
@@ -44,21 +38,18 @@ public class LockActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean isChecked) {
                 count =1;
-                Log.e("ha2.."," "+"ho.....................");
                 if (isChecked)
                 { //체크상태
                     int type = AppLock.ENABLE_PASSLOCK;
                     Intent intent2 = new Intent(LockActivity.this, AppLockActivity.class);
                     intent2.putExtra(AppLock.TYPE, type);
                     startActivityForResult(intent2, type);
-                    Log.e("ha..","chk??");
                 }
                 else{
                         int type = AppLock.DISABLE_PASSLOCK;
                         Intent intent3 = new Intent(LockActivity.this, AppLockActivity.class);
                         intent3.putExtra(AppLock.TYPE,type);
                         startActivityForResult(intent3, type);
-                        Log.e("ha2.."," "+AppLock.TYPE);
                 }
             }
         });
@@ -80,7 +71,6 @@ public class LockActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case AppLock.DISABLE_PASSLOCK:
-                Log.e("here","ok??");
                 break;
             case AppLock.ENABLE_PASSLOCK:
             case AppLock.CHANGE_PASSWORD:
@@ -98,7 +88,6 @@ public class LockActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        Log.e("count",""+Integer.toString(count));
         if (LockManager.getInstance().getAppLock().isPasscodeSet()) {
             switch_lock.setChecked(true);
             setting_lock_change_layout.setEnabled(true);
