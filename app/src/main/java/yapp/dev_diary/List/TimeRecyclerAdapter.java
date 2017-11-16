@@ -234,22 +234,37 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         SQLiteDatabase db;
         DBHelper = new MyDBHelper(context);
         db = DBHelper.getWritableDatabase();
-        int pos;
         AdapterItem tmpItem;
+
+        String str = "";
+        for(int ii : checkedList){
+            str += ii;
+            str += " ";
+        }
+        Log.i("# delete ", str);
+
         try{
-            for(int i=0; i<checkedList.size(); i++){
+            int pos;
+            for(int i = checkedList.size() - 1; 0 <= i ; i--){
+//            for(int pos : checkedList ){
                 pos = checkedList.get(i);
+                Log.i("# ", Integer.toString(pos));
                 tmpItem = itemList.get(pos);
-                Log.e("DBIndex", Integer.toString(((MyData) tmpItem).getDayOfMonth()) + "pos : "  + pos);
+
                 DBHelper.delete(((MyData) tmpItem).getDBIndex());
                 itemList.remove(pos);
                 checkBoxes.remove(pos);
-                ArrayList<Integer> days = DBHelper.monthSelect(tmpItem.getMonth(), true);
+
+                int m = tmpItem.getMonth();
+                m += ( tmpItem.getYear() * 100 );
+                Log.e("m ", Integer.toString(m) + " / pos : "  + pos);
+                ArrayList<Integer> days = DBHelper.monthSelect(m, true);
                 if(days==null){
-                    Log.e("onCreateViewHolder", "해당 달에 일기 없음 [" + Integer.toString(tmpItem.getMonth()) + "]");
+                    Log.e("onCreateViewHolder", "해당 달에 일기 없음 [" + Integer.toString(m) + "]");
                     for (int k = 0; k < itemList.size(); k++) {
                         Log.e("여기서 고친다", Integer.toString(itemList.get(k).getMonth()));
-                        if (tmpItem.getMonth() == itemList.get(k).getMonth()) {
+                        int n = itemList.get(k).getMonth() + ( itemList.get(k).getYear() * 100 );
+                        if (m == n) {
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
 
                             itemList.remove(k);
@@ -272,7 +287,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if( cb != null ){   // Data
                 Log.i("***", cb.toString() + " (" + i + ")");
                 cb.setChecked(to);
-                checkedList.add(i);
+//                checkedList.add(i);
             }
             i++;
         }
@@ -280,7 +295,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         Log.i("*** checkedList", "(" + checkedList.size() + ")");
         Log.i("*** checkBoxes", "(" + checkBoxes.size() + ")");
-        /*
+
         String str = "";
         for(int ii : checkedList){
             str += ii;
@@ -298,6 +313,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Log.i("##", "[" + Integer.toString(i) + "]" + " " + cb);
             i++;
         }
-        */
+
+
     }
 }

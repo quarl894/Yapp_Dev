@@ -200,6 +200,15 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 //        });
 
         /* 테스트 버튼 ㅎㅎ 나중에 지우면 MainActivity에서 DB 쓸 일도 없음 */
+        MyItem item = new MyItem("p_path", "r_path", "content", 1, 2, "title", 20171118, 0);
+        DBHelper.insert(item);
+        item = new MyItem("p_path1", "r_path1", "content1", 1, 2, "title", 20171118, 0);
+        DBHelper.insert(item);
+        item = new MyItem("p_path2", "r_path2", "content2", 1, 2, "title", 20171118, 0);
+        DBHelper.insert(item);
+        item = new MyItem("p_path3", "r_path3", "content3", 1, 2, "title", 20170818, 0);
+        DBHelper.insert(item);
+
         Button db_button = (Button)findViewById(R.id.db_button);
         db_button.setOnClickListener(new View.OnClickListener() {
             @Override
