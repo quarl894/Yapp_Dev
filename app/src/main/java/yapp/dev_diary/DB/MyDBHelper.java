@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,9 +20,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME = "RECORD_TABLE";
     public static final String CREATE_TABLE = "create table "
             + TABLE_NAME + "(_index INTEGER PRIMARY KEY AUTOINCREMENT, p_path TEXT, r_path TEXT, content TEXT, weather INTEGER, mood INTEGER, title TEXT, date INTEGER, backup INTEGER);";
+
     public MyDBHelper(Context context){
         super(context, DB_NAME, null,1);
     }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {//ok
         sqLiteDatabase.execSQL(CREATE_TABLE);
@@ -32,7 +35,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
-    public void insert(MyItem myItem) {//ok
+    public int insert(MyItem myItem) {//ok
         // 읽고 쓰기가 가능하게 DB 열기
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -44,9 +47,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
         values.put("title", myItem.getTitle());
         values.put("date", myItem.getDate());
         values.put("backup", myItem.getBackup());
-        db.insert(TABLE_NAME, null, values);
+        long rowID = db.insert(TABLE_NAME, null, values);
+        Log.i("db.insert()", "rowID : " + rowID);
         // DB에 입력한 값으로 행 추가
         db.close();
+        return (int)rowID;
     }
 
     public void update(MyItem myItem) {
@@ -106,28 +111,58 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
         return myItems;
     }
+
+    /* 해당 날짜로 select된 행들을 리스트로 반환. 없으면 null 반환 */
     public ArrayList<MyItem> calendarSelect(int date){
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<MyItem> list = null;
         Cursor cursor = db.rawQuery("SELECT * FROM RECORD_TABLE WHERE date = "+date+";", null);
-        while (cursor.moveToNext()) {
-            int  _index = cursor.getInt(0);
-            String p_path = cursor.getString(1);
-            String r_path = cursor.getString(2);
-            String content = cursor.getString(3);
-            int weather = cursor.getInt(4);
-            int mood = cursor.getInt(5);
-            String title = cursor.getString(6);
-            date = cursor.getInt(7);
-            int backup = cursor.getInt(8);
 
-            MyItem item = new MyItem(_index, p_path,r_path, content, weather, mood, title, date, backup );
-            list.add(item);
+        if(cursor != null && cursor.getCount() > 0) {
+            Log.i("calendarSelect", "cursor.getCount() : " + cursor.getCount());
+            list = new ArrayList<MyItem>();
+            while (cursor.moveToNext()) {
+                int _index = cursor.getInt(0);
+                String p_path = cursor.getString(1);
+                String r_path = cursor.getString(2);
+                String content = cursor.getString(3);
+                int weather = cursor.getInt(4);
+                int mood = cursor.getInt(5);
+                String title = cursor.getString(6);
+                date = cursor.getInt(7);
+                int backup = cursor.getInt(8);
+
+                MyItem item = new MyItem(_index, p_path, r_path, content, weather, mood, title, date, backup);
+                list.add(item);
+            }
+            cursor.close();
         }
-        cursor.close();
         db.close();
         return list;
     }
+
+    /* 해당 월에 일기가 있는 날짜 리스트로 반환. 없으면 null 반환.
+     * 파라미터
+      * 1) input : YYYYMM 형식으로 주세요. e.g. 201710
+      * 2) dup   : 결과 중복 허용? true 허용. false 비허용 */
+    public ArrayList<Integer> monthSelect(int input, boolean dup){
+        ArrayList<Integer> days = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT date FROM RECORD_TABLE WHERE date/100 == " + input + ";", null);
+        if( cursor != null && cursor.getCount() > 0 )
+        {
+            days = new ArrayList<Integer>();
+            while (cursor.moveToNext()){
+                int itemDay = cursor.getInt(0) % 100;
+                if( dup ) days.add(itemDay);         // 중복 허용
+                else if( !days.contains(itemDay) )  //중복 비허용
+                    days.add(itemDay);
+            }
+        }
+        db.close();
+        return days;
+    }
+
     public ArrayList<MyItem> searchSelect(String word){
         SQLiteDatabase db = getReadableDatabase();
         ArrayList<MyItem> list = new ArrayList<MyItem>();
@@ -151,4 +186,5 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
 }

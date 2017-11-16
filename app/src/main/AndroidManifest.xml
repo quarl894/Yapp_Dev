@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
+        android:name=".Lock.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -37,6 +39,8 @@
         <activity android:name=".Lock.core.AppLockActivity"
                   android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity android:name=".Setting.Pactivity"></activity>
+        <receiver android:name=".Setting.BroadcastD"></receiver>
     </application>
 
 </manifest>

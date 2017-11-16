@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 /**
- * Created by HANSUNG on 2017-09-24.
+ * Created by YoungJung on 2017-09-24.
  */
 
 public class PCMEncoder {

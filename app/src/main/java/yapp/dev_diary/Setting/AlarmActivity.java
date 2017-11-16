@@ -26,6 +26,7 @@ public class AlarmActivity extends AppCompatActivity {
     private View alarm_include_alarmsetting;
     private Button setting_alarm_btn_cancel;
     private Button setting_alarm_btn_complete;
+    static int hour, min;
 
     private TimePicker item_alarmsetting_timepicker;
     private ToggleButton alarm_day_Monday, alarm_day_Tuesday, alarm_day_Wednesday, alarm_day_Thursday, alarm_day_Friday, alarm_day_Saturday, alarm_day_Sunday;
@@ -66,7 +67,7 @@ public class AlarmActivity extends AppCompatActivity {
         setting_alarm_btn_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int hour, min;
+//                int hour, min;
                 ArrayList<Integer> check_days;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 
 import java.util.Calendar;
 
+import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.R;
+
+import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.calendar_Month_List;
 
 
 /**
@@ -198,6 +201,7 @@ public class CalendarView extends ViewGroup {
                             continue;
                         }
                         if (child.isSameDay((Long) child.getTag(), (Long) tagView.getTag())) {
+
                             child.invalidate();
                             break;
                         }

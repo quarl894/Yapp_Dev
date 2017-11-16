@@ -2,6 +2,7 @@ package yapp.dev_diary.Calendar.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,10 +17,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import yapp.dev_diary.Calendar.utils.Common;
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.R;
+
+import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.adapterHourLine;
+import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.calendar_Month_List;
+import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.itemList;
 
 
 /**
@@ -97,6 +105,50 @@ public class CalendarItemView extends View {
                 return false;
             }
         });
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(millis);
+
+                MyDBHelper DBHelper = new MyDBHelper(getContext());
+                SQLiteDatabase db = DBHelper.getWritableDatabase();
+                String tmpStr = ""+calendar.get(Calendar.YEAR);
+
+                if ((calendar.get(Calendar.MONTH))+1 < 10)
+                    tmpStr += ("0"+calendar.get(Calendar.MONTH)+1);
+                else
+                    tmpStr += calendar.get(Calendar.MONTH)+1;
+
+                if ((calendar.get(Calendar.DATE)) < 10)
+                    tmpStr += ("0"+calendar.get(Calendar.DATE));
+                else
+                    tmpStr += calendar.get(Calendar.DATE);
+
+                Log.d("체크", "확인용2 : "+calendar.get(Calendar.YEAR)+"."+calendar.get(Calendar.MONTH)+"."+calendar.get(Calendar.DATE)+','+tmpStr);
+                int tmpInt = Integer.valueOf(tmpStr);
+                ArrayList<MyItem> today_ItemList = DBHelper.calendarSelect(tmpInt);
+                if (today_ItemList != null)
+                {
+                    itemList = today_ItemList;
+                    ArrayList<String> tmp = new ArrayList<String>();
+
+                    for (int i = 0; i < today_ItemList.size(); i++)
+                    {
+                        tmp.add(today_ItemList.get(i).getTitle());
+                    }
+                    adapterHourLine.setList(tmp);
+                }
+                else
+                {
+                    itemList = null;
+                    ArrayList<String> tmp = new ArrayList<>();
+                    tmp.add("일기를 추가해주세요");
+                    adapterHourLine.setList(tmp);
+                }
+
+            }
+        });
         setPadding(30, 0, 30, 0);
     }
 
@@ -124,6 +176,21 @@ public class CalendarItemView extends View {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);
 
+//        MyDBHelper DBHelper = new MyDBHelper(getContext());
+
+//        String strTmp = calendar.get(Calendar.YEAR) + "";
+//
+//        if (calendar.get(Calendar.MONTH)+1 < 10)
+//            strTmp += "0"+(calendar.get(Calendar.MONTH)+1);
+//        else
+//            strTmp += (calendar.get(Calendar.MONTH)+1);
+//
+//        if (calendar.get(Calendar.DATE) < 10)
+//            strTmp += "0"+calendar.get(Calendar.DATE);
+//        else
+//            strTmp += calendar.get(Calendar.DATE);
+//        calendar_Month_List = DBHelper.monthSelect(Integer.valueOf(strTmp), false);
+//        Log.d ("체크", "확이~ : "+strTmp+", ");
         CalendarView calendarView = (CalendarView) getParent();
         if (calendarView.getParent() instanceof ViewPager) {
             ViewGroup parent = (ViewPager) calendarView.getParent();
@@ -142,7 +209,6 @@ public class CalendarItemView extends View {
             RectF rectF = new RectF(xPos - dp16, getHeight() / 2 - dp16, xPos + dp16, getHeight() / 2 + dp16);
             canvas.drawRoundRect(rectF, RADIUS, RADIUS, mPaintBackgroundToday);
         }
-
         if (isStaticText) {
             // 요일 표시
             canvas.drawText(CalendarView.DAY_OF_WEEK[dayOfWeek], xPos, yPos, mPaint);
@@ -152,6 +218,20 @@ public class CalendarItemView extends View {
                 canvas.drawText(calendar.get(Calendar.DATE) + "", xPos, yPos, mPaintTextWhite);
             } else {
                 canvas.drawText(calendar.get(Calendar.DATE) + "", xPos, yPos, mPaint);
+
+                if (calendar_Month_List != null)
+                {
+                    for (int i = 0; i < calendar_Month_List.size(); i++)
+                    {
+                        if (calendar_Month_List.get(i) == (Integer) calendar.get(Calendar.DATE))
+                        {
+                            Paint paint = new Paint();
+                            paint.setColor(Color.MAGENTA);
+                            canvas.drawCircle(xPos, yPos+10, 5, paint);
+                        }
+
+                    }
+                }
                 //날짜 아래 원 표시
 //                Paint paint = new Paint();
 //                paint.setColor(Color.MAGENTA);

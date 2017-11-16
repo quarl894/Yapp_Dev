@@ -2,17 +2,18 @@ package yapp.dev_diary.Detail;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +32,12 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 import java.util.ArrayList;
 
 import gun0912.tedbottompicker.TedBottomPicker;
-import yapp.dev_diary.MainActivity;
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.R;
 
 /**
- * Created by HANSUNG on 2017-09-17.
+ * Created by YoungJung on 2017-09-17.
  */
 
 public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks {
@@ -47,7 +49,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private View mImageView;
     //    private View mOverlayView;
     private ObservableScrollView mScrollView;
-    private TextView mTitleView;
+    private EditText mTitleView;
+    private EditText mContentView;
     private View mFab;
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
@@ -56,12 +59,23 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private Button btn_gall;
     Uri selectedUri;
+
+    private MyDBHelper DBHelper;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adjust);
+
+        DBHelper = new MyDBHelper(AdjustActivity.this);
+        db        = DBHelper.getWritableDatabase();
+
+        Intent intent = getIntent();
+        final int chk_num = intent.getExtras().getInt("chk_num");
+        final int rowID = intent.getExtras().getInt("rowID");
+        final MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -71,9 +85,12 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
 //        mOverlayView = findViewById(R.id.overlay);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
-        mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("제목을 입력하세요!");
+        mTitleView = (EditText) findViewById(R.id.title);
+        mTitleView.setText(thisItem.getTitle());
+        mContentView = (EditText) findViewById(R.id.context);
+        mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.title_date);
+        mTitleDate.setText(thisItem.getDate()+"");
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
         mTitlePic = (TextView) findViewById(R.id.title_pic);
         mTitleDiary.setText("오늘의\n일기_");
@@ -81,18 +98,25 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mGlideRequestManager = Glide.with(this);
         mSelectedImagesContainer = (ViewGroup) findViewById(R.id.selected_photos_container);
         setMultiShowButton();
-        Intent intent = getIntent();
-        final int chk_num = intent.getExtras().getInt("chk_num");
+
         if(chk_num == 1){
-            select_pic = MainActivity.ok_path;
+            ArrayList<String> tmpList = new ArrayList<>();
+            if (thisItem.getP_path() != null)
+            {
+                String[] strList = thisItem.getP_path().split(",");
+
+                for (int i = 0; i < strList.length; i ++)
+                {
+                    tmpList.add(strList[i]);
+                }
+                select_pic = tmpList;
+            }
+            else
+                select_pic.clear();
         }else{
             select_pic.clear();
         }
-        if(chk_num == 1){
-            select_pic = MainActivity.ok_path;
-        }else{
-            select_pic.clear();
-        }
+
         showStringgList(select_pic);
         setTitle(null);
         mFab = findViewById(R.id.fab);
@@ -100,6 +124,33 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
             @Override
             public void onClick(View v) {
                 Toast.makeText(AdjustActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+                // DB에 추가
+                // 임시 데이터들
+                Intent mainIntent = getIntent();
+                String strP_Path = "";
+                for (int i = 0; i < selectedUriList.size(); i++)
+                {
+                    if (i == selectedUriList.size()-1)
+                        strP_Path += selectedUriList.get(i);
+                    else
+                        strP_Path += selectedUriList.get(i)+",";
+                }
+                String p_path = strP_Path;
+                String r_path = thisItem.getR_path();
+                String content = mContentView.getText().toString();
+                String title = mTitleView.getText().toString();
+                int dateInt = 0;
+                Log.d("체크", ""+p_path.toString());
+                dateInt = Integer.valueOf(mTitleDate.getText().toString());
+                //Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
+                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, thisItem.getWeather(), thisItem.getMood(), title, dateInt, 0);
+                DBHelper.update(newItem);
+
+                Intent i = new Intent(AdjustActivity.this, DetailActivity.class);
+                i.putExtra("chk_num", strP_Path == "" ? 0 : 1);
+                i.putExtra("rowID", newItem.get_Index());
+                startActivity(i);
+                finish();
             }
         });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
@@ -187,7 +238,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         }
     }
     private void setMultiShowButton() {
-        Button btn_multi_show = (Button) findViewById(R.id.btn_gall);
+        ImageButton btn_multi_show = (ImageButton) findViewById(R.id.btn_gall);
         btn_multi_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
