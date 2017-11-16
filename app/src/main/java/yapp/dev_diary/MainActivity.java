@@ -5,28 +5,31 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
+import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Bundle;
 import android.os.Environment;
 import android.database.Cursor;
+import android.database.CursorJoiner;
 import android.media.ExifInterface;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Process;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,7 +39,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -49,10 +51,24 @@ import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.naver.speech.clientapi.SpeechRecognitionResult;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -69,7 +85,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
     ArrayList<String> list_stt;
-    String outputFile2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttput.mp4";
+    String outputFile2;
     MediaPlayer mPlayer = null;
     MediaRecorder mRecorder = null;
     ArrayList<String> outputFileList; // 임시 파일 리스트
@@ -191,13 +207,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 
         DBHelper = new MyDBHelper(MainActivity.this);
         db        = DBHelper.getWritableDatabase();
-//        Button test_btn = (Button) findViewById(R.id.test_btn);
-//        test_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new AlarmHATT(getApplicationContext()).Alarm();
-//            }
-//        });
 
         /* 테스트 버튼 ㅎㅎ 나중에 지우면 MainActivity에서 DB 쓸 일도 없음 */
         MyItem item = new MyItem("p_path", "r_path", "content", 1, 2, "title", 20171118, 0);
@@ -241,15 +250,35 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 Log.i("monthSelect", "201710 : " + str);
             }
         });
+        // 여기까지 테스트용
 
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                getImageNameToUri();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(MainActivity.this, "권한이 거부되었습니다. 권한거부시 앱기능 일부분을 사용하실수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        new TedPermission(MainActivity.this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_CALENDAR)
+                .check();
 
         outputSttList = new ArrayList<String>();
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddhhmmss");
         final String getTime = sdf.format(date);
-        getImageNameToUri();
+        final String today_time = sdf2.format(date);
 
+        outputFile2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +today_time +".mp4";
+        Log.e("today_time", outputFile2);
         handler2 = new Handler();
         list_stt = new ArrayList<String>();
         initToolbar();
@@ -286,7 +315,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
             if(showExif(exif5).equals(getTime)) ok_path.add(pic_path.get(4));
         }catch (Exception e) {
             e.printStackTrace();
-            Log.e("pic_path_info", " " + pic_path.get(0));
+//            Log.e("pic_path_info", " " + pic_path.get(0));
         }
         Log.e("testtest",Integer.toString(ok_path.size()));
     }
@@ -333,7 +362,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
             // 오디오 재생준비,시작
             mPlayer.prepare();
             mPlayer.start();
-        } catch (Exception e) {
+        }catch (Exception e) {
             Log.d("SampleAudioRecorder", "Audio play failed.");
         }
 
@@ -458,17 +487,17 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
             case R.id.btnPause :
                 Log.e("btnPause 일시정지"," "+p_thread.getState().toString());
                 p_thread.work =false;
-                    naverRecognizer.getSpeechRecognizer().stop();
-                    try {
-                        count +=1;
-                        mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
-                        String nowFile = mFilePath  + count + ".mp4";
-                        encodeSingleFile(nowFile);
-                        outputSttList.add(nowFile);
-                        Log.e("TAG",""+Integer.toString(outputSttList.size()));
-                    } catch (Exception e) {
-                        Log.e(TAG, "Exception while creating tmp file1", e);
-                    }
+                naverRecognizer.getSpeechRecognizer().stop();
+                try {
+                    count +=1;
+                    mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
+                    String nowFile = mFilePath  + count + ".mp4";
+                    encodeSingleFile(nowFile);
+                    outputSttList.add(nowFile);
+                    Log.e("TAG",""+Integer.toString(outputSttList.size()));
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception while creating tmp file1", e);
+                }
 
                 mBtnRecord.setEnabled(true);
                 mBtnStop.setEnabled(false);
@@ -487,7 +516,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 break;
             case R.id.btnSave:
                 try {
-//                    startMerge2(outputSttList);
+                    startMerge2(outputSttList);
                     Intent i = new Intent(MainActivity.this, SaveActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     i.putExtra("r_path", outputFile2);
@@ -712,7 +741,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 
             Calendar calendar = Calendar.getInstance();
             //알람시간 calendar에 set해주기
-
             calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 14, 49, 0);
             //알람 예약
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);

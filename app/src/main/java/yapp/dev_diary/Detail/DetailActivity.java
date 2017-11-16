@@ -29,11 +29,14 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
+import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.R;
 
 /**
@@ -47,7 +50,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private ViewGroup mSelectedImagesContainer;
     public RequestManager mGlideRequestManager;
     private View mImageView;
-//    private View mOverlayView;
+    //    private View mOverlayView;
     private ObservableScrollView mScrollView;
     private TextView mTitleView;    // 제목
     private TextView mContentView;  // 내용
@@ -59,24 +62,30 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private ImageButton btn_edit, btn_backup;
+    private ImageButton btn_edit, btn_backup, detail_imgbtn_weather, detail_imgbtn_emotion;
     private LinearLayout edit_view;
 
     private MyDBHelper     DBHelper;
     private SQLiteDatabase db;
 
     ProgressBar mProgressBar, backProgressBar;
-    Handler handler = new Handler();
+
     Context context;
     private TextView record_time;
-
+    private ImageButton weather_btn;
+    private ImageButton feel_btn;
+    private int weather, feel;
+    String item_path;
+    P_Thread pro_thread;
+    int count;
+    Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         DBHelper = new MyDBHelper(DetailActivity.this);
-        db        = DBHelper.getWritableDatabase();
+        db = DBHelper.getWritableDatabase();
 
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
@@ -96,7 +105,54 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mContentView = (TextView) findViewById(R.id.detail_context);
         mContentView.setText(thisItem.getContent());
         mTitleDate = (TextView) findViewById(R.id.detail_title_date);
-        mTitleDate.setText(thisItem.getDate()+"");
+
+        detail_imgbtn_weather = (ImageButton) findViewById(R.id.detail_imgbtn_weather);
+        int weather = thisItem.getWeather();
+        switch (weather)
+        {
+            case 0 :
+                detail_imgbtn_weather.setImageResource(R.drawable.sun);
+                break;
+            case 1 :
+                detail_imgbtn_weather.setImageResource(R.drawable.cloud);
+                break;
+            case 2 :
+                detail_imgbtn_weather.setImageResource(R.drawable.rain);
+                break;
+            case 3 :
+                detail_imgbtn_weather.setImageResource(R.drawable.snow);
+                break;
+        }
+        detail_imgbtn_emotion = (ImageButton) findViewById(R.id.detail_imgbtn_emotion);
+        int emotion = thisItem.getMood();
+        switch (emotion)
+        {
+            case 0 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.smile);
+                break;
+            case 1 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.notbad);
+                break;
+            case 2 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.sad);
+                break;
+            case 3 :
+                detail_imgbtn_emotion.setImageResource(R.drawable.angry);
+                break;
+        }
+
+        //***날짜 형식 변경***
+        Date nDate = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            nDate = simpleDateFormat.parse(thisItem.getDate()+"");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
+        String strToDay = simpleDateFormat.format(nDate);
+
+        mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
 
         mTitlePic = (TextView) findViewById(R.id.title_pic);
@@ -107,9 +163,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         record_time = (TextView) findViewById(R.id.record_time);
         context = this.getApplicationContext();
         mProgressBar = (ProgressBar) findViewById(R.id.circle_progress_bar);
-        backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
+//        backProgressBar = (ProgressBar) findViewById(R.id.circle_back_progress_bar);
 
-        Log.d("체크", ""+chk_num+","+thisItem.getP_path().toString());
         if(chk_num == 1){
             ArrayList<String> tmpList = new ArrayList<>();
             if (!thisItem.getP_path().isEmpty())
@@ -152,42 +207,28 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             @Override
             public void onClick(View v) {
                 Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
-                MediaPlayer mPlayer = new MediaPlayer();
-                try {
-                    mPlayer.setDataSource(thisItem.getR_path());
-                    mPlayer.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(count==0){
+                    handler = new Handler();
+                    pro_thread = new P_Thread();
+                    pro_thread.start();
+                    pro_thread.stop = false;
+                    pro_thread.work =true;
+                    count=1;
+                }else if(count ==1){
+                    pro_thread.stop = true;
+                    pro_thread.work =false;
+                    count =0;
+                    Log.e("btnRecord 재시작"," "+pro_thread.getState().toString());
+                    Toast.makeText(DetailActivity.this, "녹음파일을 종료합니다.", Toast.LENGTH_SHORT).show();
                 }
-                final int record_sec = mPlayer.getDuration()/1000;
-                mPlayer.start();
-                // 현재 시간을 받아옴
-                mProgressBar.setProgress(record_sec);
-                new Thread(new Runnable() {
-                    int progressStatus = record_sec;
-                    public void run() {
-                        while (progressStatus > 0) {
-                            progressStatus -= 1;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            // Update the progress bar
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    mProgressBar.setProgress(progressStatus);
-                                    record_time.setText("00:" + String.format("%02d", progressStatus));
-                                    Log.e("test",Integer.toString(mProgressBar.getProgress()));
-                                }
-                            });
-                        }
-                    }
-                }).start();
             }
         });
+        Log.e("view 확인", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-
+        record_time.getParent().bringChildToFront(mFab);
+        record_time.bringToFront();
+        record_time.invalidate();
+        Log.e("view 확인2", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
 
@@ -197,7 +238,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                 mScrollView.scrollTo(0, 1);
             }
         });
-
     }
 
     @Override
@@ -228,15 +268,15 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         ViewHelper.setScaleX(record_time, scale);
         ViewHelper.setScaleY(record_time, scale);
 
-        ViewHelper.setPivotX(mProgressBar,-350);
-        ViewHelper.setPivotY(mProgressBar, 400);
-        ViewHelper.setScaleX(mProgressBar, scale);
-        ViewHelper.setScaleY(mProgressBar, scale);
-
-        ViewHelper.setPivotX(backProgressBar,-350);
-        ViewHelper.setPivotY(backProgressBar, 400);
-        ViewHelper.setScaleX(backProgressBar, scale);
-        ViewHelper.setScaleY(backProgressBar, scale);
+//        ViewHelper.setPivotX(mProgressBar,-350);
+//        ViewHelper.setPivotY(mProgressBar, 400);
+//        ViewHelper.setScaleX(mProgressBar, scale);
+//        ViewHelper.setScaleY(mProgressBar, scale);
+//
+//        ViewHelper.setPivotX(backProgressBar,-350);
+//        ViewHelper.setPivotY(backProgressBar, 400);
+//        ViewHelper.setScaleX(backProgressBar, scale);
+//        ViewHelper.setScaleY(backProgressBar, scale);
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
         int titleTranslationY = maxTitleTranslationY - scrollY;
@@ -246,8 +286,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
 
         ViewHelper.setTranslationY(record_time, titleTranslationY);
 
-        ViewHelper.setTranslationY(backProgressBar,titleTranslationY);
-        ViewHelper.setTranslationY(mProgressBar,titleTranslationY);
+//        ViewHelper.setTranslationY(backProgressBar,titleTranslationY);
+//        ViewHelper.setTranslationY(mProgressBar,titleTranslationY);
 
         // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 2;
@@ -325,6 +365,71 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                     .into(thumbnail);
             mSelectedImagesContainer.addView(imageHolder);
             thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(pro_thread != null){
+            pro_thread.work = false;
+            pro_thread.stop = true;
+            count = 0;
+            Log.e("btnReset 리셋"," "+pro_thread.getState().toString());
+        }
+    }
+
+    private class P_Thread extends Thread{
+        public boolean stop = false;
+        public boolean work = true;
+        private int progressStatus;
+        MediaPlayer mPlayer = new MediaPlayer();
+
+        public void run() {
+            try{
+                mPlayer.setDataSource(item_path);
+                mPlayer.prepare();
+            }catch(Exception e){ e.printStackTrace();}
+            final int record_sec = mPlayer.getDuration()/1000;
+            progressStatus = record_sec;
+                while (progressStatus > 0 && !item_path.equals(null) && !Thread.currentThread().isInterrupted()) {
+                    if(work){
+                    mPlayer.start();
+                    mProgressBar.setProgress(record_sec);
+                    try {
+                        progressStatus -= 1;
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // Update the progress bar
+                    handler.post(new Runnable() {
+                        public void run() {
+                            mProgressBar.setProgress(progressStatus);
+                            record_time.setText("00:" + String.format("%02d", progressStatus));
+                            Log.e("test",Integer.toString(mProgressBar.getProgress()));
+                        }
+                    });
+                }else{
+                        Log.e("hello", " " + Thread.currentThread().getState());
+                        progressStatus =record_sec;
+                        mPlayer.pause();
+                        handler.post(new Runnable() {
+                            public void run() {
+                                mProgressBar.setProgress(progressStatus);
+                                record_time.setText("00:" + String.format("%02d", progressStatus));
+                            }
+                        });
+                        break;
+                    }
+                }
+            Log.e("끝남끝남끝남", "끝남끝남끝남");
+            Log.e("hello", " " + Thread.currentThread().getState());
+            mPlayer.stop();
+            progressStatus = record_sec;
+            stop = false;
+            work = true;
+            count=0;
         }
     }
 }

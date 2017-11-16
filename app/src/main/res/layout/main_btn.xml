@@ -29,7 +29,7 @@
             android:layout_height="91dp"
             android:textSize="22sp"
             android:textColor="#6dffffff"
-            android:text="2017. 08. 01 화요일"
+            android:text="날짜를 선택해주세요."
             android:gravity="center|left"
             android:textColorHint="#6dffffff"
             android:paddingLeft="24dp"

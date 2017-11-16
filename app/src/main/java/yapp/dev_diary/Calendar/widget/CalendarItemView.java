@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import yapp.dev_diary.Calendar.utils.Common;
 import yapp.dev_diary.DB.MyDBHelper;
@@ -71,8 +72,8 @@ public class CalendarItemView extends View {
         mPaintTextWhite.setColor(Color.WHITE);
         mPaintTextWhite.setTextSize(dp11);
         mPaintTextWhite.setTextAlign(Paint.Align.CENTER);
-        mPaintBackground.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-        mPaintBackgroundToday.setColor(ContextCompat.getColor(getContext(), R.color.today));
+        mPaintBackground.setColor(ContextCompat.getColor(getContext(), R.color.p_color1));
+        mPaintBackgroundToday.setColor(ContextCompat.getColor(getContext(), R.color.p_color1));
         mPaintBackgroundEvent.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         setClickable(true);
         setOnTouchListener(new OnTouchListener() {
@@ -176,7 +177,7 @@ public class CalendarItemView extends View {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);
 
-//        MyDBHelper DBHelper = new MyDBHelper(getContext());
+        MyDBHelper DBHelper = new MyDBHelper(getContext());
 
 //        String strTmp = calendar.get(Calendar.YEAR) + "";
 //
@@ -219,19 +220,35 @@ public class CalendarItemView extends View {
             } else {
                 canvas.drawText(calendar.get(Calendar.DATE) + "", xPos, yPos, mPaint);
 
-                if (calendar_Month_List != null)
+                if (calendar_Month_List.containsKey(calendar.get(Calendar.DATE)))
                 {
-                    for (int i = 0; i < calendar_Month_List.size(); i++)
-                    {
-                        if (calendar_Month_List.get(i) == (Integer) calendar.get(Calendar.DATE))
-                        {
-                            Paint paint = new Paint();
-                            paint.setColor(Color.MAGENTA);
-                            canvas.drawCircle(xPos, yPos+10, 5, paint);
-                        }
+                    Paint paint = new Paint();
+                    paint.setColor(Color.MAGENTA);
+                    canvas.drawCircle(xPos, yPos+10, 5, paint);
+                }
+                else
+                {
+                    String strTmp = calendar.get(Calendar.YEAR) + "";
 
+                    if (calendar.get(Calendar.MONTH)+1 < 10)
+                        strTmp += "0"+(calendar.get(Calendar.MONTH)+1);
+                    else
+                        strTmp += (calendar.get(Calendar.MONTH)+1);
+
+                    if (calendar.get(Calendar.DATE) < 10)
+                        strTmp += "0"+calendar.get(Calendar.DATE);
+                    else
+                        strTmp += calendar.get(Calendar.DATE);
+                    List<MyItem> tmpList = DBHelper.calendarSelect(Integer.valueOf(strTmp));
+
+                    if (tmpList != null)
+                    {
+                        Paint paint = new Paint();
+                        paint.setColor(Color.MAGENTA);
+                        canvas.drawCircle(xPos, yPos+10, 5, paint);
                     }
                 }
+
                 //날짜 아래 원 표시
 //                Paint paint = new Paint();
 //                paint.setColor(Color.MAGENTA);

@@ -266,7 +266,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         int n = itemList.get(k).getMonth() + ( itemList.get(k).getYear() * 100 );
                         if (m == n) {
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
-
                             itemList.remove(k);
                             checkBoxes.remove(k);
                         }

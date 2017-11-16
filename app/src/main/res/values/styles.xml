@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -37,6 +36,7 @@
         <item name="android:background">@drawable/button_background</item>
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">60dp</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="PasscodeButtonStyle2" parent="@android:style/Widget.Button">
@@ -46,6 +46,7 @@
         <item name="android:background">@drawable/button_background2</item>
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">60dp</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="PasscodeShowButtonStyle" parent="@android:style/Widget.Button">
@@ -59,12 +60,8 @@
         <item name="android:textColorHint">#ffffff</item>
     </style>
 
-    <style name="GradientProgressBar" parent="SmoothProgressBar">
-        <item name="spb_stroke_separator_length">0dp</item>
-        <item name="spb_sections_count">1</item>
-        <item name="spb_speed">1</item>
-        <item name="android:interpolator">@android:anim/decelerate_interpolator</item>
-        <item name="spb_colors">@array/p_colors</item>
-        <item name="spb_gradients">true</item>
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#fb6969</item>
     </style>
+
 </resources>

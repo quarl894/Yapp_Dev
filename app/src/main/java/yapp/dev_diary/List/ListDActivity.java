@@ -1,12 +1,11 @@
 package yapp.dev_diary.List;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,12 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -98,6 +94,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         int id = item.getItemId();
         switch(id){
             case R.id.menu_start :
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
                 Log.i("optionSelected", "R.id.menu_start");
                 break;
 
@@ -144,7 +142,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 if( allChecked == false){
                     adapter.checkAll(true);
                     allChecked = true;
-
                     ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.checked));
                 }else{
                     adapter.checkAll(false);
@@ -197,17 +194,15 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         }
         onPrepareOptionsMenu(menu);
     }
-
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
         /* 해당 postiion의 MyData 가져오기. DBIndex가져와서 rowID로 인텐트에 담아서 DetailActivity열기 */
         MyData selected = adapter.getItem(position);
         Intent i = new Intent(this, DetailActivity.class);
         MyItem tmpItem = DBHelper.oneSelect(selected.getDBIndex());
         int p_Check = tmpItem.getP_path().isEmpty() ? 0 : 1;
 
-        i.putExtra("chk_num", p_Check);      // 이렇게요
+        i.putExtra("chk_num", p_Check);
         i.putExtra("rowID", selected.getDBIndex());
         startActivity(i);
     }
@@ -240,14 +235,64 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
 
             case R.id.btn_list_delete:
-                adapter.deleteSelected(this);
-                adapter.notifyDataSetChanged();
-                slideDownButtons("btn_list_delete");
-                cb_check = false;
-                initToolbar();
+//                adapter.deleteSelected(this);
+//                adapter.notifyDataSetChanged();
+//                slideDownButtons("btn_list_delete");
+//                cb_check = false;
+//                initToolbar();
+                deleteDialog(true);
+
                 break;
 
         }
+    }
+
+    /**
+     * 삭제시 보여주는 다이얼로그 메소드
+     * @param allChecked true-전체선택 시 false-부분선택 시
+     * */
+    private void deleteDialog(boolean allChecked){
+        String title, contents;
+        int diarycnt = 0;//추후 몇개 선택했는지 이벤트에서 카운팅할 것.
+
+        if (allChecked)
+        {
+            title = "전체삭제";
+            contents = "일기를 전체 삭제 하시겠습니까?";
+        }
+        else
+        { //사용자가 선택해서 삭제한 경우
+            title = "일기 " + diarycnt + "개 삭제";
+            contents = "의 일기를 삭제 하시겠습니까?";
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(title)
+                          .setMessage(contents)
+                          .setCancelable(false)
+                          .setPositiveButton("예",
+                                  new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialogInterface, int i) {
+                                          adapter.deleteSelected(ListDActivity.this);
+                                          adapter.notifyDataSetChanged();
+                                          slideDownButtons("btn_list_delete");
+                                          cb_check = false;
+                                          initToolbar();
+                                      }
+                                  })
+                          .setNegativeButton("아니요",
+                                  new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialogInterface, int i) {
+                                          dialogInterface.cancel();
+                                      }
+                                  });
+        //생성
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        //활성화
+        alertDialog.show();
     }
 
     private void animSlideDown(View view, String msg){
