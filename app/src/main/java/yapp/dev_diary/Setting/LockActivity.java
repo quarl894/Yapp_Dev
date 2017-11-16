@@ -93,6 +93,7 @@ public class LockActivity extends AppCompatActivity {
             setting_lock_change_layout.setEnabled(true);
             setting_lock_change_layout.setBackgroundColor(Color.WHITE);
         } else {
+
             switch_lock.setChecked(false);
             setting_lock_change_layout.setEnabled(false);
             setting_lock_change_layout.setBackgroundColor(Color.argb(255, 229, 229, 229));

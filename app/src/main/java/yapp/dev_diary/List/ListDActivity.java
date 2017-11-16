@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -84,6 +85,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         int id = item.getItemId();
         switch(id){
             case R.id.menu_start :
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
                 Log.i("optionSelected", "R.id.menu_start");
                 break;
 
