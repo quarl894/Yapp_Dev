@@ -114,7 +114,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                     }
                 });
 
-                sv.setPadding(0,0,0, 140);
+                sv.setPadding(0,0,0, (int)getResources().getDimension(R.dimen.buttons_height));
                 break;
 
             case R.id.menu_list_setting :
@@ -322,7 +322,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             cb_check = false;
         }else
             super.onBackPressed();
-        finish();
+//        finish();
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {

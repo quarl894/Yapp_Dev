@@ -16,4 +16,5 @@
 
     <dimen name="cmm_height">72dp</dimen>
 
+    <dimen name="buttons_height">60dp</dimen>
 </resources>
