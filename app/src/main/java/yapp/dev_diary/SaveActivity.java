@@ -18,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -38,7 +39,10 @@ public class SaveActivity extends AppCompatActivity {
     Switch pic_switch;
     static int feel, weather;
     int chk_num;
+    int isVoice=0;
+
     ImageButton img1, img2, img3, img4,img5,img6,img7,img8;
+    ImageView check;
     TextView data_view;
     EditText edit_title;
     Calendar myCalendar = Calendar.getInstance();
@@ -66,6 +70,15 @@ public class SaveActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main_btn);
+        Intent intent = new Intent(getIntent());
+        isVoice = intent.getIntExtra("isVoice",1);
+        check = (ImageView)findViewById(R.id.check);
+        check.setVisibility(View.VISIBLE);
+        if(isVoice ==2){
+            //((ImageView)findViewById(R.id.is_voice)).setImageResource(R.drawable.check_icon);
+            check.setVisibility(View.INVISIBLE);
+        }
+
         img1 = (ImageButton) findViewById(R.id.img1);
         img2 = (ImageButton) findViewById(R.id.img2);
         img3 = (ImageButton) findViewById(R.id.img3);
@@ -276,6 +289,7 @@ public class SaveActivity extends AppCompatActivity {
                 Intent i = new Intent(SaveActivity.this,DetailActivity.class);
                 i.putExtra("chk_num", chk_num);
                 i.putExtra("rowID", rowID);
+                i.putExtra("r_path",r_path);
                 startActivity(i);
                 finish();
             }

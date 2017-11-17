@@ -36,10 +36,7 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
         mBtnSave2 = (Button)findViewById(R.id.btnSave2);
         txtResult = (EditText) findViewById(R.id.txt_result);
         txtResult.setText("");
-        Toast toast = Toast.makeText(getApplicationContext(),
-                "토스트창에 출력될 문자", Toast.LENGTH_LONG);
 
-        toast.show();
         initToolbar();
     }
 
@@ -91,9 +88,11 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnSave2:
                 try {
                     String param = null;
+                    int is_voice = 2;
                     Intent i = new Intent(VoiceActivity.this, SaveActivity.class);
                     i.putExtra("content", txtResult.getText().toString());
                     i.putExtra("r_path", param);
+                    i.putExtra("isVoice",is_voice);
                     startActivity(i);
                 }
                 catch (Exception e){

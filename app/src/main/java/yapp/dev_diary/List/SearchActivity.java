@@ -106,7 +106,7 @@ public class SearchActivity  extends AppCompatActivity implements TimeRecyclerAd
         searchview.setIconified(false);
         searchview.clearFocus();
         searchview.setQueryHint("검색어를 입력해주세요.");
-        searchview.setOnQueryTextListener(queryTextListener);
+
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         if(null!=searchManager ) {
             searchview.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));

@@ -151,7 +151,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         Intent i = new Intent(this, DetailActivity.class);
         MyItem tmpItem = DBHelper.oneSelect(selected.getDBIndex());
         int p_Check = tmpItem.getP_path().isEmpty() ? 0 : 1;
-
+        i.putExtra("r_path",tmpItem.getR_path());
         i.putExtra("chk_num", p_Check);      // 이렇게요
         i.putExtra("rowID", selected.getDBIndex());
         startActivity(i);
