@@ -1,8 +1,11 @@
 package yapp.dev_diary.List;
 
+import android.widget.CheckBox;
+
 public class MyData extends AdapterItem {
     private String name;
     private int DBIndex;
+    private CheckBox cb = null; //추가
 
     public MyData(String name, long time, int DBIndex) {
         super(time);
@@ -30,4 +33,9 @@ public class MyData extends AdapterItem {
     }
 
     public int getDBIndex() { return DBIndex; }
+
+    // 추가
+    public void setCheckBox(CheckBox cb) { this.cb = cb; }
+    public CheckBox getCheckBox() { return this.cb; }
+    public void setChecked(boolean to) { this.cb.setChecked(to); }
 }

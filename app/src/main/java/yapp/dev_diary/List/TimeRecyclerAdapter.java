@@ -27,7 +27,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private OnItemClickListener listener;
     private ArrayList<Integer> checkedList;
 
-    ArrayList<CheckBox> checkBoxes;
+//    ArrayList<CheckBox> checkBoxes;
 
     private Context context;
 
@@ -79,19 +79,19 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ArrayList<AdapterItem> initItemList(ArrayList<MyData> dataset) {
 //   ****  1. 리스트생성 : [initItemList]에서 new 함
 //      *  2. 아이템 추가 : [initItemList]에서 CheckBoxes.add(null)로 아이템 수 만큼 추가함
-        checkBoxes = new ArrayList<CheckBox>();
+//        checkBoxes = new ArrayList<CheckBox>();
 
         ArrayList<AdapterItem> result = new ArrayList<>();
         int year = 0, month = 0;
         for (MyData data : dataset) {
             if (year != data.getYear() || month != data.getMonth()) {
                 result.add(new TimeItem(data.getYear(), data.getMonth(), data.getDayOfMonth()));
-                checkBoxes.add(null);
+//                checkBoxes.add(null);
                 year = data.getYear();
                 month = data.getMonth();
             }
             result.add(data);
-            checkBoxes.add(null);
+//            checkBoxes.add(null);
         }
         return result;
     }
@@ -181,6 +181,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Log.e("cb-data", Boolean.toString(ListDActivity.cb_check));
             if (ListDActivity.cb_check) {
                 dHolder.cb.setVisibility(View.VISIBLE);
+                // 추가
             } else {
                 dHolder.cb.setVisibility(View.GONE);
                 dHolder.cb.setChecked(false);
@@ -189,15 +190,20 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //           ****  3. 체크박스 설정 : [onBindViewHolder]에서 DataViewHolder인 경우(MyData) 체크박스 저장함
 //            TimeViewHolder인 경우 체크박스 없으니까 null로 놔둠
 
-            Log.i("*** CB set", "pos : " + pos + " / " + checkBoxes.get(pos));
+//            Log.i("*** CB set", "pos : " + pos + " / " + checkBoxes.get(pos));
 //            if( checkBoxes.get(pos) == null )
-                checkBoxes.set(pos, dHolder.cb);
+//                checkBoxes.set(pos, dHolder.cb);
+
+            // 추가
+            ((MyData) itemList.get(position)).setCheckBox(dHolder.cb);
+            Log.i("추가", ((MyData) itemList.get(position)).getCheckBox().toString() );
 
             dHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.e("is checked", " " + checkBoxes.get(pos).toString() + " (" + pos + ") [" + buttonView.toString() + "] ");
+                        Log.e("is checked", " " + ((MyData) itemList.get(pos)).getCheckBox().toString() + " (" + pos + ") [" + buttonView.toString() + "] ");     //추가. 둘이 같아야 함
+//                        Log.e("is checked", " " + checkBoxes.get(pos).toString() + " (" + pos + ") [" + buttonView.toString() + "] ");
 //                        buttonView.getVerticalScrollbarPosition() // 0
                         checkedList.add(pos);   // 달라짐,,
 
@@ -266,7 +272,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 DBHelper.delete(((MyData) tmpItem).getDBIndex());
                 itemList.remove(pos);
-                checkBoxes.remove(pos);         // ****  4. 삭제 : [deleteSelected]에서 itemList.remove 할 때 체크박스도 같이 remove
+//                checkBoxes.remove(pos);         // ****  4. 삭제 : [deleteSelected]에서 itemList.remove 할 때 체크박스도 같이 remove
 
                 int m = tmpItem.getMonth();
                 m += ( tmpItem.getYear() * 100 );
@@ -280,7 +286,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         if (m == n) {
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
                             itemList.remove(k);
-                            checkBoxes.remove(k);       // **** 해당 달에 일기 없을 때 -> 년,월 아이템 지우면서 체크박스(null) 같이 삭제
+//                            checkBoxes.remove(k);       // **** 해당 달에 일기 없을 때 -> 년,월 아이템 지우면서 체크박스(null) 같이 삭제
                         }
                     }
                 }
@@ -293,9 +299,26 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void checkAll(boolean to){
-//        ****  5. check 상태 바꾸기 : [checkAll] 에서 CheckBoxes의 모든 체크박스 상태 바꿈
-
         Log.i("*** checkAll to", Boolean.toString(to));
+
+        //추가
+        for(AdapterItem item : itemList){
+            if( item.getType() == 2){
+                ((MyData)item).setChecked(to);
+            }
+        }
+
+        // checkList 확인용
+        String str = "";
+        for(int ii : checkedList){
+            str += ii;
+            str += " ";
+        }
+        Log.i("#", str);
+
+
+//        ****  5. check 상태 바꾸기 : [checkAll] 에서 CheckBoxes의 모든 체크박스 상태 바꿈
+/*
         int i = 0;
         for(CheckBox cb : checkBoxes){
             if( cb != null ){   // Data
@@ -325,8 +348,9 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (cb.isChecked() == true) str = "1";
                 else str = "0";
             }
-            Log.i("##", "[" + Integer.toString(i) + "]" + " " + cb);
+            Log.i("##", "[" + Integer.toString(i) + " / " + str + "]" + " " + cb);
             i++;
         }
+        */
     }
 }
