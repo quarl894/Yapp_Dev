@@ -37,5 +37,5 @@ public class MyData extends AdapterItem {
     // 추가
     public void setCheckBox(CheckBox cb) { this.cb = cb; }
     public CheckBox getCheckBox() { return this.cb; }
-    public void setChecked(boolean to) { this.cb.setChecked(to); }
+    public void setChecked(boolean to) { if(this.cb != null ) this.cb.setChecked(to); }
 }

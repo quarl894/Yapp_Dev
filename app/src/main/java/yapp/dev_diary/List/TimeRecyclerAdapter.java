@@ -178,11 +178,11 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //            checkBoxes.set(pos, dHolder.cb);
             // 추가 3. 체크박스 설정
             ((MyData) itemList.get(position)).setCheckBox(dHolder.cb);
-            Log.i("추가", ((MyData) itemList.get(position)).getCheckBox().toString() );
+            Log.i("추가", ((MyData) itemList.get(position)).getCheckBox().toString());
 
-            if(ListDActivity.allChecked==true){
+            if (ListDActivity.allChecked == true) {
                 checkAll(true);
-            }else{
+            } else {
                 checkAll(false);
             }
 
@@ -197,7 +197,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         checkedList.add(pos);   // 달라짐,,
                     } else {
                         Log.e("is unchecked", " " + pos); //itemList.get(pos).toString());
-                        if(checkedList.size() !=0){
+                        if (checkedList.size() != 0) {
                             Log.e("position_111_off", " " + Integer.toString(checkedList.indexOf(pos)));
                             checkedList.remove(checkedList.indexOf(pos));
                             Log.e("position_remove_size", " " + Integer.toString(checkedList.size()));
@@ -236,9 +236,9 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         db = DBHelper.getWritableDatabase();
         AdapterItem tmpItem;
 
-        try{
+        try {
             int pos;
-            for(int i = checkedList.size() - 1; 0 <= i ; i--){
+            for (int i = checkedList.size() - 1; 0 <= i; i--) {
                 pos = checkedList.get(i);
                 Log.i("# ", Integer.toString(pos));
                 tmpItem = itemList.get(pos);
@@ -248,14 +248,14 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //                checkBoxes.remove(pos);         // ****  4. 삭제 : [deleteSelected]에서 itemList.remove 할 때 체크박스도 같이 remove
 
                 int m = tmpItem.getMonth();
-                m += ( tmpItem.getYear() * 100 );
-                Log.e("m ", Integer.toString(m) + " / pos : "  + pos);
+                m += (tmpItem.getYear() * 100);
+                Log.e("m ", Integer.toString(m) + " / pos : " + pos);
                 ArrayList<Integer> days = DBHelper.monthSelect(m, true);
-                if(days==null){
+                if (days == null) {
                     Log.e("onCreateViewHolder", "해당 달에 일기 없음 [" + Integer.toString(m) + "]");
                     for (int k = 0; k < itemList.size(); k++) {
                         Log.e("여기서 고친다", Integer.toString(itemList.get(k).getMonth()));
-                        int n = itemList.get(k).getMonth() + ( itemList.get(k).getYear() * 100 );
+                        int n = itemList.get(k).getMonth() + (itemList.get(k).getYear() * 100);
                         if (m == n) {
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
                             itemList.remove(k);
@@ -266,32 +266,33 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             checkedList.clear();
             ListDActivity.allChecked = false;
-        }catch (Exception e){
-            Log.e("에러안나겠지","ㅎㅎ");
+        } catch (Exception e) {
+            Log.e("에러안나겠지", "ㅎㅎ");
         }
     }
 
-    public void checkAll(boolean to){
+    public void checkAll(boolean to) {
         Log.i("*** checkAll to", Boolean.toString(to));
 
         //추가
-        for(AdapterItem item : itemList){
-            if( item.getType() == 2 ){
-                ((MyData)item).setChecked(to);
+        for (AdapterItem item : itemList) {
+            if (item.getType() == 2) {
+                ((MyData) item).setChecked(to);
             }
         }
 
         // checkList 확인용
         String str = "";
-        for(int ii : checkedList){
+        for (int ii : checkedList) {
             str += ii;
             str += " ";
         }
         Log.i("#", str);
-        Log.e("allcheckAll 확인 : ", " " +Boolean.toString(to));
+        Log.e("allcheckAll 확인 : ", " " + Boolean.toString(to));
         Log.e("itemList 확인", " " + Integer.toString(itemList.size()));
-        for(int num =0; num<itemList.size(); num++){
+        for (int num = 0; num < itemList.size(); num++) {
             Log.e("확인 확인 : ", itemList.get(num).getDateToString());
-        Log.e("checkedList 사이즈: "," "+Integer.toString(checkedList.size()) + " checkBoex 사이즈 : "+Integer.toString(checkBoxes.size()));
+            Log.e("checkedList 사이즈: ", " " + Integer.toString(checkedList.size()));// + " checkBoex 사이즈 : "+Integer.toString(checkBoxes.size()));
+        }
     }
 }
