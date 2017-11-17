@@ -19,7 +19,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private OnItemClickListener listener;
     private ArrayList<Integer> checkedList;
 
-    ArrayList<CheckBox> checkBoxes;
+//    ArrayList<CheckBox> checkBoxes;
 
     private Context context;
 
@@ -69,19 +69,21 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private ArrayList<AdapterItem> initItemList(ArrayList<MyData> dataset) {
-        checkBoxes = new ArrayList<CheckBox>();
+//   ****  1. 리스트생성 : [initItemList]에서 new 함
+//      *  2. 아이템 추가 : [initItemList]에서 CheckBoxes.add(null)로 아이템 수 만큼 추가함
+//        checkBoxes = new ArrayList<CheckBox>();
 
         ArrayList<AdapterItem> result = new ArrayList<>();
         int year = 0, month = 0;
         for (MyData data : dataset) {
             if (year != data.getYear() || month != data.getMonth()) {
                 result.add(new TimeItem(data.getYear(), data.getMonth(), data.getDayOfMonth()));
-                checkBoxes.add(null);
+//                checkBoxes.add(null);
                 year = data.getYear();
                 month = data.getMonth();
             }
             result.add(data);
-            checkBoxes.add(null);
+//            checkBoxes.add(null);
         }
         return result;
     }
@@ -173,20 +175,28 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 dHolder.cb.setChecked(false);
             }
             // 전체삭제 하는 곳
-            checkBoxes.set(pos, dHolder.cb);
+//            checkBoxes.set(pos, dHolder.cb);
+            // 추가 3. 체크박스 설정
+            ((MyData) itemList.get(position)).setCheckBox(dHolder.cb);
+            Log.i("추가", ((MyData) itemList.get(position)).getCheckBox().toString() );
+
             if(ListDActivity.allChecked==true){
                 checkAll(true);
             }else{
                 checkAll(false);
             }
 
+
             dHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.e("position_111_on", " " + Integer.toString(checkedList.indexOf(pos)));
+                        Log.e("is checked", " " + ((MyData) itemList.get(pos)).getCheckBox().toString() + " (" + pos + ") [" + buttonView.toString() + "] ");     //추가. 둘이 같아야 함
+//                        Log.e("is checked", " " + checkBoxes.get(pos).toString() + " (" + pos + ") [" + buttonView.toString() + "] ");
+//                        buttonView.getVerticalScrollbarPosition() // 0
                         checkedList.add(pos);   // 달라짐,,
                     } else {
+                        Log.e("is unchecked", " " + pos); //itemList.get(pos).toString());
                         if(checkedList.size() !=0){
                             Log.e("position_111_off", " " + Integer.toString(checkedList.indexOf(pos)));
                             checkedList.remove(checkedList.indexOf(pos));
@@ -235,7 +245,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 DBHelper.delete(((MyData) tmpItem).getDBIndex());
                 itemList.remove(pos);
-                checkBoxes.remove(pos);
+//                checkBoxes.remove(pos);         // ****  4. 삭제 : [deleteSelected]에서 itemList.remove 할 때 체크박스도 같이 remove
 
                 int m = tmpItem.getMonth();
                 m += ( tmpItem.getYear() * 100 );
@@ -249,7 +259,7 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         if (m == n) {
                             Log.e("여기서 지워져야된다", "ok" + Integer.toString(itemList.size()));
                             itemList.remove(k);
-                            checkBoxes.remove(k);
+//                            checkBoxes.remove(k);       // **** 해당 달에 일기 없을 때 -> 년,월 아이템 지우면서 체크박스(null) 같이 삭제
                         }
                     }
                 }
@@ -262,20 +272,26 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void checkAll(boolean to){
-            int i = 0;
-            for(CheckBox cb : checkBoxes){
-                if( cb != null ){
-                    Log.e("checkBoxes 확인:", " " +Integer.toString(i));
-                    cb.setChecked(to);
-                }
-                i++;
+        Log.i("*** checkAll to", Boolean.toString(to));
+
+        //추가
+        for(AdapterItem item : itemList){
+            if( item.getType() == 2 ){
+                ((MyData)item).setChecked(to);
+            }
         }
 
+        // checkList 확인용
+        String str = "";
+        for(int ii : checkedList){
+            str += ii;
+            str += " ";
+        }
+        Log.i("#", str);
         Log.e("allcheckAll 확인 : ", " " +Boolean.toString(to));
         Log.e("itemList 확인", " " + Integer.toString(itemList.size()));
         for(int num =0; num<itemList.size(); num++){
             Log.e("확인 확인 : ", itemList.get(num).getDateToString());
-        }
         Log.e("checkedList 사이즈: "," "+Integer.toString(checkedList.size()) + " checkBoex 사이즈 : "+Integer.toString(checkBoxes.size()));
     }
 }

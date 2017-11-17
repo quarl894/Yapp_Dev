@@ -41,7 +41,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     static boolean cb_check;
 
     private LinearLayout buttonsBottom;
-    private int buttonsBottomHeight;
     private boolean     BUTTONS = false;
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
@@ -55,15 +54,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         setContentView(R.layout.activity_list);
 
         buttonsBottom = (LinearLayout)findViewById(R.id.btns_bottom);
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask(){
-            public void run(){
-                Log.i("height3", Integer.toString( buttonsBottom.getHeight() )); //90
-                buttonsBottomHeight = buttonsBottom.getHeight();
-            }
-        };
-        timer.schedule(task, 500);
 
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         sv = (ScrollView) findViewById(R.id.scroll_view);
@@ -79,6 +69,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
         cb_check = false;
+
     }
 
     private Menu menu;
@@ -98,11 +89,14 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 startActivity(i);
                 Log.i("optionSelected", "R.id.menu_start");
                 break;
+
             case R.id.menu_list_modify :
                 Log.i("optionSelected", "R.id.menu_list_modify");
+
                 // 하단 버튼들 (백업, 삭제)
                 buttonsBottom.setVisibility(View.VISIBLE);
 
+                Log.i("height4", Integer.toString((int)getResources().getDimension(R.dimen.buttons_height)) );
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
@@ -118,12 +112,13 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
 
             case R.id.menu_list_setting :
+                Log.i("optionSelected", "R.id.menu_list_setting");
                 BUTTONS = true;
                 break;
 
             case R.id.menu_select_all :
-                Log.e("allCheced :", " " + Boolean.toString(allChecked));
-                if(allChecked == false){
+                Log.i("optionSelected", "R.id.menu_select_all / allChecked : " + allChecked);
+                if( allChecked == false){
                     adapter.checkAll(true);
                     allChecked = true;
                     ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.checked));
@@ -154,6 +149,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 @Override
                 public void onClick(View v) {
                     cb_check = false;
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
