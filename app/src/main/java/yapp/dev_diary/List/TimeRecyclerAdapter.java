@@ -312,7 +312,5 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Log.i("##", "[" + Integer.toString(i) + "]" + " " + cb);
             i++;
         }
-
-
     }
 }
