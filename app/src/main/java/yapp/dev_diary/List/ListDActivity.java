@@ -112,12 +112,11 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
 
             case R.id.menu_list_setting :
-                Log.i("optionSelected", "R.id.menu_list_setting");
                 BUTTONS = true;
                 break;
 
             case R.id.menu_select_all :
-                Log.i("optionSelected", "R.id.menu_select_all / allChecked : " + allChecked);
+                mTimeRecyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
                 if( allChecked == false){
                     adapter.checkAll(true);
                     allChecked = true;
