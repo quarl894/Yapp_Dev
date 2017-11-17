@@ -46,7 +46,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
 
-    private boolean allChecked = false;
+    static boolean allChecked = false;
 
     private Toolbar toolbar = null;
     @Override
@@ -79,7 +79,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         adapter.setOnItemClickListener(this);
         mTimeRecyclerView.setAdapter(adapter);
         cb_check = false;
-
     }
 
     private Menu menu;
@@ -99,25 +98,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 startActivity(i);
                 Log.i("optionSelected", "R.id.menu_start");
                 break;
-
             case R.id.menu_list_modify :
                 Log.i("optionSelected", "R.id.menu_list_modify");
-
                 // 하단 버튼들 (백업, 삭제)
                 buttonsBottom.setVisibility(View.VISIBLE);
-                /*
-                Timer timer = new Timer();
-                TimerTask task = new TimerTask(){
-                    public void run(){
-                        Log.i("height_task", Integer.toString( buttonsBottom.getHeight() )); //90
-                        buttonsBottomHeight = buttonsBottom.getHeight();
-                    }
-                };
-                timer.schedule(task, 200);
-                Log.i("height1", Integer.toString( mTimeRecyclerView.getHeight() ));    // //984
-                Log.i("height2", Integer.toString( sv.getHeight() )); ////678
-                Log.i("height3", Integer.toString( buttonsBottom.getHeight() )); //90
-                */
 
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
@@ -130,17 +114,16 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                     }
                 });
 
-                sv.setPadding(0,0,0, 90);
+                sv.setPadding(0,0,0, 140);
                 break;
 
             case R.id.menu_list_setting :
-                Log.i("optionSelected", "R.id.menu_list_setting");
                 BUTTONS = true;
                 break;
 
             case R.id.menu_select_all :
-                Log.i("optionSelected", "R.id.menu_select_all / allChecked : " + allChecked);
-                if( allChecked == false){
+                Log.e("allCheced :", " " + Boolean.toString(allChecked));
+                if(allChecked == false){
                     adapter.checkAll(true);
                     allChecked = true;
                     ( (ActionMenuItemView) findViewById(R.id.menu_select_all) ).setIcon(getResources().getDrawable(R.drawable.checked));
@@ -213,7 +196,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
         DBHelper = new MyDBHelper(ListDActivity.this);
         db = DBHelper.getWritableDatabase();
-        Log.i("db", "DBHelper.allSelect()");
         List<MyItem> itemList = DBHelper.allSelect();
         MyItem tmpItem = null;
         for(int i = 0; i < itemList.size(); i++)
@@ -236,15 +218,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
 
             case R.id.btn_list_delete:
-//                adapter.deleteSelected(this);
-//                adapter.notifyDataSetChanged();
-//                slideDownButtons("btn_list_delete");
-//                cb_check = false;
-//                initToolbar();
                 deleteDialog(true);
-
                 break;
-
         }
     }
 
@@ -258,15 +233,14 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
 
         if (allChecked)
         {
-            title = "전체삭제";
-            contents = "일기를 전체 삭제 하시겠습니까?";
+            title = "선택된 일기 삭제";
+            contents = "선택된 일기를 삭제 하시겠습니까?";
         }
         else
         { //사용자가 선택해서 삭제한 경우
             title = "일기 " + diarycnt + "개 삭제";
             contents = "의 일기를 삭제 하시겠습니까?";
         }
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(title)
                           .setMessage(contents)
@@ -312,7 +286,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             }
         });
         view.setAnimation(slide_down);
-        Log.i("anim", "slide_down   / " + msg);
     }
 
     private void animSlideUp(View view, String msg){
@@ -331,49 +304,34 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             }
         });
         view.setAnimation(slide_up);
-        Log.i("anim", "slide_up / " + msg);
     }
 
     // BUTTONS to false, visibility, 내리는 애니메이션, 스크롤뷰 패딩 설정, adapter 함수 호출
-    private void slideDownButtons(String msg)
-    {
+    private void slideDownButtons(String msg){
         BUTTONS = false;
         buttonsBottom.setVisibility(View.GONE);
         animSlideDown(buttonsBottom, msg);
         sv.setPadding(0,0,0,0);
-
-        if( allChecked == true ){
-            adapter.checkAll(false);
-            allChecked = false;
-        }
     }
 
     // 하단에 버튼 올라와 있으면 버튼 내리기
     @Override
-    public void onBackPressed() {
-        if(BUTTONS)
-        {
+    public void onBackPressed(){
+        if(BUTTONS) {
             slideDownButtons("btn_list_delete");
             cb_check = false;
-        }
-        else super.onBackPressed();
-
+        }else
+            super.onBackPressed();
         finish();
     }
-
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         try{
-            Log.i("onPrepareOptionsMenu", "BUTTONS : " + BUTTONS);
             if(menu == null) Log.e("null", "menu is null");
             else {
                 if (BUTTONS) {
                     menu.clear();
-
                     getMenuInflater().inflate(R.menu.menu_list2, menu);
-
-
                 }else {
                     menu.clear();
                     getMenuInflater().inflate(R.menu.menu_list, menu);
@@ -382,7 +340,14 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         }catch(Exception e){
             Log.e("onPreareOptionsMenu", e.toString());
         }
-
         return super.onPrepareOptionsMenu(menu);
+    }
+    public void scrollToEnd(){
+        sv.post(new Runnable() {
+            @Override
+            public void run() {
+                sv.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 }

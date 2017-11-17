@@ -108,7 +108,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i("*** onCreateViewHolder", Integer.toString(viewType));
         View view;
         if (viewType == AdapterItem.TYPE_TIME)
             return new TimeViewHolder(
@@ -160,7 +159,6 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     Log.e("여기서 에러나나?", itemList.get(position).getDateToString());
                 }
             }
-
             //DataViewHolder
         } else {
             final DataViewHolder dHolder = (DataViewHolder) holder;
@@ -168,44 +166,36 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             dHolder.nameView.setText(
                     ((MyData) itemList.get(position))
                             .getName());
-            Log.e("cb-data", Boolean.toString(ListDActivity.cb_check));
             if (ListDActivity.cb_check) {
                 dHolder.cb.setVisibility(View.VISIBLE);
             } else {
                 dHolder.cb.setVisibility(View.GONE);
                 dHolder.cb.setChecked(false);
             }
-
-            Log.i("*** CB set", "pos : " + pos + " / " + checkBoxes.get(pos));
-//            if( checkBoxes.get(pos) == null )
-                checkBoxes.set(pos, dHolder.cb);
+            // 전체삭제 하는 곳
+            checkBoxes.set(pos, dHolder.cb);
+            if(ListDActivity.allChecked==true){
+                checkAll(true);
+            }else{
+                checkAll(false);
+            }
 
             dHolder.cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Log.e("is checked", " " + checkBoxes.get(pos).toString() + " (" + pos + ") [" + buttonView.toString() + "] ");
-//                        buttonView.getVerticalScrollbarPosition() // 0
+                        Log.e("position_111_on", " " + Integer.toString(checkedList.indexOf(pos)));
                         checkedList.add(pos);   // 달라짐,,
-
                     } else {
-                        Log.e("is unchecked", " " + pos); //itemList.get(pos).toString());
                         if(checkedList.size() !=0){
-                            int index = checkedList.indexOf(pos);
-                            Log.e("position_111 (index)", " " + Integer.toString(index));
-                            checkedList.remove(index);
-                            Log.e("position_remove (size)", " " + Integer.toString(checkedList.size()));
+                            Log.e("position_111_off", " " + Integer.toString(checkedList.indexOf(pos)));
+                            checkedList.remove(checkedList.indexOf(pos));
+                            Log.e("position_remove_size", " " + Integer.toString(checkedList.size()));
                         }
                     }
                 }
             });
         }
-
-
-//        Log.i("마지막 아이템", "position : " + position + " / " + getItemCount());
-//        if( getItemCount()-1 == position){
-//            ScrollView sv = sv = (ScrollView) context.findViewById(R.id.scroll_view);
-//        }
     }
 
     @Override
@@ -236,17 +226,9 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         db = DBHelper.getWritableDatabase();
         AdapterItem tmpItem;
 
-        String str = "";
-        for(int ii : checkedList){
-            str += ii;
-            str += " ";
-        }
-        Log.i("# delete ", str);
-
         try{
             int pos;
             for(int i = checkedList.size() - 1; 0 <= i ; i--){
-//            for(int pos : checkedList ){
                 pos = checkedList.get(i);
                 Log.i("# ", Integer.toString(pos));
                 tmpItem = itemList.get(pos);
@@ -272,45 +254,28 @@ public class TimeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             }
-
             checkedList.clear();
+            ListDActivity.allChecked = false;
         }catch (Exception e){
             Log.e("에러안나겠지","ㅎㅎ");
         }
     }
 
     public void checkAll(boolean to){
-        Log.i("*** checkAll to", Boolean.toString(to));
-        int i = 0;
-        for(CheckBox cb : checkBoxes){
-            if( cb != null ){   // Data
-                Log.i("***", cb.toString() + " (" + i + ")");
-                cb.setChecked(to);
-//                checkedList.add(i);
-            }
-            i++;
+            int i = 0;
+            for(CheckBox cb : checkBoxes){
+                if( cb != null ){
+                    Log.e("checkBoxes 확인:", " " +Integer.toString(i));
+                    cb.setChecked(to);
+                }
+                i++;
         }
-        if( to == false ) checkedList.clear();
 
-        Log.i("*** checkedList", "(" + checkedList.size() + ")");
-        Log.i("*** checkBoxes", "(" + checkBoxes.size() + ")");
-
-        String str = "";
-        for(int ii : checkedList){
-            str += ii;
-            str += " ";
+        Log.e("allcheckAll 확인 : ", " " +Boolean.toString(to));
+        Log.e("itemList 확인", " " + Integer.toString(itemList.size()));
+        for(int num =0; num<itemList.size(); num++){
+            Log.e("확인 확인 : ", itemList.get(num).getDateToString());
         }
-        Log.i("#", str);
-
-        i = 0;
-        for(CheckBox cb : checkBoxes){
-            if(cb == null) str = "-1";
-            else{
-                if (cb.isChecked() == true) str = "1";
-                else str = "0";
-            }
-            Log.i("##", "[" + Integer.toString(i) + "]" + " " + cb);
-            i++;
-        }
+        Log.e("checkedList 사이즈: "," "+Integer.toString(checkedList.size()) + " checkBoex 사이즈 : "+Integer.toString(checkBoxes.size()));
     }
 }
