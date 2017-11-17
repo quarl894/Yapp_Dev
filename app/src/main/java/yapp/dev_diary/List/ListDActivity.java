@@ -41,7 +41,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
     static boolean cb_check;
 
     private LinearLayout buttonsBottom;
-    private int buttonsBottomHeight;
     private boolean     BUTTONS = false;
     private RecyclerView mTimeRecyclerView;
     ScrollView sv;
@@ -55,15 +54,6 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
         setContentView(R.layout.activity_list);
 
         buttonsBottom = (LinearLayout)findViewById(R.id.btns_bottom);
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask(){
-            public void run(){
-                Log.i("height3", Integer.toString( buttonsBottom.getHeight() )); //90
-                buttonsBottomHeight = buttonsBottom.getHeight();
-            }
-        };
-        timer.schedule(task, 500);
 
         mTimeRecyclerView = (RecyclerView) findViewById(R.id.mTimeRecyclerView);
         sv = (ScrollView) findViewById(R.id.scroll_view);
@@ -118,7 +108,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 Log.i("height2", Integer.toString( sv.getHeight() )); ////678
                 Log.i("height3", Integer.toString( buttonsBottom.getHeight() )); //90
                 */
-
+                Log.i("height4", Integer.toString((int)getResources().getDimension(R.dimen.buttons)) );
                 animSlideUp(buttonsBottom, "menu_list_modify");
                 BUTTONS = true;
                 initToolbar();
@@ -130,7 +120,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                     }
                 });
 
-                sv.setPadding(0,0,0, 90);
+                sv.setPadding(0,0,0, (int)getResources().getDimension(R.dimen.buttons));
                 break;
 
             case R.id.menu_list_setting :
@@ -171,6 +161,7 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 @Override
                 public void onClick(View v) {
                     cb_check = false;
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -356,9 +347,10 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
             slideDownButtons("btn_list_delete");
             cb_check = false;
         }
-        else super.onBackPressed();
-
-        finish();
+        else{
+            super.onBackPressed();
+            finish();
+        }
     }
 
 
