@@ -86,6 +86,10 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
         final int rowID = intent.getExtras().getInt("rowID");
+        String r_path = intent.getStringExtra("r_path");
+        if (r_path == null){
+            ((ImageView)findViewById(R.id.fab)).setImageResource(R.drawable.sound_stop);
+        }
         final MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);

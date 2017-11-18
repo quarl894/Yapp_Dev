@@ -281,5 +281,6 @@
         android:scaleType="center"
         android:src="@drawable/sound_play"
         app:fab_colorNormal="@color/white"
-        app:fab_colorPressed="@color/white" />
+        app:fab_colorPressed="@color/white"
+        android:visibility="gone"/>
 </FrameLayout>

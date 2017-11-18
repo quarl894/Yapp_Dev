@@ -36,6 +36,7 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
         mBtnSave2 = (Button)findViewById(R.id.btnSave2);
         txtResult = (EditText) findViewById(R.id.txt_result);
         txtResult.setText("");
+
         initToolbar();
     }
 
@@ -65,9 +66,12 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_start:
+
                 Intent i = new Intent(this, MainActivity.class);
                 startActivity(i);
                 return true;
@@ -84,9 +88,11 @@ public class VoiceActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnSave2:
                 try {
                     String param = null;
+                    int is_voice = 2;
                     Intent i = new Intent(VoiceActivity.this, SaveActivity.class);
                     i.putExtra("content", txtResult.getText().toString());
                     i.putExtra("r_path", param);
+                    i.putExtra("isVoice",is_voice);
                     startActivity(i);
                 }
                 catch (Exception e){

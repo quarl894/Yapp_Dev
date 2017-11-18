@@ -33,6 +33,7 @@ import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.R;
+import yapp.dev_diary.Setting.SetActivity;
 
 public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdapter.OnItemClickListener {
     private TimeRecyclerAdapter adapter;
@@ -112,6 +113,8 @@ public class ListDActivity extends AppCompatActivity implements TimeRecyclerAdap
                 break;
 
             case R.id.menu_list_setting :
+                Intent intent3 = new Intent(this, SetActivity.class);
+                startActivity(intent3);
                 BUTTONS = true;
                 break;
 
