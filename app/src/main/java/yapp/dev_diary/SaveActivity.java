@@ -289,7 +289,7 @@ public class SaveActivity extends AppCompatActivity {
                 Intent i = new Intent(SaveActivity.this,DetailActivity.class);
                 i.putExtra("chk_num", chk_num);
                 i.putExtra("rowID", rowID);
-                i.putExtra("r_path",r_path);
+                i.putExtra("r_path",r_path);//추가
                 startActivity(i);
                 finish();
             }
