@@ -243,7 +243,7 @@ public class SaveActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        }); 
         btn_weather.performClick();
         //사진 가져오기
         pic_switch = (Switch) findViewById(R.id.switch_btn);
