@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:background="#aba0ff"
         android:weightSum="1">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="93dp"
             android:gravity="center">
@@ -19,17 +19,26 @@
                 android:src="@drawable/group_3"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"/>
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check_icon"
+                android:paddingTop="3dp"
+                android:layout_marginLeft="45dp"
+                android:scaleType="fitXY"/>
+        </RelativeLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/white"/>
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="91dp"
             android:textSize="22sp"
             android:textColor="#6dffffff"
-            android:hint="2017. 08. 01 화요일"
+            android:text="날짜를 선택해주세요."
+            android:gravity="center|left"
             android:textColorHint="#6dffffff"
             android:paddingLeft="24dp"
             android:id="@+id/edit_btn"
@@ -40,6 +49,7 @@
             android:background="@android:color/white"/>
 
         <EditText
+            android:id="@+id/edit_title"
             android:layout_width="match_parent"
             android:layout_height="91dp"
             android:textSize="22sp"
@@ -75,44 +85,87 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#9b9b9b"></View>
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="104dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@android:color/white">
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/sun"
-                android:background="@color/white"
-                android:layout_weight="1"
-                android:id="@+id/img1"/>
+            android:background="@color/white">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:id="@+id/img_weather"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sun"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:id="@+id/img1"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:src="@drawable/cloud"
-                android:layout_weight="1"
-                android:id="@+id/img2"/>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:src="@drawable/cloud"
+                    android:layout_weight="1"
+                    android:id="@+id/img2"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/rain"
-                android:background="@color/white"
-                android:layout_weight="1"
-                android:id="@+id/img3"/>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/rain"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:id="@+id/img3"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/snow"
-                android:background="@color/white"
-                android:layout_weight="1"
-                android:id="@+id/img4"/>
-        </LinearLayout>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/snow"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:id="@+id/img4"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:id="@+id/img_feel"
+                android:orientation="horizontal"
+                android:gravity="center">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/smile"
+                        android:background="@color/white"
+                        android:layout_weight="1"
+                        android:id="@+id/img5"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@drawable/notbad"
+                        android:layout_weight="1"
+                        android:id="@+id/img6"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/sad"
+                        android:background="@color/white"
+                        android:layout_weight="1"
+                        android:id="@+id/img7"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/angry"
+                        android:background="@color/white"
+                        android:layout_weight="1"
+                        android:id="@+id/img8"/>
+            </LinearLayout>
+        </FrameLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

@@ -47,13 +47,6 @@
             android:layout_gravity="right" />
     </LinearLayout>
 
-    <!--<View-->
-        <!--android:id="@+id/overlay"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/flexible_space_image_height"-->
-        <!--android:background="?attr/colorPrimary" />-->
-
-
     <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -70,22 +63,52 @@
                 android:layout_height="@dimen/flexible_space_image_height"
                 android:background="@android:color/transparent" />
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/title_diary"
-                android:textSize="22sp"
-                android:background="@android:color/white"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="26dp"
-                android:textColor="#aba0ff"
-                android:lineSpacingExtra="8sp"
-                android:text="오늘의 일기"
-                />
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="#f7f7f7">
+
+                <TextView
+                    android:id="@+id/title_diary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:lineSpacingExtra="8sp"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="26dp"
+                    android:text="오늘의 일기"
+                    android:textColor="#aba0ff"
+                    android:textSize="22sp" />
+
+                <ImageButton
+                    android:id="@+id/btn_status1"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="58dp"
+                    android:background="#aba0ff"
+                    android:src="@drawable/page_1" />
+
+                <ImageButton
+                    android:id="@+id/btn_status2"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="22dp"
+                    android:background="#aba0ff"
+                    android:src="@drawable/smile_contents" />
+            </RelativeLayout>
 
             <TextView
+                android:id="@+id/detail_context"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
@@ -111,32 +134,56 @@
                 android:lineSpacingExtra="8sp"
                 android:text="오늘의 사진" />
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <HorizontalScrollView
+                    android:id="@+id/hori_scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <HorizontalScrollView
-                        android:id="@+id/hori_scroll_view"
+                    android:fillViewport="false"
+                    android:foregroundGravity="left">
+                    <LinearLayout
+                        android:id="@+id/selected_photos_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fillViewport="false"
-                        android:foregroundGravity="left">
-                        <LinearLayout
-                            android:id="@+id/selected_photos_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:animateLayoutChanges="true"
-                            android:gravity="left"
-                            android:orientation="horizontal"
-                            android:visibility="visible">
-                            <!-- images will be added dynamicall to this layout -->
-                        </LinearLayout>
-                    </HorizontalScrollView>
-                </LinearLayout>
+                        android:layout_gravity="left"
+                        android:animateLayoutChanges="true"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+                        <!-- images will be added dynamicall to this layout -->
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+    <ProgressBar
+        android:id="@+id/circle_back_progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="90dp"
+        android:layout_height="86dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:layout_marginLeft="29dp"
+        android:scaleType="center"
+        android:progressDrawable="@drawable/circle_progress_background" />
 
+    <ProgressBar
+        android:id="@+id/circle_progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="90dp"
+        android:layout_height="86dp"
+        android:layout_centerInParent="true"
+        android:max="100"
+        android:rotation="-90"
+        android:indeterminate="false"
+        android:layout_marginLeft="29dp"
+        android:scaleType="center"
+        android:progressDrawable="@drawable/circle_progress_foreground" />
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -147,7 +194,15 @@
         android:src="@drawable/sound_play"
         app:fab_colorNormal="@color/white"
         app:fab_colorPressed="@color/white" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/record_time"
+        android:scaleType="center"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:layout_marginTop="55dp"
+        android:elevation="2dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -155,15 +210,13 @@
         android:paddingLeft="@dimen/margin_standard">
 
         <TextView
+            android:id="@+id/detail_title_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/title_date"
-            android:textSize="11sp"
-            android:textColor="#4a4a4a"
             android:lineSpacingExtra="1sp"
             android:text="2017. 08. 01 화   오후 9: 25"
-            />
-
+            android:textColor="#4a4a4a"
+            android:textSize="11sp" />
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"

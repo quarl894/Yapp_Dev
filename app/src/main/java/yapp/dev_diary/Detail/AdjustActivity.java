@@ -2,18 +2,21 @@ package yapp.dev_diary.Detail;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,17 +31,21 @@ import com.gun0912.tedpermission.TedPermission;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import gun0912.tedbottompicker.TedBottomPicker;
-import yapp.dev_diary.MainActivity;
+import yapp.dev_diary.DB.MyDBHelper;
+import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.R;
 
 /**
- * Created by HANSUNG on 2017-09-17.
+ * Created by YoungJung on 2017-09-17.
  */
 
-public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class AdjustActivity extends BaseActivity implements ObservableScrollViewCallbacks{
     ArrayList<String> select_pic = new ArrayList<>();
     ArrayList<Uri> selectedUriList;
     private ViewGroup mSelectedImagesContainer;
@@ -47,7 +54,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private View mImageView;
     //    private View mOverlayView;
     private ObservableScrollView mScrollView;
-    private TextView mTitleView;
+    private EditText mTitleView;
+    private EditText mContentView;
     private View mFab;
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
@@ -56,12 +64,31 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private TextView mTitleDate;
     private TextView mTitleDiary, mTitlePic;
-    private Button btn_gall;
+    private Button btnSave;
+    private ImageButton adjust_imgbtn_weather, adjust_imgbtn_emotion;
+
     Uri selectedUri;
+    private ImageButton weather_btn;
+    private ImageButton feel_btn;
+    private int weather, feel;
+
+    private MyDBHelper DBHelper;
+    private SQLiteDatabase db;
+    LinearLayout show_img;
+    LinearLayout show_img2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adjust);
+
+        DBHelper = new MyDBHelper(AdjustActivity.this);
+        db        = DBHelper.getWritableDatabase();
+
+        Intent intent = getIntent();
+        final int chk_num = intent.getExtras().getInt("chk_num");
+        final int rowID = intent.getExtras().getInt("rowID");
+        final MyItem thisItem = DBHelper.oneSelect(rowID);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -71,9 +98,78 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
 //        mOverlayView = findViewById(R.id.overlay);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
-        mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("제목을 입력하세요!");
-        mTitleDate = (TextView) findViewById(R.id.title_date);
+        mTitleView = (EditText) findViewById(R.id.title);
+        mTitleView.setText(thisItem.getTitle());
+        mContentView = (EditText) findViewById(R.id.context);
+        mContentView.setText(thisItem.getContent());
+        mTitleDate = (TextView) findViewById(R.id.adjust_title_date);
+        weather_btn = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+        feel_btn = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
+        show_img = (LinearLayout) findViewById(R.id.show_img);
+        show_img2 = (LinearLayout) findViewById(R.id.show_img2);
+
+        weather = thisItem.getWeather();
+        feel = thisItem.getMood();
+        weather_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_img.setVisibility(View.VISIBLE);
+            }
+        });
+        feel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show_img2.setVisibility(View.VISIBLE);
+            }
+        });
+
+        switch(weather) {
+            case 1:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case 2:
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case 3:
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case 4:
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            default:
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+        }
+        switch(feel){
+            case 1 :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case 2 :
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case 3 :
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case 4 :
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default :
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+        }
+
+        //***날짜 형식 변경***
+        Date nDate = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        try {
+            nDate = simpleDateFormat.parse(thisItem.getDate()+"");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd E");
+        String strToDay = simpleDateFormat.format(nDate);
+
+        mTitleDate.setText(strToDay);
         mTitleDiary = (TextView) findViewById(R.id.title_diary);
         mTitlePic = (TextView) findViewById(R.id.title_pic);
         mTitleDiary.setText("오늘의\n일기_");
@@ -81,30 +177,115 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         mGlideRequestManager = Glide.with(this);
         mSelectedImagesContainer = (ViewGroup) findViewById(R.id.selected_photos_container);
         setMultiShowButton();
-        Intent intent = getIntent();
-        final int chk_num = intent.getExtras().getInt("chk_num");
+
         if(chk_num == 1){
-            select_pic = MainActivity.ok_path;
+            ArrayList<String> tmpList = new ArrayList<>();
+            if (thisItem.getP_path() != null)
+            {
+                String[] strList = thisItem.getP_path().split(",");
+
+                for (int i = 0; i < strList.length; i ++)
+                {
+                    tmpList.add(strList[i]);
+                }
+                select_pic = tmpList;
+            }
+            else
+                select_pic.clear();
         }else{
             select_pic.clear();
         }
-        if(chk_num == 1){
-            select_pic = MainActivity.ok_path;
-        }else{
-            select_pic.clear();
+
+        adjust_imgbtn_weather = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+        switch (weather)
+        {
+            case 0 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.page_1);
+                weather = 1;
+                break;
+            case 1 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.cloudy_contents);
+                weather = 2;
+                break;
+            case 2 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.rainy_contents);
+                weather = 3;
+                break;
+            case 3 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.snowy_contents);
+                weather = 4;
+                break;
         }
+
+        adjust_imgbtn_emotion = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
+        int emotion = thisItem.getMood();
+        switch (emotion)
+        {
+            case 0 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.smile_contents);
+                feel = 1;
+                break;
+            case 1 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad_contents);
+                feel = 2;
+                break;
+            case 2 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.sad_contents);
+                feel = 3;
+                break;
+            case 3 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.angry_contents);
+                feel = 4;
+                break;
+        }
+
         showStringgList(select_pic);
         setTitle(null);
         mFab = findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(AdjustActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
+
+        btnSave = (Button) findViewById(R.id.adjust_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // DB에 추가
+                // 임시 데이터들
+                Intent mainIntent = getIntent();
+                String strP_Path = "";
+
+                if (selectedUriList != null)
+                {
+                    for (int i = 0; i < selectedUriList.size(); i++) {
+                        if (i == selectedUriList.size() - 1)
+                            strP_Path += selectedUriList.get(i);
+                        else
+                            strP_Path += selectedUriList.get(i) + ",";
+                    }
+                }
+                else
+                {
+                    strP_Path = thisItem.getP_path();
+                }
+
+                String p_path = strP_Path;
+                String r_path = thisItem.getR_path();
+                String content = mContentView.getText().toString();
+                String title = mTitleView.getText().toString();
+                int dateInt = 0;
+                Log.d("체크", ""+p_path.toString());
+                //Log.i("db", "p_path : " + p_path + ", r_path : " + r_path + ", content : " + content + "weather : " + weather + ", feel : " + feel + ", title : " + title + ", date : " + dateInt);
+                MyItem newItem = new MyItem(thisItem.get_Index() ,p_path, r_path, content, weather, feel, title, thisItem.getDate(), 0);
+                DBHelper.update(newItem);
+
+                Intent i = new Intent(AdjustActivity.this, DetailActivity.class);
+                i.putExtra("chk_num", strP_Path == "" ? 0 : 1);
+                i.putExtra("rowID", newItem.get_Index());
+                startActivity(i);
+                finish();
+            }
+        });
 
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
@@ -187,7 +368,7 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         }
     }
     private void setMultiShowButton() {
-        Button btn_multi_show = (Button) findViewById(R.id.btn_gall);
+        ImageButton btn_multi_show = (ImageButton) findViewById(R.id.btn_gall);
         btn_multi_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -261,6 +442,46 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
             mSelectedImagesContainer.addView(imageHolder);
             thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
         }
+    }
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.img1 :
+                weather = 1;
+                weather_btn.setImageResource(R.drawable.page_1);
+                break;
+            case R.id.img2:
+                weather = 2;
+                weather_btn.setImageResource(R.drawable.cloudy_contents);
+                break;
+            case R.id.img3:
+                weather = 3;
+                weather_btn.setImageResource(R.drawable.rainy_contents);
+                break;
+            case R.id.img4:
+                weather = 4;
+                weather_btn.setImageResource(R.drawable.snowy_contents);
+                break;
+            case R.id.img5 :
+                feel = 1;
+                feel_btn.setImageResource(R.drawable.smile_contents);
+                break;
+            case R.id.img6:
+                feel = 2;
+                feel_btn.setImageResource(R.drawable.notbad_contents);
+                break;
+            case R.id.img7:
+                feel = 3;
+                feel_btn.setImageResource(R.drawable.sad_contents);
+                break;
+            case R.id.img8:
+                feel = 4;
+                feel_btn.setImageResource(R.drawable.angry_contents);
+                break;
+            default:
+                break;
+        }
+        show_img2.setVisibility(View.GONE);
+        show_img.setVisibility(View.GONE);
     }
 }
 
