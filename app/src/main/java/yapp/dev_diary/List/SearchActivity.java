@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +67,6 @@ public class SearchActivity  extends AppCompatActivity implements TimeRecyclerAd
     }
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(this, adapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
         /* 해당 postiion의 MyData 가져오기. DBIndex가져와서 rowID로 인텐트에 담아서 DetailActivity열기 */
         MyData selected = adapter.getItem(position);
         Intent i = new Intent(this, DetailActivity.class);
@@ -131,7 +129,6 @@ public class SearchActivity  extends AppCompatActivity implements TimeRecyclerAd
             return false;
         }
     };
-
 }
 
 

@@ -242,12 +242,6 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         showStringgList(select_pic);
         setTitle(null);
         mFab = findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(AdjustActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);

@@ -69,12 +69,15 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     private SQLiteDatabase db;
 
     ProgressBar mProgressBar, backProgressBar;
-    Handler handler = new Handler();
     Context context;
     private TextView record_time;
     private ImageButton weather_btn;
     private ImageButton feel_btn;
     private int weather, feel;
+    String r_path;
+    P_Thread pro_thread;
+    int count;
+    Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,12 +89,14 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         Intent intent = getIntent();
         final int chk_num = intent.getExtras().getInt("chk_num");
         final int rowID = intent.getExtras().getInt("rowID");
-        String r_path = intent.getStringExtra("r_path");
-        if (r_path == null){
-            ((ImageView)findViewById(R.id.fab)).setImageResource(R.drawable.sound_stop);
-        }
         final MyItem thisItem = DBHelper.oneSelect(rowID);
 
+        r_path = thisItem.getR_path();
+        if(r_path == null){
+            ((ImageView)findViewById(R.id.fab)).setImageResource(R.drawable.sound_stop);
+        }else{
+            ((ImageView)findViewById(R.id.fab)).setImageResource(R.drawable.sound_play);
+        }
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
         mActionBarSize = getActionBarSize();
@@ -111,6 +116,7 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         weather = thisItem.getWeather();
         feel = thisItem.getMood();
 
+        count=0;
         switch(weather) {
             case 1:
                 weather_btn.setImageResource(R.drawable.page_1);
@@ -195,7 +201,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "hi", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(DetailActivity.this, AdjustActivity.class);
                 i.putExtra("chk_num", chk_num);
                 i.putExtra("rowID", rowID);
@@ -210,50 +215,27 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
-                MediaPlayer mPlayer = new MediaPlayer();
-                if (thisItem.getR_path() != null)
-                {
-                    try {
-                        mPlayer.setDataSource(thisItem.getR_path());
-                        mPlayer.prepare();
-                    }catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    final int record_sec = mPlayer.getDuration()/1000;
-                    mPlayer.start();
-                    // 현재 시간을 받아옴
-                    mProgressBar.setProgress(record_sec);
-                    new Thread(new Runnable() {
-                        int progressStatus = record_sec;
-                        public void run() {
-                            while (progressStatus > 0) {
-                                progressStatus -= 1;
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                // Update the progress bar
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        mProgressBar.setProgress(progressStatus);
-                                        record_time.setText("00:" + String.format("%02d", progressStatus));
-                                        Log.e("test",Integer.toString(mProgressBar.getProgress()));
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
+                if(count==0){
+                    Toast.makeText(DetailActivity.this, "녹음파일을 재생합니다", Toast.LENGTH_SHORT).show();
+                    handler = new Handler();
+                    pro_thread = new P_Thread();
+                    pro_thread.start();
+                    pro_thread.stop = false;
+                    pro_thread.work =true;
+                    count=1;
+                }else if(count ==1){
+                    pro_thread.stop = true;
+                    pro_thread.work =false;
+                    count =0;
+                    Log.e("btnRecord 재시작"," "+pro_thread.getState().toString());
+                    Toast.makeText(DetailActivity.this, "녹음파일을 종료합니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        Log.e("view 확인", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         record_time.getParent().bringChildToFront(mFab);
         record_time.bringToFront();
         record_time.invalidate();
-        Log.e("view 확인2", record_time.getParent().toString() +"//" + mFab.getParent().toString());
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
 
@@ -269,14 +251,6 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         // Translate overlay and image
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
-//        int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
-//        ViewHelper.setTranslationY(mOverlayView, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-//        ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
-
-        // Change alpha of overlay
-//        ViewHelper.setAlpha(mOverlayView, ScrollUtils.getFloat((float) scrollY / flexibleRange, 0, 1));
-
-        // Scale title text
         float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
         ViewHelper.setPivotX(mTitleView, 0);
         ViewHelper.setPivotY(mTitleView, 2000);
@@ -330,16 +304,8 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
             record_time.getParent().bringChildToFront(mFab);
 
         } else {
-//            ViewHelper.setTranslationX(mFab, mOverlayView.getWidth() - mFabMargin - mFab.getWidth());
             ViewHelper.setTranslationY(mFab, fabTranslationY-150);
             ViewHelper.setTranslationY(record_time, fabTranslationY-150);
-//            ViewHelper.setTranslationY(mProgressBar, fabTranslationY-150);
-//            mScrollView.getParent().bringChildToFront(mProgressBar);
-//            record_time.bringToFront();
-//            record_time.getParent().bringChildToFront(mFab);
-
-//            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) record_time.getLayoutParams();
-//            ((FrameLayout) mFab.getParent()).addView(record_time);
             mFab.getParent().bringChildToFront(record_time);
             record_time.getParent().clearChildFocus(mFab);
         }
@@ -390,6 +356,70 @@ public class DetailActivity extends BaseActivity implements ObservableScrollView
                     .into(thumbnail);
             mSelectedImagesContainer.addView(imageHolder);
             thumbnail.setLayoutParams(new FrameLayout.LayoutParams(wdpx, htpx));
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(pro_thread != null){
+            pro_thread.work = false;
+            pro_thread.stop = true;
+            count = 0;
+            Log.e("btnReset 리셋"," "+pro_thread.getState().toString());
+        }
+    }
+
+    private class P_Thread extends Thread{
+        public boolean stop = false;
+        public boolean work = true;
+        private int progressStatus;
+        MediaPlayer mPlayer = new MediaPlayer();
+
+        public void run() {
+            try{
+                mPlayer.setDataSource(r_path);
+                mPlayer.prepare();
+            }catch(Exception e){ e.printStackTrace();}
+            final int record_sec = mPlayer.getDuration()/1000;
+            progressStatus = record_sec;
+            while (progressStatus > 0 && !r_path.equals(null) && !Thread.currentThread().isInterrupted()) {
+                if(work){
+                    mPlayer.start();
+                    mProgressBar.setProgress(record_sec);
+                    try {
+                        progressStatus -= 1;
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // Update the progress bar
+                    handler.post(new Runnable() {
+                        public void run() {
+                            mProgressBar.setProgress(progressStatus);
+                            record_time.setText("00:" + String.format("%02d", progressStatus));
+                            Log.e("test",Integer.toString(mProgressBar.getProgress()));
+                        }
+                    });
+                }else{
+                    Log.e("hello", " " + Thread.currentThread().getState());
+                    progressStatus =record_sec;
+                    mPlayer.pause();
+                    handler.post(new Runnable() {
+                        public void run() {
+                            mProgressBar.setProgress(progressStatus);
+                            record_time.setText("00:" + String.format("%02d", progressStatus));
+                        }
+                    });
+                    break;
+                }
+            }
+            Log.e("끝남끝남끝남", "끝남끝남끝남");
+            Log.e("hello", " " + Thread.currentThread().getState());
+            mPlayer.stop();
+            progressStatus = record_sec;
+            stop = false;
+            work = true;
+            count=0;
         }
     }
 }
