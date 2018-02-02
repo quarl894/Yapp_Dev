@@ -83,28 +83,26 @@ public class SearchActivity  extends AppCompatActivity implements TimeRecyclerAd
 
         helper = new MyDBHelper(SearchActivity.this);
         db = helper.getWritableDatabase();
-        Log.i("db", "DBHelper.allSelect()");
+        //Log.i("db", "DBHelper.allSelect()");
         List<MyItem> itemList = helper.searchSelect(query);
         MyItem tmpItem = null;
         for(int i = 0; i < itemList.size(); i++)
         {
             tmpItem = itemList.get(i);
             dataset.add(new MyData(tmpItem.getTitle(), tmpItem.getDate()/10000, (tmpItem.getDate()/100)%100, tmpItem.getDate()%100, tmpItem.get_Index()));
-            Log.i("p_path:", tmpItem.getTitle() + ", "+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100 + ", " + tmpItem.get_Index());
+            //Log.i("p_path:", tmpItem.getTitle() + ", "+tmpItem.getDate()/10000 +"," + (tmpItem.getDate()/100)%100 + ", "+tmpItem.getDate()%100 + ", " + tmpItem.get_Index());
         }
         return dataset;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_search, menu);
         searchview = (SearchView) menu.findItem(R.id.search).getActionView();
         searchview.setIconified(false);
         searchview.clearFocus();
         searchview.setQueryHint("검색어를 입력해주세요.");
-
+        searchview.setOnQueryTextListener(queryTextListener); //검색받은 단어 결과 출력
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         if(null!=searchManager ) {
             searchview.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));

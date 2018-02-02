@@ -40,5 +40,4 @@
         <activity android:name=".Mark.MarkActivity"></activity>
         <receiver android:name=".Setting.BroadcastD"></receiver>
     </application>
-
 </manifest>

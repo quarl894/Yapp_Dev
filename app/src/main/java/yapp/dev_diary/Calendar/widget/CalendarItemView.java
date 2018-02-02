@@ -51,6 +51,7 @@ public class CalendarItemView extends View {
     private boolean hasEvent = false;
     private int[] mColorEvents;
     private final float RADIUS = 100f;
+    public static ArrayList<String> tmp = new ArrayList<String>();
 
     public CalendarItemView(Context context) {
         super(context);
@@ -132,7 +133,6 @@ public class CalendarItemView extends View {
                 if (today_ItemList != null)
                 {
                     itemList = today_ItemList;
-                    ArrayList<String> tmp = new ArrayList<String>();
 
                     for (int i = 0; i < today_ItemList.size(); i++)
                     {
