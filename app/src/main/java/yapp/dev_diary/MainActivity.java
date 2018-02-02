@@ -515,6 +515,11 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         naverRecognizer.getSpeechRecognizer().release();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     // Declare handler for handling SpeechRecognizer thread's Messages.
     static class RecognitionHandler extends Handler {
         private final WeakReference<MainActivity> mActivity;

@@ -74,9 +74,9 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
         Log.d("체크", ""+intToDay);
         if (itemList != null)
         {
-            MyItem tmpItem = null;
             for (int i = 0; i < itemList.size(); i++)
             {
+                Log.e("itemList test:",itemList.get(i).getTitle());
                 mList.add(itemList.get(i).getTitle());
             }
         }

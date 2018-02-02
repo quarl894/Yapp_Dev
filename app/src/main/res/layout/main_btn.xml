@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#aba0ff"
-        android:weightSum="1">
+    android:layout_height="match_parent"
+    android:background="#aba0ff">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="93dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_weight="1">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -28,13 +23,19 @@
                 android:layout_marginLeft="45dp"
                 android:scaleType="fitXY"/>
         </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/white"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="91dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:textSize="22sp"
             android:textColor="#6dffffff"
             android:text="날짜를 선택해주세요."
@@ -42,6 +43,7 @@
             android:textColorHint="#6dffffff"
             android:paddingLeft="24dp"
             android:id="@+id/edit_btn"
+            android:layout_weight="1"
             android:keepScreenOn="false"/>
         <View
             android:layout_width="match_parent"
@@ -51,17 +53,22 @@
         <EditText
             android:id="@+id/edit_title"
             android:layout_width="match_parent"
-            android:layout_height="91dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:textSize="22sp"
             android:textColor="#6dffffff"
             android:hint="제목을 적어주세요."
+            android:background="@null"
             android:textColorHint="#6dffffff"
-            android:paddingLeft="24dp"/>
-
+            android:paddingLeft="24dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_weight="1"
             android:background="#fafafa">
             <Button
                 android:layout_width="match_parent"
@@ -69,6 +76,7 @@
                 android:background="#fafafa"
                 android:textColor="#9b9b9b"
                 android:text="오늘의 날씨"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:id="@+id/btn_weather"/>
 
@@ -79,6 +87,7 @@
                 android:textColor="#9b9b9b"
                 android:text="오늘의 기분"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:id="@+id/btn_feel"/>
         </LinearLayout>
         <View
@@ -87,8 +96,9 @@
             android:background="#9b9b9b"></View>
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="104dp"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_weight="1">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="104dp"
@@ -172,11 +182,11 @@
             android:background="#9b9b9b"></View>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="118dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:paddingLeft="59dp"
-            android:layout_weight="0.21">
+            android:layout_weight="1">
            <Switch
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
@@ -193,14 +203,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="#9b9b9b"
+                android:layout_marginBottom="20dp"
                 android:text="5장의 사진을 업로드 합니다." />
         </LinearLayout>
-    </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#68e5f4"
+        android:textSize="22sp"
         android:text="저장"
+        android:textColor="@color/white"
         android:id="@+id/btn_save"
         android:layout_gravity="bottom"/>
-</FrameLayout>
+</LinearLayout>
