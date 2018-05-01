@@ -197,45 +197,37 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         }
 
         adjust_imgbtn_weather = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
+
         switch (weather)
         {
-            case 0 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.page_1);
-                weather = 1;
-                break;
             case 1 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.cloudy_contents);
-                weather = 2;
+                adjust_imgbtn_weather.setImageResource(R.drawable.page_1);
                 break;
             case 2 :
-                adjust_imgbtn_weather.setImageResource(R.drawable.rainy_contents);
-                weather = 3;
+                adjust_imgbtn_weather.setImageResource(R.drawable.cloudy_contents);
                 break;
             case 3 :
+                adjust_imgbtn_weather.setImageResource(R.drawable.rainy_contents);
+                break;
+            case 4 :
                 adjust_imgbtn_weather.setImageResource(R.drawable.snowy_contents);
-                weather = 4;
                 break;
         }
 
         adjust_imgbtn_emotion = (ImageButton) findViewById(R.id.adjust_imgbtn_emotion);
-        int emotion = thisItem.getMood();
-        switch (emotion)
+        switch (feel)
         {
-            case 0 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.smile_contents);
-                feel = 1;
-                break;
             case 1 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad_contents);
-                feel = 2;
+                adjust_imgbtn_emotion.setImageResource(R.drawable.smile_contents);
                 break;
             case 2 :
-                adjust_imgbtn_emotion.setImageResource(R.drawable.sad_contents);
-                feel = 3;
+                adjust_imgbtn_emotion.setImageResource(R.drawable.notbad_contents);
                 break;
             case 3 :
+                adjust_imgbtn_emotion.setImageResource(R.drawable.sad_contents);
+                break;
+            case 4 :
                 adjust_imgbtn_emotion.setImageResource(R.drawable.angry_contents);
-                feel = 4;
                 break;
         }
 
@@ -484,4 +476,3 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         show_img.setVisibility(View.GONE);
     }
 }
-
