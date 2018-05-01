@@ -29,6 +29,7 @@ import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.Detail.DetailActivity;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.List.MyData;
+import yapp.dev_diary.List.SearchActivity;
 import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
 import yapp.dev_diary.Setting.SetActivity;
@@ -202,6 +203,8 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
         int id = item.getItemId();
         switch(id){
             case R.id.menu_calendar_search :
+                Intent i = new Intent(this, SearchActivity.class);
+                startActivity(i);
                 return true;
             case R.id.menu_calendar_setting :
                 Intent i3 = new Intent(this, SetActivity.class);
