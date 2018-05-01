@@ -1,16 +1,4 @@
 package yapp.dev_diary;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.lang.ref.WeakReference;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -25,16 +13,9 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.database.Cursor;
-import android.database.CursorJoiner;
-import android.media.ExifInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
@@ -73,7 +55,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import yapp.dev_diary.DB.MyDBHelper;
-import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Lock.core.BaseActivity;
 import yapp.dev_diary.Setting.BroadcastD;
@@ -464,11 +445,16 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 mBtnStop.setVisibility(View.INVISIBLE);
                 break;
             case R.id.btnReset :
-                onBtnReset();
-                p_thread.work = false;
-                p_thread.stop = true;
-                t_count = 0;
-                Log.e("btnReset 리셋"," "+p_thread.getState().toString());
+                if (p_thread != null) {
+                    onBtnReset();
+                    p_thread.work = false;
+                    p_thread.stop = true;
+                    t_count = 0;
+                    Log.e("btnReset 리셋", " " + p_thread.getState().toString());
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "녹음 시작 시 초기화 가능", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btnPlay:
                 onBtnPlay();
@@ -713,4 +699,3 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         }
     }
 }
-
