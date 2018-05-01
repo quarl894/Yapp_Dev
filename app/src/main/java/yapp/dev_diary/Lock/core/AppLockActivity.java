@@ -140,7 +140,6 @@ public class AppLockActivity extends BaseActivity {
 		codeField1.requestFocus();
 
 		switch (type) {
-
 		case AppLock.DISABLE_PASSLOCK:
 			if (LockManager.getInstance().getAppLock().checkPasscode(passLock)) {
 				setResult(RESULT_OK);

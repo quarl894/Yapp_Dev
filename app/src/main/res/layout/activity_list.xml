@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".List.ListDActivity">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,14 +16,65 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     </android.support.v7.widget.Toolbar>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mTimeRecyclerView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:id="@+id/scroll_view"
+        android:fillViewport="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mTimeRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </ScrollView>
 
+    <LinearLayout
+        android:id="@+id/btns_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/buttons_height"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:layout_alignBottom="@+id/scroll_view"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_list_backup"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:background="#FFFFFF"
+            android:drawableTop="@drawable/backup"
+            android:onClick="onClick"
+            android:paddingTop="18dp" />
+
+        <Button
+            android:id="@+id/btn_list_delete"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:background="#FFFFFF"
+            android:drawableTop="@drawable/delete"
+            android:onClick="onClick"
+            android:paddingTop="12dp" />
+
+    </LinearLayout>
 </RelativeLayout>
 

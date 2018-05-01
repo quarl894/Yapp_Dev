@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToyCalendar</string>
+    <string name="app_name">하루소리</string>
 
     <string-array name="day_of_week">
         <item>일</item>

@@ -12,7 +12,15 @@
     <color name="black">#000000</color>
     <color name="today">@color/black</color>
     <color name="transparent">@android:color/transparent</color>
+    <color name="opacity">#140000</color>
+    <color name="red">#EE3311</color>
 
     <color name="light_gray">#FFE5E5E5</color>
     <color name="light_blue">#FF78c8e6</color>
+    <color name="p_color1">#aba0ff</color>
+    <color name="p_color2">#79eaf7</color>
+    <integer-array name="p_colors">
+        <item>@color/p_color1</item>
+        <item>@color/p_color2</item>
+    </integer-array>
 </resources>

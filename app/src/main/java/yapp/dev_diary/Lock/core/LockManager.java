@@ -1,6 +1,9 @@
 package yapp.dev_diary.Lock.core;
 
 import android.app.Application;
+import android.util.Log;
+
+import yapp.dev_diary.Setting.LockActivity;
 
 public class LockManager {
 
@@ -24,9 +27,22 @@ public class LockManager {
 	}
 
 	public boolean isAppLockEnabled() {
+		curAppLocker.addIgnoredActivity(LockActivity.class);
 		if (curAppLocker == null) {
+			Log.e("a","a");
 			return false;
 		} else {
+			Log.e("b","b");
+			return true;
+		}
+	}
+	public boolean isnotAppLockEnabled() {
+		curAppLocker.removeIgnoredActivity(LockActivity.class);
+		if (curAppLocker == null) {
+			Log.e("a","a");
+			return false;
+		} else {
+			Log.e("b","b");
 			return true;
 		}
 	}
