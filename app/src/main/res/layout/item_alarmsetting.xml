@@ -70,10 +70,21 @@
                     android:paddingTop="30dp">
 
                     <ToggleButton
-                        android:id="@+id/alarm_day_Monday"
+                        android:id="@+id/alarm_day_Sunday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/circle_btn"
+                        android:checked="false"
+                        android:text="ToggleButton"
+                        android:textOff="일"
+                        android:textOn="일" />
+
+                    <ToggleButton
+                        android:id="@+id/alarm_day_Monday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/circle_btn"
                         android:checked="false"
@@ -128,24 +139,13 @@
                         android:id="@+id/alarm_day_Saturday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:background="@drawable/circle_btn"
                         android:checked="false"
                         android:text="ToggleButton"
                         android:textOff="토"
                         android:textOn="토" />
-
-                    <ToggleButton
-                        android:id="@+id/alarm_day_Sunday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="40dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/circle_btn"
-                        android:checked="false"
-                        android:text="ToggleButton"
-                        android:textOff="일"
-                        android:textOn="일" />
 
                 </LinearLayout>
 

@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
@@ -256,8 +256,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 //            Log.e("pic_path_info", " " + pic_path.get(0));
         }
         Log.e("testtest",Integer.toString(ok_path.size()));
-
-
     }
 
     @Override
