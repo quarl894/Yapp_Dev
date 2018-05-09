@@ -31,7 +31,8 @@
         <activity android:name=".Setting.AlarmActivity" />
         <activity android:name=".Voice.VoiceActivity" />
         <activity android:name=".SaveActivity" />
-        <activity android:name=".Detail.AdjustActivity" />
+        <activity android:name=".Detail.AdjustActivity"
+                   android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Detail.DetailActivity" />
         <activity android:name=".List.ListDActivity" />
         <activity android:name=".List.SearchActivity" />

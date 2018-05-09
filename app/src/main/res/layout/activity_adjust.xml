@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/adjust_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/image"
@@ -30,9 +31,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#f7f7f7"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:background="#f7f7f7">
+                android:focusableInTouchMode="true">
 
                 <TextView
                     android:id="@+id/title_diary"
@@ -69,83 +70,93 @@
                     android:layout_marginEnd="22dp"
                     android:background="@drawable/roundcorner"
                     android:src="@drawable/smile_contents" />
+
                 <LinearLayout
+                    android:id="@+id/show_img"
                     android:layout_width="144dp"
                     android:layout_height="36dp"
-                    android:id="@+id/show_img"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="22dp"
                     android:layout_marginTop="16dp"
                     android:visibility="invisible">
+
                     <ImageButton
                         android:id="@+id/img1"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/page_1"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/page_1" />
+
                     <ImageButton
                         android:id="@+id/img2"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/cloudy_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/cloudy_contents" />
+
                     <ImageButton
                         android:id="@+id/img3"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/rainy_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/rainy_contents" />
+
                     <ImageButton
                         android:id="@+id/img4"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/snowy_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/snowy_contents" />
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/show_img2"
                     android:layout_width="144dp"
                     android:layout_height="36dp"
-                    android:id="@+id/show_img2"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="right"
                     android:layout_marginEnd="22dp"
                     android:layout_marginTop="16dp"
                     android:visibility="invisible">
+
                     <ImageButton
                         android:id="@+id/img5"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/smile_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/smile_contents" />
+
                     <ImageButton
                         android:id="@+id/img6"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/notbad_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/notbad_contents" />
+
                     <ImageButton
                         android:id="@+id/img7"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/sad_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/sad_contents" />
+
                     <ImageButton
                         android:id="@+id/img8"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/angry_contents"
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:src="@drawable/angry_contents" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -221,19 +232,20 @@
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
+
             <Button
                 android:id="@+id/adjust_btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#68e5f4"
                 android:text="확인"
-                android:textSize="22sp"
                 android:textColor="#FFFFFF"
+                android:textSize="22sp"
                 app:scale_height="60"
                 app:scale_left="0"
+                app:scale_textsize="22"
                 app:scale_top="556"
-                app:scale_width="360"
-                app:scale_textsize="22"/>
+                app:scale_width="360" />
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
@@ -280,7 +292,7 @@
         android:layout_marginLeft="29dp"
         android:scaleType="center"
         android:src="@drawable/sound_play"
+        android:visibility="gone"
         app:fab_colorNormal="@color/white"
-        app:fab_colorPressed="@color/white"
-        android:visibility="gone"/>
+        app:fab_colorPressed="@color/white" />
 </FrameLayout>

@@ -1,16 +1,21 @@
 package yapp.dev_diary.Detail;
 
 import android.Manifest;
+import android.app.Service;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -76,6 +81,8 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
     private SQLiteDatabase db;
     LinearLayout show_img;
     LinearLayout show_img2;
+
+    SoftKeyboard mSoftKeyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,6 +292,38 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
                 mScrollView.scrollTo(0, 1);
             }
         });
+        FrameLayout adjust_layout = (FrameLayout) findViewById(R.id.adjust_layout);
+        InputMethodManager controlManager = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
+        mSoftKeyboard = new SoftKeyboard(adjust_layout, controlManager);
+        mSoftKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+            @Override
+            public void onSoftKeyboardHide() {
+                new Handler(Looper.getMainLooper()).post(new Runnable(){
+
+                    @Override
+                    public void run() {
+                        //키보드 내려왔을 때
+                    }
+                });
+            }
+
+            @Override
+            public void onSoftKeyboardShow() {
+                new Handler(Looper.getMainLooper()).post(new Runnable(){
+
+                    @Override
+                    public void run() {
+                        //키보드 올라왔을 때
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSoftKeyboard.unRegisterSoftKeyboardCallback();
     }
 
     @Override
