@@ -229,6 +229,9 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         mBtnRecord.setVisibility(View.VISIBLE);
         mBtnStop.setVisibility(View.INVISIBLE);
 
+        //초기화 버튼 녹음 시작 시에만 활성화
+        mBtnReset.setEnabled(false);
+
         txtResult = (TextView) findViewById(R.id.txt_result);
         handler = new RecognitionHandler(this);
         naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
@@ -403,10 +406,10 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     // Start button is pushed when SpeechRecognizer's state is inactive.
                     // Run SpeechRecongizer by calling recognize().
                     mResult = "";
-                    txtResult.setText("Connecting...");
+                    //txtResult.setText("Connecting..."); //불필요한 구문(사용자에게 노출되면 안됨)
                     naverRecognizer.recognize();
                 } else {
-                    Log.e(TAG, "stop and wait Final Result");
+                    //Log.e(TAG, "stop and wait Final Result");
                     naverRecognizer.getSpeechRecognizer().stop();
                 }
                 mBtnRecord.setEnabled(false);
@@ -415,6 +418,10 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 // mBtnPlay.setEnabled(false);
                 mBtnRecord.setVisibility(View.INVISIBLE);
                 mBtnStop.setVisibility(View.VISIBLE);
+
+                // 초기화버튼 활성화
+                if (!mBtnReset.isEnabled())
+                    mBtnReset.setEnabled(true);
 
                 // 다른 앱 음악 일시정지
                 AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -437,6 +444,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     Log.e(TAG, "Exception while creating tmp file1", e);
                 }
 
+                //이 부분 모듈화(인자에 따른 셋팅) 할 것.
                 mBtnRecord.setEnabled(true);
                 mBtnStop.setEnabled(false);
                 mBtnRecord.setVisibility(View.VISIBLE);
@@ -444,15 +452,24 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 break;
             case R.id.btnReset :
                 if (p_thread != null) {
-                    onBtnReset();
                     p_thread.work = false;
+                    naverRecognizer.getSpeechRecognizer().stop();
+                    onBtnReset();
                     p_thread.stop = true;
                     t_count = 0;
+
+                    mBtnRecord.setEnabled(true);
+                    mBtnStop.setEnabled(false);
+                    mBtnRecord.setVisibility(View.VISIBLE);
+                    mBtnStop.setVisibility(View.INVISIBLE);
                     Log.e("btnReset 리셋", " " + p_thread.getState().toString());
                 }
                 else{
                     Toast.makeText(MainActivity.this, "녹음 시작 시 초기화 가능", Toast.LENGTH_SHORT).show();
                 }
+                if (mBtnReset.isEnabled())
+                    mBtnReset.setEnabled(false);
+
                 break;
             case R.id.btnPlay:
                 onBtnPlay();
@@ -633,7 +650,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                         }
                     });
                 } else {
-                    Log.e("여기 뭐나오지???"," "+p_thread.getState().toString());
+                    //Log.e("여기 뭐나오지???"," "+p_thread.getState().toString());
                     if (Thread.currentThread().getState().equals(State.RUNNABLE)) {
                         try {
                             Thread.sleep(800);
@@ -645,16 +662,20 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                         progressStatus =0;
                         handler3.post(new Runnable() {
                             public void run() {
-                                p_gradient.setProgress(progressStatus);
-                                start_time.setText("00:" + String.format("%02d", progressStatus));
-                                end_time.setText("00:" + String.format("%02d", 60 - progressStatus));
+                                //p_gradient.setProgress(progressStatus);
+                                //start_time.setText("00:" + String.format("%02d", progressStatus));
+                                //end_time.setText("00:" + String.format("%02d", 60 - progressStatus));
+                                // 중지 시 아무것도 표시 안함
+                                p_gradient.setProgress(0);
+                                start_time.setText(null);
+                                end_time.setText(null);
                             }
                         });
                         break;
                     }
                 }
             }
-            Log.e("끝남끝남끝남", "끝남끝남끝남");
+
             progressStatus = 0;
             stop = false;
             work = true;
