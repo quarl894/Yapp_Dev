@@ -122,88 +122,94 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#9b9b9b"></View>
-        <FrameLayout
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/img_weather"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:layout_weight="1">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:id="@+id/img_weather"
-                android:orientation="horizontal"
-                android:gravity="center">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/sun"
-                    android:background="@color/white"
-                    android:layout_weight="1"
-                    android:id="@+id/img1"/>
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:src="@drawable/cloud"
-                    android:layout_weight="1"
-                    android:id="@+id/img2"/>
+            <ImageButton
+                android:id="@+id/img1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/sun" />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/rain"
-                    android:background="@color/white"
-                    android:layout_weight="1"
-                    android:id="@+id/img3"/>
+            <ImageButton
+                android:id="@+id/img2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/cloud" />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/snow"
-                    android:background="@color/white"
-                    android:layout_weight="1"
-                    android:id="@+id/img4"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:id="@+id/img_feel"
-                android:orientation="horizontal"
-                android:gravity="center">
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/smile"
-                        android:background="@color/white"
-                        android:layout_weight="1"
-                        android:id="@+id/img5"/>
+            <ImageButton
+                android:id="@+id/img3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/rain" />
 
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:src="@drawable/notbad"
-                        android:layout_weight="1"
-                        android:id="@+id/img6"/>
+            <ImageButton
+                android:id="@+id/img4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/snow" />
+        </LinearLayout>
 
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/sad"
-                        android:background="@color/white"
-                        android:layout_weight="1"
-                        android:id="@+id/img7"/>
+        <LinearLayout
+            android:id="@+id/img_feel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/angry"
-                        android:background="@color/white"
-                        android:layout_weight="1"
-                        android:id="@+id/img8"/>
-            </LinearLayout>
-        </FrameLayout>
+            <ImageButton
+                android:id="@+id/img5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/smile" />
+
+            <ImageButton
+                android:id="@+id/img6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/notbad" />
+
+            <ImageButton
+                android:id="@+id/img7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/sad" />
+
+            <ImageButton
+                android:id="@+id/img8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:src="@drawable/angry" />
+        </LinearLayout>
+    </FrameLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -215,24 +221,36 @@
             android:background="@android:color/white"
             android:paddingLeft="59dp"
             android:layout_weight="1">
-           <Switch
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="사진업로드"
-               android:paddingTop="25dp"
-               android:paddingBottom="27dp"
-               android:textColor="#aba0ff"
-               android:textSize="14sp"
-               android:id="@+id/switch_btn"
-               android:switchPadding="125dp"
-               android:checked="true"/>
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="#9b9b9b"
-                android:layout_marginBottom="20dp"
-                android:text="5장의 사진을 업로드 합니다." />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingRight="57dp">
+
+                <Switch
+                    android:id="@+id/switch_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="27dp"
+                    android:layout_marginTop="25dp"
+                    android:checked="true"
+                    android:switchPadding="125dp"
+                    android:text="사진업로드"
+                    android:textColor="#aba0ff"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="37dp"
+                    android:text="5장의 사진을 업로드 합니다."
+                    android:textColor="#9b9b9b"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
         </LinearLayout>
     <Button
         android:layout_width="match_parent"
