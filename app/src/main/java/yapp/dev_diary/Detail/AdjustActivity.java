@@ -199,19 +199,19 @@ public class AdjustActivity extends BaseActivity implements ObservableScrollView
         adjust_imgbtn_weather = (ImageButton) findViewById(R.id.adjust_imgbtn_weather);
         switch (weather)
         {
-            case 0 :
+            case 1 :
                 adjust_imgbtn_weather.setImageResource(R.drawable.page_1);
                 weather = 1;
                 break;
-            case 1 :
+            case 2 :
                 adjust_imgbtn_weather.setImageResource(R.drawable.cloudy_contents);
                 weather = 2;
                 break;
-            case 2 :
+            case 3 :
                 adjust_imgbtn_weather.setImageResource(R.drawable.rainy_contents);
                 weather = 3;
                 break;
-            case 3 :
+            case 4 :
                 adjust_imgbtn_weather.setImageResource(R.drawable.snowy_contents);
                 weather = 4;
                 break;

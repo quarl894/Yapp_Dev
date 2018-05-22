@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">14dp</dimen>
     <dimen name="toolbar_margin_start">72dp</dimen>
     <dimen name="flexible_space_height">72dp</dimen>
-    <dimen name="flexible_space_image_height">420dp</dimen>
+    <dimen name="flexible_space_image_height">380dp</dimen>
     <dimen name="flexible_space_show_fab_offset">120dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
 

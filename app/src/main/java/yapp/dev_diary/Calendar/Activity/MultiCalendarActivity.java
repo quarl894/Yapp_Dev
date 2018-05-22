@@ -157,7 +157,6 @@ public class MultiCalendarActivity extends BaseActivity implements FrgCalendar.O
 
             }
 
-
         });
 
         adapterHourLine = new AdapterRcvSimple(R.layout.item_rcv_simple);
