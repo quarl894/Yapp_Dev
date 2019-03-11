@@ -433,7 +433,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     count +=1;
                     mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
                     String nowFile = mFilePath  + count + ".mp4";
-                    encodeSingleFile(nowFile);
+                    //encodeSingleFile(nowFile);
                     outputSttList.add(nowFile);
                     Log.e("TAG",""+Integer.toString(outputSttList.size()));
                 } catch (Exception e) {
@@ -575,40 +575,6 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
         }
     }
 
-    private void encodeSingleFile(final String outputPath) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(encodeTask(1, outputPath));
-    }
-
-    private Runnable encodeTask(final int numFiles, final String outputPath) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final PCMEncoder pcmEncoder = new PCMEncoder(48000, 16000, 1);
-                    pcmEncoder.setOutputPath(outputPath);
-                    pcmEncoder.prepare();
-                    File directory = new File("storage/emulated/0/NaverSpeechTest/Test.pcm");
-                    for (int i = 0; i < numFiles; i++) {
-                        Log.d(TAG, "Encoding: " + i);
-                        //InputStream inputStream = getAssets().open("test.wav");
-                        InputStream inputStream = new FileInputStream(directory);
-                        inputStream.skip(44);
-                        pcmEncoder.encode(inputStream, 16000);
-                    }
-                    pcmEncoder.stop();
-                    handler2.post(new Runnable() {
-                        @Override
-                        public void run() {
-//                            Toast.makeText(getApplicationContext(), "Encoded file to: " + outputPath, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.e(TAG, "Cannot create FileInputStream", e);
-                }
-            }
-        };
-    }
     private class P_Thread extends Thread{
         private int progressStatus = 0;
         public boolean stop = false;
@@ -674,5 +640,41 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     }
                 }
             };
-}
 
+
+}
+//
+//    private void encodeSingleFile(final String outputPath) {
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//        executorService.submit(encodeTask(1, outputPath));
+//    }
+//
+//    private Runnable encodeTask(final int numFiles, final String outputPath) {
+//        return new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    final PCMEncoder pcmEncoder = new PCMEncoder(48000, 16000, 1);
+//                    pcmEncoder.setOutputPath(outputPath);
+//                    pcmEncoder.prepare();
+//                    File directory = new File("storage/emulated/0/NaverSpeechTest/Test.pcm");
+//                    for (int i = 0; i < numFiles; i++) {
+//                        Log.d(TAG, "Encoding: " + i);
+//                        //InputStream inputStream = getAssets().open("test.wav");
+//                        InputStream inputStream = new FileInputStream(directory);
+//                        inputStream.skip(44);
+//                        pcmEncoder.encode(inputStream, 16000);
+//                    }
+//                    pcmEncoder.stop();
+//                    handler2.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            Toast.makeText(getApplicationContext(), "Encoded file to: " + outputPath, Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+//                } catch (IOException e) {
+//                    Log.e(TAG, "Cannot create FileInputStream", e);
+//                }
+//            }
+//        };
+//    }
