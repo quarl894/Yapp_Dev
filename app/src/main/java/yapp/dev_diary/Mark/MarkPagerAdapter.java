@@ -1,15 +1,10 @@
 package yapp.dev_diary.Mark;
 
-import android.content.Intent;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import java.util.Random;
-
-import yapp.dev_diary.MainActivity;
 import yapp.dev_diary.R;
 
 public class MarkPagerAdapter extends PagerAdapter {

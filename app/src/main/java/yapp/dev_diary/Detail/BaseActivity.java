@@ -1,13 +1,12 @@
 package yapp.dev_diary.Detail;
 
 import android.content.res.TypedArray;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ListView;
 
 import java.util.ArrayList;

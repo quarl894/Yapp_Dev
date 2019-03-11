@@ -4,7 +4,7 @@ package yapp.dev_diary;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 import android.util.Log;
 
 import com.naver.speech.clientapi.SpeechConfig;

@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,16 +22,11 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.database.Cursor;
-import android.database.CursorJoiner;
-import android.media.ExifInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,35 +47,22 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.naver.speech.clientapi.SpeechRecognitionResult;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import yapp.dev_diary.DB.MyDBHelper;
-import yapp.dev_diary.DB.MyItem;
 import yapp.dev_diary.List.ListDActivity;
 import yapp.dev_diary.Lock.core.BaseActivity;
-import yapp.dev_diary.Setting.BroadcastD;
 import yapp.dev_diary.Setting.SetActivity;
 import yapp.dev_diary.Voice.VoiceActivity;
+import yapp.dev_diary.network.SttActivity;
 import yapp.dev_diary.utils.AudioWriterPCM;
 
 public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String CLIENT_ID = "s2xquX9eCQsCD0xOxV0E";
+    private static final String CLIENT_ID = "b248ms8z21";
     ArrayList<String> list_stt;
     String outputFile2;
     MediaPlayer mPlayer = null;
@@ -100,7 +79,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     TextView start_time, end_time;
     int t_count=0;
     private RecognitionHandler handler;
-    private NaverRecognizer naverRecognizer;
+   // private NaverRecognizer naverRecognizer;
     private TextView txtResult;
     private String mResult;
 
@@ -114,6 +93,8 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     P_Thread p_thread;
     MyDBHelper     DBHelper;
     SQLiteDatabase db;
+
+    SttActivity sttActivity = new SttActivity();
 
     // Handle speech recognition Messages.
     private void handleMessage(Message msg) {
@@ -250,7 +231,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
 
         txtResult = (TextView) findViewById(R.id.txt_result);
         handler = new RecognitionHandler(this);
-        naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
+     //   naverRecognizer = new NaverRecognizer(this, handler, CLIENT_ID);
 
         p_gradient = (ProgressBar) findViewById(R.id.p_gradient);
         start_time = (TextView) findViewById(R.id.start_time);
@@ -411,6 +392,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     p_thread.start();
                     p_thread.stop = false;
                     p_thread.work =true;
+                    sttActivity.stt_init();
                     Log.e("btnRecord 처음시작"," "+p_thread.getState().toString());
                 }else if(t_count ==1){
                     p_thread.stop = false;
@@ -420,16 +402,16 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                 t_count=1;
                 Log.e("thread_status: " ,""+p_thread.getState()+ Integer.toString(t_count));
 
-                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
-                    // Start button is pushed when SpeechRecognizer's state is inactive.
-                    // Run SpeechRecongizer by calling recognize().
-                    mResult = "";
-                    txtResult.setText("Connecting...");
-                    naverRecognizer.recognize();
-                } else {
-                    Log.e(TAG, "stop and wait Final Result");
-                    naverRecognizer.getSpeechRecognizer().stop();
-                }
+//                if(!naverRecognizer.getSpeechRecognizer().isRunning()) {
+//                    // Start button is pushed when SpeechRecognizer's state is inactive.
+//                    // Run SpeechRecongizer by calling recognize().
+//                    mResult = "";
+//                    txtResult.setText("Connecting...");
+//                    naverRecognizer.recognize();
+//                } else {
+//                    Log.e(TAG, "stop and wait Final Result");
+//                    naverRecognizer.getSpeechRecognizer().stop();
+//                }
                 mBtnRecord.setEnabled(false);
                 mBtnStop.setEnabled(true);
 
@@ -446,7 +428,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
             case R.id.btnPause :
                 Log.e("btnPause 일시정지"," "+p_thread.getState().toString());
                 p_thread.work =false;
-                naverRecognizer.getSpeechRecognizer().stop();
+          //      naverRecognizer.getSpeechRecognizer().stop();
                 try {
                     count +=1;
                     mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sttrecording";
@@ -498,7 +480,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     protected void onStart() {
         super.onStart();
         // NOTE : initialize() must be called on start time.
-        naverRecognizer.getSpeechRecognizer().initialize();
+   //     naverRecognizer.getSpeechRecognizer().initialize();
     }
 
     @Override
@@ -512,7 +494,7 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
     protected void onStop() {
         super.onStop();
         // NOTE : release() must be called on stop time.
-        naverRecognizer.getSpeechRecognizer().release();
+   //     naverRecognizer.getSpeechRecognizer().release();
     }
 
     @Override
@@ -692,25 +674,5 @@ public class MainActivity extends BaseActivity implements MediaRecorder.OnInfoLi
                     }
                 }
             };
-    public class AlarmHATT {
-        private Context context;
-        public AlarmHATT(Context context) {
-            this.context=context;
-        }
-        public void Alarm() {
-            AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(MainActivity.this, BroadcastD.class);
-
-            PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-
-            Calendar calendar = Calendar.getInstance();
-            //알람시간 calendar에 set해주기
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 14, 49, 0);
-            //알람 예약
-            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-
-            Log.e("알림 시간:", " " +calendar.getTime().toString());
-        }
-    }
 }
 

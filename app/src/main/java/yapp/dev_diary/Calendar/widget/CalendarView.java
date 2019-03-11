@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.Calendar;
 
-import yapp.dev_diary.DB.MyDBHelper;
 import yapp.dev_diary.R;
-
-import static yapp.dev_diary.Calendar.Activity.MultiCalendarActivity.calendar_Month_List;
 
 
 /**
